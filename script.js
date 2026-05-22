@@ -62,6 +62,7 @@ function renderStatsTable(grouped, allStats) {
     const games = g.rows.length;
     const goals = sum(g.rows, "goals");
     return `<tr>
+      <td>${escape(g.clubName)}</td>
       <td>${escape(g.tournamentName)}</td>
       <td class="num">${escape(g.season)}</td>
       <td class="num">${games}</td>
@@ -76,6 +77,7 @@ function renderStatsTable(grouped, allStats) {
   const tg = allStats.length;
   const tGoals = sum(allStats, "goals");
   const totalRow = `<tr>
+    <td></td>
     <td><strong>Total</strong></td>
     <td class="num"></td>
     <td class="num">${tg}</td>
@@ -90,6 +92,7 @@ function renderStatsTable(grouped, allStats) {
     <table class="stats-table">
       <thead>
         <tr>
+          <th>Club</th>
           <th>Tournament</th>
           <th class="num">Season</th>
           <th class="num">Games</th>
@@ -109,9 +112,11 @@ function renderStatsTable(grouped, allStats) {
 function groupByTournament(stats) {
   const map = new Map();
   for (const s of stats) {
-    const key = `${s.tournamentId}|${s.season}`;
+    const key = `${s.teamId}|${s.tournamentId}|${s.season}`;
     if (!map.has(key)) {
       map.set(key, {
+        teamId: s.teamId,
+        clubName: s.clubName ?? s.teamId,
         tournamentId: s.tournamentId,
         tournamentName: s.tournamentName ?? `Tournament ${s.tournamentId}`,
         season: s.season,
@@ -122,6 +127,7 @@ function groupByTournament(stats) {
   }
   return [...map.values()].sort((a, b) => {
     if (b.season !== a.season) return b.season.localeCompare(a.season);
+    if (a.clubName !== b.clubName) return a.clubName.localeCompare(b.clubName);
     return a.tournamentName.localeCompare(b.tournamentName);
   });
 }
