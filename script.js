@@ -49,10 +49,61 @@ function renderProfile(profile, stats) {
   }
 
   const grouped = groupByTournament(stats);
-  const blocks = grouped.map(g => renderTournamentBlock(g));
-  const total = renderTotalsBlock(stats);
 
-  return titleHtml + blocks.join("") + total;
+  return titleHtml + renderStatsTable(grouped, stats);
+}
+
+function renderStatsTable(grouped, allStats) {
+  const avg = (total, games) => games === 0 ? "—" : (total / games).toLocaleString(undefined, {
+    minimumFractionDigits: 2, maximumFractionDigits: 2
+  });
+
+  const bodyRows = grouped.map(g => {
+    const games = g.rows.length;
+    const goals = sum(g.rows, "goals");
+    return `<tr>
+      <td>${escape(g.tournamentName)}</td>
+      <td class="num">${escape(g.season)}</td>
+      <td class="num">${games}</td>
+      <td class="num">${goals}</td>
+      <td class="num">${avg(goals, games)}</td>
+      <td class="num">${sum(g.rows, "yellowCards")}</td>
+      <td class="num">${sum(g.rows, "twoMinuteSuspensions")}</td>
+      <td class="num">${sum(g.rows, "redCards")}</td>
+    </tr>`;
+  }).join("\n");
+
+  const tg = allStats.length;
+  const tGoals = sum(allStats, "goals");
+  const totalRow = `<tr>
+    <td><strong>Total</strong></td>
+    <td class="num"></td>
+    <td class="num">${tg}</td>
+    <td class="num">${tGoals}</td>
+    <td class="num">${avg(tGoals, tg)}</td>
+    <td class="num">${sum(allStats, "yellowCards")}</td>
+    <td class="num">${sum(allStats, "twoMinuteSuspensions")}</td>
+    <td class="num">${sum(allStats, "redCards")}</td>
+  </tr>`;
+
+  return `
+    <table class="stats-table">
+      <thead>
+        <tr>
+          <th>Tournament</th>
+          <th class="num">Season</th>
+          <th class="num">Games</th>
+          <th class="num">Goals</th>
+          <th class="num">Avg goals</th>
+          <th class="num">Yellow</th>
+          <th class="num">2-min</th>
+          <th class="num">Red</th>
+        </tr>
+      </thead>
+      <tbody>${bodyRows}</tbody>
+      <tfoot>${totalRow}</tfoot>
+    </table>
+  `;
 }
 
 function groupByTournament(stats) {
@@ -73,42 +124,6 @@ function groupByTournament(stats) {
     if (b.season !== a.season) return b.season.localeCompare(a.season);
     return a.tournamentName.localeCompare(b.tournamentName);
   });
-}
-
-function renderTournamentBlock(g) {
-  return renderBlock(`${escape(g.tournamentName)} — ${escape(g.season)}`, g.rows);
-}
-
-function renderTotalsBlock(stats) {
-  return renderBlock("Total", stats, /* total */ true);
-}
-
-function renderBlock(title, rows, total = false) {
-  const games = rows.length;
-  const totalGoals = sum(rows, "goals");
-  const totalYellow = sum(rows, "yellowCards");
-  const total2Min = sum(rows, "twoMinuteSuspensions");
-  const totalRed = sum(rows, "redCards");
-
-  const avg = n => games === 0 ? "0.00" : (n / games).toLocaleString(undefined, {
-    minimumFractionDigits: 2, maximumFractionDigits: 2
-  });
-
-  const cls = total ? "tournament tournament-total" : "tournament";
-
-  return `
-    <section class="${cls}">
-      <h2 class="tournament-title">${title}</h2>
-      <table>
-        <tr><td class="label">Games</td>            <td class="value">${games}</td></tr>
-        <tr><td class="label">Total goals</td>       <td class="value">${totalGoals}</td></tr>
-        <tr><td class="label">Avg goals / game</td>  <td class="value">${avg(totalGoals)}</td></tr>
-        <tr><td class="label">Avg yellow / game</td> <td class="value">${avg(totalYellow)}</td></tr>
-        <tr><td class="label">Avg 2-min / game</td>  <td class="value">${avg(total2Min)}</td></tr>
-        <tr><td class="label">Total red cards</td>   <td class="value">${totalRed}</td></tr>
-      </table>
-    </section>
-  `;
 }
 
 function sum(rows, key) {

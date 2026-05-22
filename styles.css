@@ -18,7 +18,7 @@ html, body {
 }
 
 .card {
-  max-width: 640px;
+  max-width: 820px;
   margin: 2rem auto;
   background: var(--card-bg);
   border: 1px solid var(--border);
@@ -30,14 +30,34 @@ html, body {
 .jersey { color: var(--accent); margin-right: 0.5rem; }
 .subtitle { color: var(--muted); margin: 0.25rem 0 1.5rem; }
 
-.tournament { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 1rem; }
-.tournament-title { font-weight: 600; margin: 0 0 0.5rem; }
-.tournament-total { font-weight: 600; }
-
-table { width: 100%; border-collapse: collapse; }
-td { padding: 0.25rem 0; }
-td.label { color: var(--muted); }
-td.value { text-align: right; font-variant-numeric: tabular-nums; }
+.stats-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+}
+.stats-table th, .stats-table td {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+.stats-table th {
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--border);
+}
+.stats-table th.num, .stats-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.stats-table tfoot td {
+  border-top: 2px solid var(--border);
+  border-bottom: none;
+  font-weight: 600;
+}
 
 .status { color: var(--muted); }
 .error { color: #b00020; }
