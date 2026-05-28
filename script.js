@@ -13,9 +13,9 @@ if (!playerId) {
 }
 
 async function loadPlayer(id) {
-  const [profileRes, statsRes] = await Promise.all([
+  const [profileRes, historyRes] = await Promise.all([
     fetch(`${apiBase}/api/players/${encodeURIComponent(id)}`),
-    fetch(`${apiBase}/api/players/${encodeURIComponent(id)}/stats`)
+    fetch(`${apiBase}/api/players/${encodeURIComponent(id)}/history`)
   ]);
 
   if (profileRes.status === 404) {
@@ -25,12 +25,16 @@ async function loadPlayer(id) {
   if (!profileRes.ok) throw new Error(`profile HTTP ${profileRes.status}`);
 
   const profile = await profileRes.json();
-  const stats = statsRes.ok ? (await statsRes.json()).stats : [];
 
-  render(renderProfile(profile, stats));
+  let history = { history: [], totals: null };
+  if (historyRes.ok) {
+    history = await historyRes.json();
+  }
+
+  render(renderProfile(profile, history));
 }
 
-function renderProfile(profile, stats) {
+function renderProfile(profile, history) {
   const headerBits = [];
   if (profile.clubName) headerBits.push(escape(profile.clubName));
   if (profile.age !== null && profile.age !== undefined) headerBits.push(`Age ${profile.age}`);
@@ -44,49 +48,46 @@ function renderProfile(profile, stats) {
     <p class="subtitle">${headerBits.join(" · ")}</p>
   `;
 
-  if (stats.length === 0) {
+  if (!history.history || history.history.length === 0) {
     return titleHtml + `<p class="status">No matches played yet.</p>`;
   }
 
-  const grouped = groupByTournament(stats);
-
-  return titleHtml + renderStatsTable(grouped, stats);
+  return titleHtml + renderStatsTable(history.history, history.totals);
 }
 
-function renderStatsTable(grouped, allStats) {
-  const avg = (total, games) => games === 0 ? "—" : (total / games).toLocaleString(undefined, {
+function renderStatsTable(entries, totals) {
+  const cell = (value) => value === null || value === undefined ? "—" : escape(String(value));
+  const avg = (value) => value.toLocaleString(undefined, {
     minimumFractionDigits: 2, maximumFractionDigits: 2
   });
 
-  const bodyRows = grouped.map(g => {
-    const games = g.rows.length;
-    const goals = sum(g.rows, "goals");
-    return `<tr>
-      <td>${escape(g.clubName)}</td>
-      <td>${escape(g.tournamentName)}</td>
-      <td class="num">${escape(g.season)}</td>
-      <td class="num">${games}</td>
-      <td class="num">${goals}</td>
-      <td class="num">${avg(goals, games)}</td>
-      <td class="num">${sum(g.rows, "yellowCards")}</td>
-      <td class="num">${sum(g.rows, "twoMinuteSuspensions")}</td>
-      <td class="num">${sum(g.rows, "redCards")}</td>
-    </tr>`;
-  }).join("\n");
+  const bodyRows = entries.map(e => `
+    <tr>
+      <td>${cell(e.clubName)}</td>
+      <td>${cell(e.tournamentName)}</td>
+      <td class="num">${escape(e.season)}</td>
+      <td class="num">${e.games}</td>
+      <td class="num">${e.totalGoals}</td>
+      <td class="num">${avg(e.avgGoals)}</td>
+      <td class="num">${e.totalYellowCards}</td>
+      <td class="num">${e.totalTwoMinuteSuspensions}</td>
+      <td class="num">${e.totalRedCards}</td>
+    </tr>
+  `).join("\n");
 
-  const tg = allStats.length;
-  const tGoals = sum(allStats, "goals");
-  const totalRow = `<tr>
-    <td></td>
-    <td><strong>Total</strong></td>
-    <td class="num"></td>
-    <td class="num">${tg}</td>
-    <td class="num">${tGoals}</td>
-    <td class="num">${avg(tGoals, tg)}</td>
-    <td class="num">${sum(allStats, "yellowCards")}</td>
-    <td class="num">${sum(allStats, "twoMinuteSuspensions")}</td>
-    <td class="num">${sum(allStats, "redCards")}</td>
-  </tr>`;
+  const totalRow = totals ? `
+    <tr>
+      <td></td>
+      <td><strong>Total</strong></td>
+      <td class="num"></td>
+      <td class="num">${totals.games}</td>
+      <td class="num">${totals.totalGoals}</td>
+      <td class="num">${avg(totals.avgGoals)}</td>
+      <td class="num">${totals.totalYellowCards}</td>
+      <td class="num">${totals.totalTwoMinuteSuspensions}</td>
+      <td class="num">${totals.totalRedCards}</td>
+    </tr>
+  ` : "";
 
   return `
     <table class="stats-table">
@@ -107,33 +108,6 @@ function renderStatsTable(grouped, allStats) {
       <tfoot>${totalRow}</tfoot>
     </table>
   `;
-}
-
-function groupByTournament(stats) {
-  const map = new Map();
-  for (const s of stats) {
-    const key = `${s.teamId}|${s.tournamentId}|${s.season}`;
-    if (!map.has(key)) {
-      map.set(key, {
-        teamId: s.teamId,
-        clubName: s.clubName ?? s.teamId,
-        tournamentId: s.tournamentId,
-        tournamentName: s.tournamentName ?? `Tournament ${s.tournamentId}`,
-        season: s.season,
-        rows: []
-      });
-    }
-    map.get(key).rows.push(s);
-  }
-  return [...map.values()].sort((a, b) => {
-    if (b.season !== a.season) return b.season.localeCompare(a.season);
-    if (a.clubName !== b.clubName) return a.clubName.localeCompare(b.clubName);
-    return a.tournamentName.localeCompare(b.tournamentName);
-  });
-}
-
-function sum(rows, key) {
-  return rows.reduce((acc, r) => acc + (r[key] ?? 0), 0);
 }
 
 function formatBirthday(iso) {
