@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
 import { MatchList, type MatchSummary } from "../components/MatchList";
+import { Panel } from "../components/Panel";
 import { StatTable } from "../components/StatTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { usePlayer, usePlayerHistory, usePlayerStats } from "../query/hooks";
@@ -36,27 +37,33 @@ export default function PlayerPage() {
   );
 
   return (
-    <section>
-      <h1 className="title">
-        {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
-        {p.name}
-      </h1>
-      <p className="subtitle">{headerBits.join(" · ")}</p>
+    <section className="stack">
+      <div className="page-head">
+        <h1 className="title">
+          {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
+          {p.name}
+        </h1>
+        <p className="subtitle">{headerBits.join(" · ")}</p>
+      </div>
 
-      <h2 className="section-title">Season history</h2>
-      {history.isPending && <Loading />}
-      {history.isError && <ErrorView error={history.error} notFoundLabel="No history" />}
-      {history.data &&
-        (history.data.history.length === 0 ? (
-          <p className="status">No matches played yet.</p>
-        ) : (
-          <StatTable entries={history.data.history} totals={history.data.totals} />
-        ))}
+      <Panel>
+        <h2 className="section-title">Season history</h2>
+        {history.isPending && <Loading />}
+        {history.isError && <ErrorView error={history.error} notFoundLabel="No history" />}
+        {history.data &&
+          (history.data.history.length === 0 ? (
+            <p className="status">No matches played yet.</p>
+          ) : (
+            <StatTable entries={history.data.history} totals={history.data.totals} />
+          ))}
+      </Panel>
 
-      <h2 className="section-title">Matches</h2>
-      {stats.isPending && <Loading />}
-      {stats.isError && <ErrorView error={stats.error} notFoundLabel="No matches" />}
-      {stats.data && <MatchList matches={stats.data.stats.map(toSummary)} />}
+      <Panel>
+        <h2 className="section-title">Matches</h2>
+        {stats.isPending && <Loading />}
+        {stats.isError && <ErrorView error={stats.error} notFoundLabel="No matches" />}
+        {stats.data && <MatchList matches={stats.data.stats.map(toSummary)} />}
+      </Panel>
     </section>
   );
 }

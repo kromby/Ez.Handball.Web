@@ -1,7 +1,7 @@
-import React from "react";
 import { useParams } from "react-router-dom";
-import { LineScoreTable } from "../components/LineScoreTable";
+import { ScoreLine } from "../components/ScoreLine";
 import { MatchRoster } from "../components/MatchRoster";
+import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useMatch } from "../query/hooks";
 
@@ -34,20 +34,14 @@ export default function MatchPage() {
   ].filter(Boolean) as string[];
 
   return (
-    <section>
-      <h1 className="title">
-        {data.homeTeam.clubName ?? "—"} vs {data.awayTeam.clubName ?? "—"}
-      </h1>
-      <p className="subtitle">
-        {meta.map((item, i) => (
-          <React.Fragment key={i}>
-            {i > 0 && " · "}
-            <span>{item}</span>
-          </React.Fragment>
-        ))}
-      </p>
-
-      <LineScoreTable home={data.homeTeam} away={data.awayTeam} />
+    <section className="stack">
+      <Panel className="match-info">
+        <h1 className="visually-hidden">
+          {data.homeTeam.clubName ?? "—"} vs {data.awayTeam.clubName ?? "—"}
+        </h1>
+        <p className="match-meta">{meta.join(" · ")}</p>
+        <ScoreLine home={data.homeTeam} away={data.awayTeam} />
+      </Panel>
 
       <div className="rosters">
         <MatchRoster title={data.homeTeam.clubName ?? "Home"} players={data.homeTeam.players} />
