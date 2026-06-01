@@ -11,10 +11,8 @@ const team = (name: string, fh: number, sh: number, final: number): MatchTeam =>
   players: [],
 });
 
-test("renders both clubs and their final scores", () => {
+test("renders both final scores", () => {
   render(<ScoreLine home={team("Valur", 14, 13, 27)} away={team("Haukar", 12, 13, 25)} />);
-  expect(screen.getByText("Valur")).toBeInTheDocument();
-  expect(screen.getByText("Haukar")).toBeInTheDocument();
   expect(screen.getByText("27")).toBeInTheDocument();
   expect(screen.getByText("25")).toBeInTheDocument();
 });

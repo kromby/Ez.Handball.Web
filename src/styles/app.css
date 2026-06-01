@@ -389,31 +389,17 @@ button {
 }
 
 /* ===================== match scoreline ===================== */
-/* Bold scoreboard: big amber final scores with the clubs above and the
-   half-time line small underneath. Clubs and scores share the same
-   1fr / auto / 1fr grid so each club sits over its score. */
+/* Bold scoreboard: big amber final scores (home left, away right — matching
+   the "X vs Y" page title) with the half-time line small underneath. */
 .scoreline {
   margin-top: 1.2rem;
 }
-.scoreline-clubs,
 .scoreline-scores {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   justify-items: center;
   column-gap: clamp(0.75rem, 4vw, 2rem);
-}
-.scoreline-clubs > :first-child {
-  grid-column: 1;
-}
-.scoreline-clubs > :last-child {
-  grid-column: 3;
-}
-.scoreline-club {
-  font-size: clamp(0.95rem, 2.5vw, 1.15rem);
-  font-weight: 600;
-  color: var(--ink-2);
-  text-align: center;
 }
 .scoreline-score {
   font-family: "Spectral", Georgia, serif;
