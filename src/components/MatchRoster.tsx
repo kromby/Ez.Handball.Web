@@ -10,7 +10,6 @@ export function MatchRoster({ title, players }: { title: string; players: MatchP
           <tr>
             <th className="num">#</th>
             <th>Player</th>
-            <th>Pos</th>
             <th className="num">Goals</th>
             <th className="num">Yellow</th>
             <th className="num">2-min</th>
@@ -24,7 +23,6 @@ export function MatchRoster({ title, players }: { title: string; players: MatchP
               <td>
                 <Link to={`/players/${encodeURIComponent(pl.playerId)}`}>{pl.name ?? "Unknown player"}</Link>
               </td>
-              <td>{pl.position ?? "—"}</td>
               <td className="num">{pl.goals}</td>
               <td className="num">{pl.yellowCards}</td>
               <td className="num">{pl.twoMinuteSuspensions}</td>
