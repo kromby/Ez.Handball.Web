@@ -189,12 +189,33 @@ button {
   text-decoration: none;
 }
 
-/* ===================== sheet ===================== */
-/* The paper border + background are drawn by the SketchBox; .card only owns layout. */
-.card {
+/* ===================== page + panels ===================== */
+/* The page is a transparent canvas; each block of content lives in its own
+   hand-drawn Panel (a SketchBox). No single page-tall sheet. */
+.page {
   max-width: var(--maxw);
-  margin: 1.75rem auto;
+  margin: 0 auto;
+  padding: 1.75rem clamp(12px, 3vw, 28px);
+}
+
+/* vertical rhythm between a page's heading and its panels */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(16px, 2.5vw, 22px);
+}
+
+.panel {
   box-shadow: var(--shadow);
+}
+/* the panel's own padding already spaces the first child */
+.panel > :first-child {
+  margin-top: 0;
+}
+
+/* page heading sits on the bare paper, above the panels */
+.page-head .subtitle {
+  margin-bottom: 0;
 }
 
 /* ===================== headings ===================== */
@@ -368,29 +389,22 @@ button {
 }
 
 /* ===================== rosters ===================== */
+/* Each roster is its own Panel; this grid lays the two teams out side by side. */
 .rosters {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
-  margin-top: 1.25rem;
+  gap: clamp(16px, 2.5vw, 22px);
 }
 @media (min-width: 720px) {
   .rosters {
     grid-template-columns: 1fr 1fr;
   }
 }
+/* As a grid item, default min-width:auto refuses to shrink below the table's
+   content width — so the panel would overflow instead of letting the table
+   scroll inside it. min-width:0 lets it shrink to the track. */
 .roster {
-  /* As a grid item, default min-width:auto refuses to shrink below the table's
-     content width — so the panel would grow and overflow the sheet instead of
-     letting the table scroll inside it. min-width:0 lets it shrink to the track. */
   min-width: 0;
-  background: var(--paper-3);
-  border: 1.5px solid var(--line-2);
-  border-radius: 12px;
-  padding: 0.4rem 1rem 1rem;
-}
-.roster .section-title {
-  margin-top: 1rem;
 }
 
 /* ===================== states ===================== */
@@ -422,14 +436,13 @@ button {
   .nav-inner {
     padding: 0.75rem 1rem;
   }
-  .card {
-    margin: 1rem 0.75rem;
+  .page {
+    padding: 1rem 0.75rem;
   }
 
-  /* Stats tables are wider than a phone — let them scroll inside the sheet
-     instead of pushing the whole paper sheet past the viewport edge. The
-     browser wraps the row groups in a single anonymous table, so columns
-     stay aligned across header and body. */
+  /* Stats tables are wider than a phone — let them scroll inside their panel
+     instead of widening it. The browser wraps the row groups in a single
+     anonymous table, so columns stay aligned across header and body. */
   .stats-table {
     display: block;
     overflow-x: auto;
