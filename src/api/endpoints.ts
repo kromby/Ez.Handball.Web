@@ -13,12 +13,12 @@ export function getLeaderboard(params: {
   offset?: number;
   limit?: number;
 }): Promise<Leaderboard> {
-  const q = new URLSearchParams();
-  if (params.metric) q.set("metric", params.metric);
-  if (params.offset != null) q.set("offset", String(params.offset));
-  if (params.limit != null) q.set("limit", String(params.limit));
-  const qs = q.toString();
-  return apiGet<Leaderboard>(`/api/leaderboard${qs ? `?${qs}` : ""}`);
+  const searchParams = new URLSearchParams();
+  if (params.metric) searchParams.set("metric", params.metric);
+  if (params.offset != null) searchParams.set("offset", String(params.offset));
+  if (params.limit != null) searchParams.set("limit", String(params.limit));
+  const queryString = searchParams.toString();
+  return apiGet<Leaderboard>(`/api/leaderboard${queryString ? `?${queryString}` : ""}`);
 }
 
 export function getPlayer(id: string): Promise<Player> {

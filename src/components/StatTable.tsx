@@ -40,11 +40,11 @@ export function StatTable({
       {totals && (
         <tfoot>
           <tr>
-            <td></td>
+            <td />
             <td>
               <strong>Total</strong>
             </td>
-            <td className="num"></td>
+            <td className="num" />
             <td className="num">{totals.games}</td>
             <td className="num">{totals.totalGoals}</td>
             <td className="num">{totals.avgGoals.toFixed(2)}</td>

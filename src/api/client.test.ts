@@ -9,7 +9,7 @@ function mockFetch(response: Partial<Response> & { jsonBody?: unknown }) {
   const fetchMock = vi.fn().mockResolvedValue({
     ok: response.ok ?? true,
     status: response.status ?? 200,
-    json: async () => response.jsonBody,
+    json: () => Promise.resolve(response.jsonBody),
   } as Response);
   vi.stubGlobal("fetch", fetchMock);
   return fetchMock;
@@ -34,9 +34,7 @@ describe("apiGet", () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: false,
       status: 500,
-      json: async () => {
-        throw new Error("not json");
-      },
+      json: () => Promise.reject(new Error("not json")),
     } as unknown as Response);
     vi.stubGlobal("fetch", fetchMock);
     await expect(apiGet("/api/x")).rejects.toMatchObject({ status: 500, code: null });

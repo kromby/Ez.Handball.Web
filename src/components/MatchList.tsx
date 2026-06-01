@@ -19,7 +19,7 @@ export function MatchList({ matches }: { matches: MatchSummary[] }) {
           <th className="num">Season</th>
           <th>Tournament</th>
           <th>Detail</th>
-          <th></th>
+          <th />
         </tr>
       </thead>
       <tbody>
