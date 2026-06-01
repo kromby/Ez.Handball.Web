@@ -12,11 +12,11 @@ function useSize(ref: React.RefObject<HTMLElement | null>) {
   const [size, setSize] = useState({ w: 0, h: 0 });
   useLayoutEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el) return undefined;
     const measure = () => setSize({ w: el.offsetWidth, h: el.offsetHeight });
     measure();
     // jsdom (tests) has no ResizeObserver — bail gracefully; w stays 0 and the SVG is skipped.
-    if (typeof ResizeObserver === "undefined") return;
+    if (typeof ResizeObserver === "undefined") return undefined;
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
@@ -64,13 +64,13 @@ export function SketchBox({
   const ref = useRef<HTMLElement>(null);
   const { w, h } = useSize(ref);
   const Tag = (as ?? "div") as ElementType;
-  const t = TONES[tone] ?? TONES.paper;
+  const toneStyle = TONES[tone] ?? TONES.paper;
 
   return (
     <Tag
       ref={ref}
       className={`sketchbox ${className}`.trim()}
-      style={{ position: "relative", background: t.bg, borderRadius: radius, padding: pad, ...style }}
+      style={{ position: "relative", background: toneStyle.bg, borderRadius: radius, padding: pad, ...style }}
       {...rest}
     >
       {w > 0 && (
@@ -84,18 +84,18 @@ export function SketchBox({
           <path
             d={roundRectPath(w, h, radius)}
             fill="none"
-            stroke={t.stroke}
-            strokeWidth={t.sw}
-            strokeOpacity={t.op}
+            stroke={toneStyle.stroke}
+            strokeWidth={toneStyle.sw}
+            strokeOpacity={toneStyle.op}
             filter="url(#pencil)"
             strokeLinejoin="round"
           />
           <path
             d={roundRectPath(w, h, radius + 1.5)}
             fill="none"
-            stroke={t.stroke}
-            strokeWidth={t.sw * 0.7}
-            strokeOpacity={t.op * 0.35}
+            stroke={toneStyle.stroke}
+            strokeWidth={toneStyle.sw * 0.7}
+            strokeOpacity={toneStyle.op * 0.35}
             filter="url(#pencil2)"
             strokeLinejoin="round"
             transform="translate(1.2,1.6)"

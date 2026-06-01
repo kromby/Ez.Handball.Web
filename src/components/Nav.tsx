@@ -22,16 +22,23 @@ function LogoMark() {
   );
 }
 
+/** "Ez.Handball" wordmark with its handwritten tagline. */
+function Wordmark() {
+  return (
+    <span className="wordmark">
+      <span className="wordmark-name">Ez.Handball</span>
+      <span className="wordmark-sub">the stats, drawn by hand</span>
+    </span>
+  );
+}
+
 export function Nav() {
   return (
     <header className="nav">
       <div className="nav-inner">
         <Link to="/" className="brand" aria-label="Ez.Handball — home">
           <LogoMark />
-          <span className="wordmark">
-            <span className="wordmark-name">Ez.Handball</span>
-            <span className="wordmark-sub">the stats, drawn by hand</span>
-          </span>
+          <Wordmark />
         </Link>
       </div>
     </header>
