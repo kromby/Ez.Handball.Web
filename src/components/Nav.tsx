@@ -4,20 +4,7 @@ import { Link } from "react-router-dom";
 function LogoMark() {
   return (
     <span className="logomark" aria-hidden="true">
-      <img src="/assets/ball.png" alt="" className="logomark-ball" />
-      <svg viewBox="0 0 48 48" className="logomark-goal">
-        <g filter="url(#pencil)">
-          <path
-            d="M5 9 H40 V13 H9 V44"
-            fill="none"
-            stroke="var(--ink)"
-            strokeWidth="3.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M40 9 V30" stroke="var(--ink)" strokeWidth="3.4" strokeLinecap="round" />
-        </g>
-      </svg>
+      <img src="/assets/logo.png" alt="" className="logomark-img" />
     </span>
   );
 }
