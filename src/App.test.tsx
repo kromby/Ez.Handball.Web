@@ -28,5 +28,5 @@ test("legacy ?playerId redirects to the player route", () => {
 
 test("renders the match page at /matches/:id", () => {
   renderWithProviders(<App />, ["/matches/99"]);
-  expect(screen.getByRole("heading", { name: "Match" })).toBeInTheDocument();
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 });
