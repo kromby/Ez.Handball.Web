@@ -421,4 +421,15 @@ button {
   .card {
     margin: 1rem 0.75rem;
   }
+
+  /* Stats tables are wider than a phone — let them scroll inside the sheet
+     instead of pushing the whole paper sheet past the viewport edge. The
+     browser wraps the row groups in a single anonymous table, so columns
+     stay aligned across header and body. */
+  .stats-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
 }
