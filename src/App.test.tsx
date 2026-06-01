@@ -11,7 +11,8 @@ test("renders the nav banner and leaderboard at /", () => {
 
 test("legacy ?playerId redirects to the player route", () => {
   renderWithProviders(<App />, ["/?playerId=42"]);
-  expect(screen.getByRole("heading", { name: "Player" })).toBeInTheDocument();
+  // Redirected to /players/42 — PlayerPage shows Loading while fetching
+  expect(screen.getByText(/loading/i)).toBeInTheDocument();
 });
 
 test("renders the match page at /matches/:id", () => {
