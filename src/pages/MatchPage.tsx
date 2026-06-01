@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { LineScoreTable } from "../components/LineScoreTable";
+import { ScoreLine } from "../components/ScoreLine";
 import { MatchRoster } from "../components/MatchRoster";
 import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
@@ -40,7 +40,7 @@ export default function MatchPage() {
           {data.homeTeam.clubName ?? "—"} vs {data.awayTeam.clubName ?? "—"}
         </h1>
         <p className="subtitle">{meta.join(" · ")}</p>
-        <LineScoreTable home={data.homeTeam} away={data.awayTeam} />
+        <ScoreLine home={data.homeTeam} away={data.awayTeam} />
       </Panel>
 
       <div className="rosters">
