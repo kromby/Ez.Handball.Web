@@ -1,5 +1,6 @@
 import {
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type CSSProperties,
@@ -24,9 +25,71 @@ function useSize(ref: React.RefObject<HTMLElement | null>) {
   return size;
 }
 
-function roundRectPath(w: number, h: number, r: number): string {
-  r = Math.min(r, w / 2, h / 2);
-  return `M ${r} 1 H ${w - r} Q ${w - 1} 1 ${w - 1} ${r} V ${h - r} Q ${w - 1} ${h - 1} ${w - r} ${h - 1} H ${r} Q 1 ${h - 1} 1 ${h - r} V ${r} Q 1 1 ${r} 1 Z`;
+/** Tiny seeded PRNG (Lehmer) so the wobble is stable across renders. */
+function seededRng(seed: number): () => number {
+  let state = seed % 2147483647;
+  if (state <= 0) state += 2147483646;
+  return () => (state = (state * 16807) % 2147483647) / 2147483647;
+}
+
+/**
+ * Build a hand-drawn rounded-rect outline by walking the perimeter and nudging
+ * each sample point along its outward normal, then smoothing through the points.
+ *
+ * This replaces the old SVG `feDisplacementMap` "pencil" filter, which silently
+ * stops painting past a browser-imposed region (~800px) — so on tall boxes the
+ * lower border vanished and content appeared to spill outside. Geometry has no
+ * such cap and renders identically at any height.
+ */
+function roughRoundRectPath(w: number, h: number, radius: number, amp: number, step: number, seed: number): string {
+  const inset = 1.6; // keep the stroke off the edge so it isn't clipped
+  const right = w - inset;
+  const bottom = h - inset;
+  const corner = Math.max(0, Math.min(radius, (right - inset) / 2, (bottom - inset) / 2));
+  const rnd = seededRng(seed);
+  const pts: [number, number][] = [];
+
+  const push = (x: number, y: number, nx: number, ny: number) => {
+    const jitter = (rnd() - 0.5) * 2 * amp;
+    pts.push([x + nx * jitter, y + ny * jitter]);
+  };
+  const edge = (x0: number, y0: number, x1: number, y1: number, nx: number, ny: number) => {
+    const segments = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / step));
+    for (let i = 0; i <= segments; i++) {
+      const progress = i / segments;
+      push(x0 + (x1 - x0) * progress, y0 + (y1 - y0) * progress, nx, ny);
+    }
+  };
+  const arc = (cx: number, cy: number, from: number, to: number) => {
+    const segments = Math.max(2, Math.round((Math.abs(to - from) * corner) / step));
+    for (let i = 0; i <= segments; i++) {
+      const angle = from + (to - from) * (i / segments);
+      const nx = Math.cos(angle);
+      const ny = Math.sin(angle);
+      push(cx + nx * corner, cy + ny * corner, nx, ny);
+    }
+  };
+
+  // clockwise from the top edge
+  edge(inset + corner, inset, right - corner, inset, 0, -1);
+  arc(right - corner, inset + corner, -Math.PI / 2, 0); // top-right
+  edge(right, inset + corner, right, bottom - corner, 1, 0);
+  arc(right - corner, bottom - corner, 0, Math.PI / 2); // bottom-right
+  edge(right - corner, bottom, inset + corner, bottom, 0, 1);
+  arc(inset + corner, bottom - corner, Math.PI / 2, Math.PI); // bottom-left
+  edge(inset, bottom - corner, inset, inset + corner, -1, 0);
+  arc(inset + corner, inset + corner, Math.PI, Math.PI * 1.5); // top-left
+
+  if (pts.length < 2) return "";
+  const mid = (start: [number, number], end: [number, number]) => [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2];
+  const first = mid(pts[pts.length - 1], pts[0]);
+  let path = `M ${first[0].toFixed(1)} ${first[1].toFixed(1)} `;
+  for (let i = 0; i < pts.length; i++) {
+    const cur = pts[i];
+    const next = mid(cur, pts[(i + 1) % pts.length]);
+    path += `Q ${cur[0].toFixed(1)} ${cur[1].toFixed(1)} ${next[0].toFixed(1)} ${next[1].toFixed(1)} `;
+  }
+  return `${path}Z`;
 }
 
 type Tone = "paper" | "sunken" | "amber" | "ink" | "none";
@@ -50,7 +113,7 @@ export interface SketchBoxProps {
   [key: string]: unknown;
 }
 
-/** A container drawn with a wobbly, hand-sketched border (real SVG pencil filter). */
+/** A container drawn with a wobbly, hand-sketched border (geometric, not filtered). */
 export function SketchBox({
   tone = "paper",
   radius = 14,
@@ -65,6 +128,14 @@ export function SketchBox({
   const { w, h } = useSize(ref);
   const Tag = (as ?? "div") as ElementType;
   const toneStyle = TONES[tone] ?? TONES.paper;
+
+  const [pathA, pathB] = useMemo(() => {
+    if (w <= 0 || h <= 0) return ["", ""];
+    return [
+      roughRoundRectPath(w, h, radius, 1.5, 17, 7),
+      roughRoundRectPath(w, h, radius + 1.5, 1.1, 23, 23),
+    ];
+  }, [w, h, radius]);
 
   return (
     <Tag
@@ -82,23 +153,21 @@ export function SketchBox({
           style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "visible", zIndex: 0 }}
         >
           <path
-            d={roundRectPath(w, h, radius)}
-            fill="none"
-            stroke={toneStyle.stroke}
-            strokeWidth={toneStyle.sw}
-            strokeOpacity={toneStyle.op}
-            filter="url(#pencil)"
-            strokeLinejoin="round"
-          />
-          <path
-            d={roundRectPath(w, h, radius + 1.5)}
+            d={pathB}
             fill="none"
             stroke={toneStyle.stroke}
             strokeWidth={toneStyle.sw * 0.7}
             strokeOpacity={toneStyle.op * 0.35}
-            filter="url(#pencil2)"
             strokeLinejoin="round"
             transform="translate(1.2,1.6)"
+          />
+          <path
+            d={pathA}
+            fill="none"
+            stroke={toneStyle.stroke}
+            strokeWidth={toneStyle.sw}
+            strokeOpacity={toneStyle.op}
+            strokeLinejoin="round"
           />
         </svg>
       )}

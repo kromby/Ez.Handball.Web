@@ -380,6 +380,10 @@ button {
   }
 }
 .roster {
+  /* As a grid item, default min-width:auto refuses to shrink below the table's
+     content width — so the panel would grow and overflow the sheet instead of
+     letting the table scroll inside it. min-width:0 lets it shrink to the track. */
+  min-width: 0;
   background: var(--paper-3);
   border: 1.5px solid var(--line-2);
   border-radius: 12px;
