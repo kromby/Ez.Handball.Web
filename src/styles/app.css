@@ -161,19 +161,10 @@ button {
   height: 40px;
   flex: none;
 }
-.logomark-ball {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  left: 2px;
-  bottom: 1px;
-  object-fit: contain;
-}
-.logomark-goal {
-  position: absolute;
-  inset: 0;
+.logomark-img {
   width: 40px;
   height: 40px;
+  object-fit: contain;
 }
 
 .wordmark {
