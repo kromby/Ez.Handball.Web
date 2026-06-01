@@ -1,0 +1,15 @@
+version = 1
+
+test_patterns = ["src/**/*.test.ts", "src/**/*.test.tsx"]
+
+exclude_patterns = ["dist/**"]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+  [analyzers.meta]
+  plugins = ["react"]
+  environment = ["nodejs", "browser", "vitest"]
+  dialect = "typescript"
+  module_system = "es-modules"
