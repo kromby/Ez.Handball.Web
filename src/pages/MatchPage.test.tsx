@@ -51,7 +51,7 @@ test("renders match metadata, line score, and both rosters", async () => {
     awayTeam: team("Haukar"),
   });
   setup();
-  await waitFor(() => expect(screen.getByText("Vodafonehöllin")).toBeInTheDocument());
+  await waitFor(() => expect(screen.getByText(/Vodafonehöllin/)).toBeInTheDocument());
   expect(screen.getByText("Valur Player")).toBeInTheDocument();
   expect(screen.getByText("Haukar Player")).toBeInTheDocument();
   expect(screen.getAllByText("27").length).toBeGreaterThan(0);

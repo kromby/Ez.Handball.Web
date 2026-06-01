@@ -1,4 +1,3 @@
-import React from "react";
 import { useParams } from "react-router-dom";
 import { LineScoreTable } from "../components/LineScoreTable";
 import { MatchRoster } from "../components/MatchRoster";
@@ -40,14 +39,7 @@ export default function MatchPage() {
         <h1 className="title">
           {data.homeTeam.clubName ?? "—"} vs {data.awayTeam.clubName ?? "—"}
         </h1>
-        <p className="subtitle">
-          {meta.map((item, i) => (
-            <React.Fragment key={i}>
-              {i > 0 && " · "}
-              <span>{item}</span>
-            </React.Fragment>
-          ))}
-        </p>
+        <p className="subtitle">{meta.join(" · ")}</p>
         <LineScoreTable home={data.homeTeam} away={data.awayTeam} />
       </Panel>
 
