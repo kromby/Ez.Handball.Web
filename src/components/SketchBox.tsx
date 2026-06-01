@@ -27,9 +27,9 @@ function useSize(ref: React.RefObject<HTMLElement | null>) {
 
 /** Tiny seeded PRNG (Lehmer) so the wobble is stable across renders. */
 function seededRng(seed: number): () => number {
-  let s = seed % 2147483647;
-  if (s <= 0) s += 2147483646;
-  return () => (s = (s * 16807) % 2147483647) / 2147483647;
+  let state = seed % 2147483647;
+  if (state <= 0) state += 2147483646;
+  return () => (state = (state * 16807) % 2147483647) / 2147483647;
 }
 
 /**
@@ -42,54 +42,54 @@ function seededRng(seed: number): () => number {
  * such cap and renders identically at any height.
  */
 function roughRoundRectPath(w: number, h: number, radius: number, amp: number, step: number, seed: number): string {
-  const m = 1.6; // inset so the stroke isn't clipped at the edges
-  const right = w - m;
-  const bottom = h - m;
-  const r = Math.max(0, Math.min(radius, (right - m) / 2, (bottom - m) / 2));
+  const inset = 1.6; // keep the stroke off the edge so it isn't clipped
+  const right = w - inset;
+  const bottom = h - inset;
+  const corner = Math.max(0, Math.min(radius, (right - inset) / 2, (bottom - inset) / 2));
   const rnd = seededRng(seed);
   const pts: [number, number][] = [];
 
   const push = (x: number, y: number, nx: number, ny: number) => {
-    const j = (rnd() - 0.5) * 2 * amp;
-    pts.push([x + nx * j, y + ny * j]);
+    const jitter = (rnd() - 0.5) * 2 * amp;
+    pts.push([x + nx * jitter, y + ny * jitter]);
   };
   const edge = (x0: number, y0: number, x1: number, y1: number, nx: number, ny: number) => {
-    const n = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / step));
-    for (let i = 0; i <= n; i++) {
-      const t = i / n;
-      push(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, nx, ny);
+    const segments = Math.max(1, Math.round(Math.hypot(x1 - x0, y1 - y0) / step));
+    for (let i = 0; i <= segments; i++) {
+      const progress = i / segments;
+      push(x0 + (x1 - x0) * progress, y0 + (y1 - y0) * progress, nx, ny);
     }
   };
-  const arc = (cx: number, cy: number, a0: number, a1: number) => {
-    const n = Math.max(2, Math.round((Math.abs(a1 - a0) * r) / step));
-    for (let i = 0; i <= n; i++) {
-      const a = a0 + (a1 - a0) * (i / n);
-      const nx = Math.cos(a);
-      const ny = Math.sin(a);
-      push(cx + nx * r, cy + ny * r, nx, ny);
+  const arc = (cx: number, cy: number, from: number, to: number) => {
+    const segments = Math.max(2, Math.round((Math.abs(to - from) * corner) / step));
+    for (let i = 0; i <= segments; i++) {
+      const angle = from + (to - from) * (i / segments);
+      const nx = Math.cos(angle);
+      const ny = Math.sin(angle);
+      push(cx + nx * corner, cy + ny * corner, nx, ny);
     }
   };
 
   // clockwise from the top edge
-  edge(m + r, m, right - r, m, 0, -1);
-  arc(right - r, m + r, -Math.PI / 2, 0); // top-right
-  edge(right, m + r, right, bottom - r, 1, 0);
-  arc(right - r, bottom - r, 0, Math.PI / 2); // bottom-right
-  edge(right - r, bottom, m + r, bottom, 0, 1);
-  arc(m + r, bottom - r, Math.PI / 2, Math.PI); // bottom-left
-  edge(m, bottom - r, m, m + r, -1, 0);
-  arc(m + r, m + r, Math.PI, Math.PI * 1.5); // top-left
+  edge(inset + corner, inset, right - corner, inset, 0, -1);
+  arc(right - corner, inset + corner, -Math.PI / 2, 0); // top-right
+  edge(right, inset + corner, right, bottom - corner, 1, 0);
+  arc(right - corner, bottom - corner, 0, Math.PI / 2); // bottom-right
+  edge(right - corner, bottom, inset + corner, bottom, 0, 1);
+  arc(inset + corner, bottom - corner, Math.PI / 2, Math.PI); // bottom-left
+  edge(inset, bottom - corner, inset, inset + corner, -1, 0);
+  arc(inset + corner, inset + corner, Math.PI, Math.PI * 1.5); // top-left
 
   if (pts.length < 2) return "";
-  const mid = (a: [number, number], b: [number, number]) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
-  const start = mid(pts[pts.length - 1], pts[0]);
-  let d = `M ${start[0].toFixed(1)} ${start[1].toFixed(1)} `;
+  const mid = (start: [number, number], end: [number, number]) => [(start[0] + end[0]) / 2, (start[1] + end[1]) / 2];
+  const first = mid(pts[pts.length - 1], pts[0]);
+  let path = `M ${first[0].toFixed(1)} ${first[1].toFixed(1)} `;
   for (let i = 0; i < pts.length; i++) {
     const cur = pts[i];
-    const end = mid(cur, pts[(i + 1) % pts.length]);
-    d += `Q ${cur[0].toFixed(1)} ${cur[1].toFixed(1)} ${end[0].toFixed(1)} ${end[1].toFixed(1)} `;
+    const next = mid(cur, pts[(i + 1) % pts.length]);
+    path += `Q ${cur[0].toFixed(1)} ${cur[1].toFixed(1)} ${next[0].toFixed(1)} ${next[1].toFixed(1)} `;
   }
-  return `${d}Z`;
+  return `${path}Z`;
 }
 
 type Tone = "paper" | "sunken" | "amber" | "ink" | "none";
