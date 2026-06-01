@@ -4,6 +4,7 @@ import { ErrorView, Loading } from "../components/StateViews";
 import { LeaderboardTable } from "../components/LeaderboardTable";
 import { METRICS, MetricSwitcher } from "../components/MetricSwitcher";
 import { Pagination } from "../components/Pagination";
+import { Panel } from "../components/Panel";
 import { useLeaderboard } from "../query/hooks";
 
 const LIMIT = 50;
@@ -28,16 +29,18 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <section>
-      <h2 className="title">Leaderboard</h2>
-      <MetricSwitcher value={metric} onChange={setMetric} />
+    <section className="stack">
+      <div className="page-head">
+        <h2 className="title">Leaderboard</h2>
+        <MetricSwitcher value={metric} onChange={setMetric} />
+      </div>
       {isPending && <Loading />}
       {isError && <ErrorView error={error} notFoundLabel="Leaderboard not found" />}
       {data && (
-        <>
+        <Panel>
           <LeaderboardTable entries={data.entries} metric={metric} />
           <Pagination offset={data.offset} limit={data.limit} total={data.total} onOffsetChange={setOffset} />
-        </>
+        </Panel>
       )}
     </section>
   );

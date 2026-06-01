@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import type { MatchPlayerLine } from "../api/types";
+import { Panel } from "./Panel";
 
 export function MatchRoster({ title, players }: { title: string; players: MatchPlayerLine[] }) {
   return (
-    <div className="roster">
+    <Panel className="roster">
       <h3 className="section-title">{title}</h3>
       <table className="stats-table">
         <thead>
@@ -31,6 +32,6 @@ export function MatchRoster({ title, players }: { title: string; players: MatchP
           ))}
         </tbody>
       </table>
-    </div>
+    </Panel>
   );
 }
