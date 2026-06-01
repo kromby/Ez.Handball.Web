@@ -1,7 +1,13 @@
 import { screen } from "@testing-library/react";
 import { expect, test } from "vitest";
+import { useLocation } from "react-router-dom";
 import App from "./App";
 import { renderWithProviders } from "./test/renderWithQuery";
+
+function LocationProbe() {
+  const location = useLocation();
+  return <div data-testid="pathname">{location.pathname}</div>;
+}
 
 test("renders the nav banner and leaderboard at /", () => {
   renderWithProviders(<App />, ["/"]);
@@ -10,9 +16,14 @@ test("renders the nav banner and leaderboard at /", () => {
 });
 
 test("legacy ?playerId redirects to the player route", () => {
-  renderWithProviders(<App />, ["/?playerId=42"]);
-  // Redirected to /players/42 — PlayerPage shows Loading while fetching
-  expect(screen.getByText(/loading/i)).toBeInTheDocument();
+  renderWithProviders(
+    <>
+      <App />
+      <LocationProbe />
+    </>,
+    ["/?playerId=42"],
+  );
+  expect(screen.getByTestId("pathname")).toHaveTextContent("/players/42");
 });
 
 test("renders the match page at /matches/:id", () => {
