@@ -36,10 +36,10 @@ export default function MatchPage() {
   return (
     <section className="stack">
       <Panel className="match-info">
-        <h1 className="title">
+        <h1 className="visually-hidden">
           {data.homeTeam.clubName ?? "—"} vs {data.awayTeam.clubName ?? "—"}
         </h1>
-        <p className="subtitle">{meta.join(" · ")}</p>
+        <p className="match-meta">{meta.join(" · ")}</p>
         <ScoreLine home={data.homeTeam} away={data.awayTeam} />
       </Panel>
 
