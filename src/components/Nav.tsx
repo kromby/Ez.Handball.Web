@@ -1,23 +1,11 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 
 /** Brand logomark: the hand-drawn handball tucked into a goal's top corner. */
 function LogoMark() {
   return (
     <span className="logomark" aria-hidden="true">
-      <img src="/assets/ball.png" alt="" className="logomark-ball" />
-      <svg viewBox="0 0 48 48" className="logomark-goal">
-        <g filter="url(#pencil)">
-          <path
-            d="M5 9 H40 V13 H9 V44"
-            fill="none"
-            stroke="var(--ink)"
-            strokeWidth="3.4"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path d="M40 9 V30" stroke="var(--ink)" strokeWidth="3.4" strokeLinecap="round" />
-        </g>
-      </svg>
+      <img src="/assets/logo.png" alt="" className="logomark-img" />
     </span>
   );
 }
@@ -32,6 +20,24 @@ function Wordmark() {
   );
 }
 
+function AuthArea() {
+  const { status, user } = useAuth();
+  if (status === "loading") return null;
+  if (status === "authenticated" && user) {
+    return (
+      <nav className="nav-auth" aria-label="Account">
+        <Link to="/account" className="user-name">{user.displayName}</Link>
+      </nav>
+    );
+  }
+  return (
+    <nav className="nav-auth" aria-label="Account">
+      <Link to="/login">Log in</Link>
+      <Link to="/register">Register</Link>
+    </nav>
+  );
+}
+
 export function Nav() {
   return (
     <header className="nav">
@@ -40,6 +46,7 @@ export function Nav() {
           <LogoMark />
           <Wordmark />
         </Link>
+        <AuthArea />
       </div>
     </header>
   );
