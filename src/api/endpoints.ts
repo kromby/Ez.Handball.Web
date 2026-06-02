@@ -1,5 +1,6 @@
 import { apiGet } from "./client";
 import type {
+  Club,
   Leaderboard,
   LeaderboardMetric,
   MatchDetail,
@@ -35,4 +36,8 @@ export function getPlayerStats(id: string): Promise<PlayerStatsResponse> {
 
 export function getMatch(id: string): Promise<MatchDetail> {
   return apiGet<MatchDetail>(`/api/matches/${encodeURIComponent(id)}`);
+}
+
+export function getClubs(): Promise<Club[]> {
+  return apiGet<Club[]>("/api/clubs");
 }
