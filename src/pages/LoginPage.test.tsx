@@ -1,6 +1,7 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
+import { Route, Routes } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import { renderWithProviders } from "../test/renderWithQuery";
 import { ApiError } from "../api/client";
@@ -28,5 +29,20 @@ describe("LoginPage", () => {
     await userEvent.click(screen.getByRole("button", { name: "Log in" }));
 
     expect(await screen.findByText("That email or password didn't match.")).toBeInTheDocument();
+  });
+
+  test("returns to the page the user came from after login", async () => {
+    const login = vi.fn().mockResolvedValue(undefined);
+    renderWithProviders(
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/account" element={<p>account page</p>} />
+      </Routes>,
+      { initialEntries: [{ pathname: "/login", state: { from: { pathname: "/account" } } }], auth: { login } },
+    );
+    await userEvent.type(screen.getByLabelText("Email"), "a@b.is");
+    await userEvent.type(screen.getByLabelText("Password"), "hunter2hunter2");
+    await userEvent.click(screen.getByRole("button", { name: "Log in" }));
+    expect(await screen.findByText("account page")).toBeInTheDocument();
   });
 });

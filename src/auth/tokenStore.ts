@@ -1,5 +1,4 @@
-import { baseUrl } from "../api/config";
-import type { AuthResponse } from "../api/types";
+import { postRefresh } from "../api/refreshRequest";
 
 const REFRESH_KEY = "ezhb.refreshToken";
 
@@ -52,21 +51,11 @@ async function doRefresh(): Promise<boolean> {
     expireSession();
     return false;
   }
-  try {
-    const res = await fetch(`${baseUrl}/api/auth/refresh`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refreshToken }),
-    });
-    if (!res.ok) {
-      expireSession();
-      return false;
-    }
-    const body = JSON.parse(await res.text()) as AuthResponse;
-    setSession({ accessToken: body.accessToken, refreshToken: body.refreshToken });
-    return true;
-  } catch {
+  const pair = await postRefresh(refreshToken);
+  if (!pair) {
     expireSession();
     return false;
   }
+  setSession({ accessToken: pair.accessToken, refreshToken: pair.refreshToken });
+  return true;
 }

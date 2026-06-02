@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { Panel } from "../components/Panel";
 import { useAuth } from "../auth/useAuth";
@@ -7,6 +7,7 @@ import { useAuth } from "../auth/useAuth";
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +19,8 @@ export default function LoginPage() {
     setPending(true);
     try {
       await login(email, password);
-      navigate("/");
+      const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
+      navigate(from ?? "/");
     } catch (err) {
       setError(
         err instanceof ApiError && err.status === 429

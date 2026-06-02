@@ -2,6 +2,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { render } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { MemoryRouter } from "react-router-dom";
+import type { InitialEntry } from "@remix-run/router";
 import { AuthContext, type AuthContextValue } from "../auth/useAuth";
 import { createQueryClient } from "../query/queryClient";
 
@@ -21,7 +22,7 @@ export function buildAuth(overrides: Partial<AuthContextValue> = {}): AuthContex
 
 export function renderWithProviders(
   ui: ReactElement,
-  options: { initialEntries?: string[]; auth?: Partial<AuthContextValue> } = {},
+  options: { initialEntries?: InitialEntry[]; auth?: Partial<AuthContextValue> } = {},
 ) {
   const { initialEntries = ["/"], auth } = options;
   const client = createQueryClient();
