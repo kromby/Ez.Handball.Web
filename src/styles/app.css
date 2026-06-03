@@ -731,19 +731,6 @@ button {
     transform: scale(1);
   }
 }
-.reg-stamp {
-  animation: regStamp 0.4s cubic-bezier(0.2, 1.4, 0.4, 1) 0.35s both;
-}
-@keyframes regStamp {
-  from {
-    opacity: 0;
-    transform: rotate(-12deg) scale(2.4);
-  }
-  to {
-    opacity: 1;
-    transform: rotate(-12deg) scale(1);
-  }
-}
 .reg-spin {
   width: 15px;
   height: 15px;
@@ -761,8 +748,7 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .reg-page,
   .reg-pop,
-  .reg-burst,
-  .reg-stamp {
+  .reg-burst {
     animation: none !important;
   }
 }
@@ -1086,18 +1072,6 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
   overflow: visible;
-}
-.reg-celebrate-stamp {
-  position: absolute;
-  bottom: -6px;
-  right: -26px;
-  border-radius: 8px;
-  padding: 3px 9px;
-  font-family: var(--serif, "Spectral", serif);
-  font-weight: 800;
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  background: color-mix(in srgb, var(--paper-2) 80%, transparent);
 }
 .reg-celebrate h2 {
   font-size: 36px;

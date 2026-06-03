@@ -1,5 +1,4 @@
 import type { Club } from "../../api/types";
-import { clubColor } from "./clubColor";
 import { ClubCrest } from "./ClubCrest";
 import { Icon } from "./Icon";
 
@@ -13,7 +12,6 @@ export function Celebration({
   club: Club | null;
   onEnter: () => void;
 }) {
-  const accent = club ? clubColor(club.clubId) : "var(--amber-deep)";
   const firstName = displayName.trim() ? displayName.trim().split(/\s+/)[0] : "manager";
 
   return (
@@ -47,9 +45,6 @@ export function Celebration({
           ) : (
             <img src="/assets/ball.png" alt="" width={92} height={92} style={{ display: "block" }} />
           )}
-          <div className="reg-stamp reg-celebrate-stamp" style={{ border: `2.5px solid ${accent}`, color: accent }}>
-            MEMBER
-          </div>
         </div>
       </div>
 
