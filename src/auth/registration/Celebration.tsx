@@ -24,7 +24,7 @@ export function Celebration({
             const r2 = 84 + (i % 3) * 9;
             return (
               <line
-                key={i}
+                key={angle}
                 x1={100 + Math.cos(angle) * r1}
                 y1={100 + Math.sin(angle) * r1}
                 x2={100 + Math.cos(angle) * r2}

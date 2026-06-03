@@ -29,7 +29,7 @@ export default function ForgotPasswordPage() {
       <Panel>
         {submitted ? (
           <p className="form-note" role="status">
-            If an account exists for that email, we've sent reset instructions.
+            If an account exists for that email, we&rsquo;ve sent reset instructions.
           </p>
         ) : (
           <form className="auth-form" onSubmit={onSubmit} noValidate>

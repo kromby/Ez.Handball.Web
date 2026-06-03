@@ -8,7 +8,8 @@ import { ApiError } from "../api/client";
 
 afterEach(() => vi.restoreAllMocks());
 
-const confirmation = "If an account exists for that email, we've sent reset instructions.";
+// apostrophe-agnostic: the UI uses a typographic ’, the assertion shouldn't care
+const confirmation = /If an account exists for that email, we.ve sent reset instructions\./;
 
 describe("ForgotPasswordPage", () => {
   test("shows the same confirmation on success", async () => {

@@ -30,9 +30,7 @@ function ClubRow({
       >
         <div className="reg-club-row">
           <ClubCrest club={club} size={50} shape={shape} />
-          <div style={{ minWidth: 0, flex: 1 }}>
-            <div className="reg-club-row-name">{club.name}</div>
-          </div>
+          <div className="reg-club-row-name">{club.name}</div>
         </div>
       </SketchBox>
     </button>
@@ -62,9 +60,7 @@ export function ClubPicker({
       <div className="reg-club-search">
         <SketchBox tone="sunken" radius={11} pad="0">
           <div className="reg-club-search-row">
-            <span style={{ color: "var(--ink-3)", display: "flex" }}>
-              <Icon name="search" size={16} />
-            </span>
+            <Icon name="search" size={16} style={{ color: "var(--ink-3)" }} />
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}

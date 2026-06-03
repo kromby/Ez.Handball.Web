@@ -127,7 +127,6 @@ export default function RegisterPage() {
                     id="displayName"
                     label="Display name"
                     placeholder="e.g. Halla"
-                    autoFocus
                     value={displayName}
                     onChange={update("displayName", setDisplayName)}
                     onBlur={() => touch("displayName")}

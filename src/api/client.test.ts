@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { apiGet, ApiError } from "./client";
+import { apiGet, ApiError, apiPost, authedGet, authedSend } from "./client";
+import * as store from "../auth/tokenStore";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -40,9 +41,6 @@ describe("apiGet", () => {
     await expect(apiGet("/api/x")).rejects.toMatchObject({ status: 500, code: null });
   });
 });
-
-import { apiPost, authedGet, authedSend } from "./client";
-import * as store from "../auth/tokenStore";
 
 describe("authed requests", () => {
   afterEach(() => {

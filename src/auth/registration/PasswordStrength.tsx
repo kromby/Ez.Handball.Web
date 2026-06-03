@@ -6,11 +6,11 @@ const COLORS = ["var(--line-2)", "var(--bad)", "var(--amber)", "var(--good)"];
 /** Three pencil ticks rating password strength, with a handwritten label. */
 export function PasswordStrength({ value }: { value: string }) {
   const score = useMemo(() => {
-    let s = 0;
-    if (value.length >= 8) s += 1;
-    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) s += 1;
-    if (/[0-9!@#$%^&*]/.test(value)) s += 1;
-    return value.length === 0 ? 0 : Math.max(1, s);
+    let points = 0;
+    if (value.length >= 8) points += 1;
+    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) points += 1;
+    if (/[0-9!@#$%^&*]/.test(value)) points += 1;
+    return value.length === 0 ? 0 : Math.max(1, points);
   }, [value]);
 
   return (

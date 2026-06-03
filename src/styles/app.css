@@ -1009,6 +1009,8 @@ button {
   gap: 13px;
 }
 .reg-club-row-name {
+  flex: 1;
+  min-width: 0;
   font-weight: 700;
   font-size: 15.5px;
   white-space: nowrap;

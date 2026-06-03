@@ -59,7 +59,7 @@ export function RegisterCover({ club, step, done }: { club: Club | null; step: n
           <div className="reg-cover-placeholder">
             <img src="/assets/ball.png" alt="" width={52} height={52} style={{ display: "block" }} />
             <div className="scribble" style={{ fontSize: 17, color: "#f3ead2cc", maxWidth: 150 }}>
-              your club's crest lands here ↘
+              your club&rsquo;s crest lands here ↘
             </div>
           </div>
         )}

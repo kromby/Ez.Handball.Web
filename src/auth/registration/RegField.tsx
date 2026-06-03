@@ -12,7 +12,6 @@ export function RegField({
   placeholder,
   error,
   hint,
-  autoFocus,
 }: {
   id: string;
   label: string;
@@ -23,7 +22,6 @@ export function RegField({
   placeholder?: string;
   error?: string;
   hint?: string;
-  autoFocus?: boolean;
 }) {
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
@@ -51,7 +49,6 @@ export function RegField({
             className="reg-input"
             value={value}
             placeholder={placeholder}
-            autoFocus={autoFocus}
             onChange={(event) => onChange(event.target.value)}
             onBlur={onBlur}
           />
