@@ -12,7 +12,7 @@ function setup() {
     <Routes>
       <Route path="/players/:playerId" element={<PlayerPage />} />
     </Routes>,
-    ["/players/7"],
+    { initialEntries: ["/players/7"] },
   );
 }
 

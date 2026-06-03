@@ -130,3 +130,48 @@ export interface MatchDetail {
   homeTeam: MatchTeam;
   awayTeam: MatchTeam;
 }
+
+export type Language = "is" | "en";
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  displayName: string;
+  language: Language;
+  favoriteClubId: string;
+  emailVerified: boolean;
+  createdAt: string;
+  lastLoginAt: string | null;
+}
+
+export interface AuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  user: AuthUser;
+}
+
+export interface RegisterRequest {
+  email: string;
+  password: string;
+  displayName: string;
+  language: Language;
+  favoriteClubId: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface UpdateProfileRequest {
+  displayName?: string;
+  language?: Language;
+  favoriteClubId?: string;
+}
+
+export interface Club {
+  clubId: string;
+  name: string;
+  logoUrl: string | null;
+}

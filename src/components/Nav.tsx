@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/useAuth";
 
 /** Brand logomark: the hand-drawn handball tucked into a goal's top corner. */
 function LogoMark() {
@@ -19,6 +20,24 @@ function Wordmark() {
   );
 }
 
+function AuthArea() {
+  const { status, user } = useAuth();
+  if (status === "loading") return null;
+  if (status === "authenticated" && user) {
+    return (
+      <nav className="nav-auth" aria-label="Account">
+        <Link to="/account" className="user-name">{user.displayName}</Link>
+      </nav>
+    );
+  }
+  return (
+    <nav className="nav-auth" aria-label="Account">
+      <Link to="/login">Log in</Link>
+      <Link to="/register">Register</Link>
+    </nav>
+  );
+}
+
 export function Nav() {
   return (
     <header className="nav">
@@ -27,6 +46,7 @@ export function Nav() {
           <LogoMark />
           <Wordmark />
         </Link>
+        <AuthArea />
       </div>
     </header>
   );

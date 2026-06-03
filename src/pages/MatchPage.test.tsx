@@ -33,7 +33,7 @@ function setup() {
     <Routes>
       <Route path="/matches/:matchId" element={<MatchPage />} />
     </Routes>,
-    ["/matches/m1"],
+    { initialEntries: ["/matches/m1"] },
   );
 }
 

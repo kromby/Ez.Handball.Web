@@ -32,14 +32,14 @@ function leaderboard(entries = 1) {
 
 test("renders fetched entries", async () => {
   vi.spyOn(api, "getLeaderboard").mockResolvedValue(leaderboard(2));
-  renderWithProviders(<LeaderboardPage />, ["/"]);
+  renderWithProviders(<LeaderboardPage />, { initialEntries: ["/"] });
   await waitFor(() => expect(screen.getByText("Player 0")).toBeInTheDocument());
   expect(screen.getByText("Player 1")).toBeInTheDocument();
 });
 
 test("switching metric refetches with the new metric", async () => {
   const spy = vi.spyOn(api, "getLeaderboard").mockResolvedValue(leaderboard(1));
-  renderWithProviders(<LeaderboardPage />, ["/"]);
+  renderWithProviders(<LeaderboardPage />, { initialEntries: ["/"] });
   await waitFor(() => expect(screen.getByText("Player 0")).toBeInTheDocument());
   await userEvent.click(screen.getByRole("tab", { name: "Games" }));
   await waitFor(() =>
@@ -49,6 +49,6 @@ test("switching metric refetches with the new metric", async () => {
 
 test("shows an error view on failure", async () => {
   vi.spyOn(api, "getLeaderboard").mockRejectedValue(new Error("boom"));
-  renderWithProviders(<LeaderboardPage />, ["/"]);
+  renderWithProviders(<LeaderboardPage />, { initialEntries: ["/"] });
   await waitFor(() => expect(screen.getByText(/something went wrong/i)).toBeInTheDocument());
 });

@@ -10,7 +10,7 @@ function LocationProbe() {
 }
 
 test("renders the nav banner and leaderboard at /", () => {
-  renderWithProviders(<App />, ["/"]);
+  renderWithProviders(<App />, { initialEntries: ["/"] });
   expect(screen.getByRole("banner")).toBeInTheDocument();
   expect(screen.getByRole("heading", { name: "Leaderboard" })).toBeInTheDocument();
 });
@@ -21,12 +21,12 @@ test("legacy ?playerId redirects to the player route", () => {
       <App />
       <LocationProbe />
     </>,
-    ["/?playerId=42"],
+    { initialEntries: ["/?playerId=42"] },
   );
   expect(screen.getByTestId("pathname")).toHaveTextContent("/players/42");
 });
 
 test("renders the match page at /matches/:id", () => {
-  renderWithProviders(<App />, ["/matches/99"]);
+  renderWithProviders(<App />, { initialEntries: ["/matches/99"] });
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
 });

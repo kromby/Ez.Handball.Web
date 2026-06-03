@@ -40,3 +40,11 @@ export function useMatch(id: string) {
     enabled: id.length > 0,
   });
 }
+
+export function useClubs() {
+  return useQuery({
+    queryKey: ["clubs"],
+    queryFn: () => api.getClubs(),
+    staleTime: Infinity,
+  });
+}

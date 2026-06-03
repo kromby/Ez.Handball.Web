@@ -162,6 +162,7 @@ button {
   flex: none;
 }
 .logomark-img {
+  display: block;
   width: 40px;
   height: 40px;
   object-fit: contain;
@@ -511,5 +512,594 @@ button {
     overflow-x: auto;
     white-space: nowrap;
     -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* --- Auth forms --- */
+.auth-card {
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.field input,
+.field select {
+  font: inherit;
+  padding: 0.6rem 0.7rem;
+  border: 2px solid currentColor;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+}
+
+.field-error {
+  color: #b00020;
+  font-size: 0.85rem;
+}
+
+.form-error {
+  color: #b00020;
+  font-weight: 600;
+}
+
+.form-note {
+  opacity: 0.75;
+  font-size: 0.9rem;
+}
+
+.btn-primary {
+  font: inherit;
+  font-weight: 700;
+  padding: 0.65rem 1rem;
+  border: 2px solid currentColor;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-link {
+  font: inherit;
+  border: none;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+
+.verify-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: 2px dashed currentColor;
+  border-radius: 10px;
+}
+
+/* --- Nav auth area --- */
+.nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-auth a,
+.nav-auth .user-name {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+/* ===================================================================
+   Registration — the two-step "notebook spread" (issue #7 redesign)
+   Hand-drawn sketchbook look; the cover retints to the chosen club.
+   =================================================================== */
+
+/* --- buttons (sketchbook kit) --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  white-space: nowrap;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 11px;
+  background: var(--ink);
+  color: var(--paper-2);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s, opacity 0.12s;
+  box-shadow: 0 2px 0 #00000022, 0 8px 18px -10px #28241d88;
+}
+.btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+.btn--amber {
+  background: linear-gradient(180deg, var(--amber) 0%, var(--amber-deep) 120%);
+  color: #fff8ee;
+}
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: none;
+  border: 1.5px solid var(--line-2);
+}
+.btn--ghost:hover:not(:disabled) {
+  background: #ffffff55;
+}
+.btn--sm {
+  padding: 7px 13px;
+  font-size: 13px;
+  border-radius: 9px;
+}
+
+/* --- registration animations --- */
+.reg-page {
+  animation: regSlide 0.42s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+@keyframes regSlide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.reg-pop {
+  animation: regPop 0.5s cubic-bezier(0.2, 1.2, 0.4, 1) both;
+}
+@keyframes regPop {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.reg-burst {
+  animation: regBurst 0.55s ease-out both;
+  transform-origin: center;
+}
+@keyframes regBurst {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}
+.reg-spin {
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  border: 2.4px solid var(--amber-soft);
+  border-top-color: var(--amber-deep);
+  display: inline-block;
+  animation: regSpin 0.7s linear infinite;
+}
+@keyframes regSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .reg-page,
+  .reg-pop,
+  .reg-burst {
+    animation: none !important;
+  }
+}
+
+/* --- the spread: cover rail + form pane --- */
+.reg-wrap {
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto;
+}
+.reg-spread {
+  display: flex;
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 1px 0 #fffdf6 inset, 0 18px 40px -24px rgba(40, 36, 29, 0.5);
+}
+.reg-cover {
+  width: 340px;
+  flex: none;
+  position: relative;
+  padding: 34px 30px;
+  color: #f3ead2;
+  background: linear-gradient(160deg, #322c22, var(--ink));
+  transition: background 0.5s ease;
+  display: flex;
+  flex-direction: column;
+}
+.reg-cover-scribble {
+  color: #f0c98a;
+  font-size: 19px;
+  margin-top: 26px;
+}
+.reg-cover h2 {
+  color: #fbf4e2;
+  font-size: 31px;
+  line-height: 1.04;
+  margin-top: 6px;
+}
+.reg-cover-preview {
+  margin-top: 30px;
+  min-height: 130px;
+}
+.reg-cover-club {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.reg-cover-club-name {
+  font-family: var(--serif, "Spectral", serif);
+  font-weight: 800;
+  font-size: 20px;
+  color: #fff;
+}
+.reg-cover-placeholder {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  opacity: 0.8;
+}
+.reg-steps {
+  margin-top: auto;
+  padding-top: 34px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.reg-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0.55;
+}
+.reg-step.is-active,
+.reg-step.is-done {
+  opacity: 1;
+}
+.reg-step-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  font-family: var(--serif, "Spectral", serif);
+  font-weight: 800;
+  font-size: 13px;
+  background: #ffffff1a;
+  color: #fff;
+}
+.reg-step.is-active .reg-step-num {
+  background: #f0c98a;
+  color: #2a2118;
+}
+.reg-step.is-done .reg-step-num {
+  background: #ffffff33;
+}
+.reg-step-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+.reg-step-sub {
+  font-size: 12px;
+  color: #f3ead2aa;
+}
+
+.reg-form {
+  flex: 1;
+  min-width: 0;
+  background: var(--paper-2);
+  padding: 36px 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.reg-form-inner {
+  width: 100%;
+}
+.reg-form h2 {
+  font-size: 27px;
+  margin-bottom: 4px;
+}
+.reg-lede {
+  color: var(--ink-2);
+  font-size: 14.5px;
+  margin-bottom: 22px;
+}
+.reg-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* --- sketch-bordered fields --- */
+.reg-field-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+.reg-field-label {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+.reg-field-hint {
+  font-size: 12px;
+  color: var(--ink-3);
+}
+.reg-field-error {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--bad);
+}
+.reg-input-row {
+  display: flex;
+  align-items: center;
+}
+.reg-input {
+  flex: 1;
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 15.5px;
+  color: var(--ink);
+  padding: 12px 14px;
+}
+.reg-input-toggle {
+  all: unset;
+  cursor: pointer;
+  padding: 0 14px;
+  color: var(--ink-3);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+/* --- password strength --- */
+.reg-pwstrength {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 9px;
+  transition: opacity 0.2s;
+}
+.reg-pwstrength-bars {
+  display: flex;
+  gap: 5px;
+  flex: 1;
+}
+.reg-pwstrength-bar {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--line);
+  transition: background 0.25s;
+}
+.reg-pwstrength-label {
+  font-size: 15px;
+  min-width: 92px;
+  text-align: right;
+}
+
+/* --- language chips --- */
+.reg-lang {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+/* --- club picker --- */
+.reg-club-search {
+  margin-bottom: 12px;
+}
+.reg-club-search-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+}
+.reg-club-search input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14.5px;
+  padding: 11px 0;
+  color: var(--ink);
+}
+.reg-club-list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  max-height: clamp(300px, 52vh, 540px);
+  overflow-y: auto;
+  padding-right: 6px;
+  /* a slim, paper-toned scrollbar so it doesn't break the hand-drawn look */
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.reg-club-list::-webkit-scrollbar {
+  width: 8px;
+}
+.reg-club-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.reg-club-list::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 8px;
+  border: 2px solid var(--paper-2);
+}
+.reg-club-row {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.reg-club-row-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 700;
+  font-size: 15.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reg-club-row-sub {
+  font-size: 12.5px;
+  color: var(--ink-2);
+}
+.reg-empty {
+  text-align: center;
+  color: var(--ink-3);
+  padding: 24px 0;
+}
+
+/* --- action row --- */
+.reg-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 24px;
+  min-height: 44px;
+}
+.reg-actions-spacer {
+  flex: 1;
+}
+.reg-busy {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 700;
+  color: var(--amber-deep);
+  font-size: 15px;
+}
+.reg-have-account {
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 14px;
+  margin-top: 18px;
+}
+.reg-have-account a {
+  color: var(--amber-deep);
+  font-weight: 700;
+}
+
+/* --- celebration --- */
+.reg-celebrate {
+  text-align: center;
+  position: relative;
+  padding: 10px 0;
+}
+.reg-celebrate-mark {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 18px;
+}
+.reg-celebrate-burst {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  overflow: visible;
+}
+.reg-celebrate h2 {
+  font-size: 36px;
+  line-height: 1.02;
+}
+.reg-celebrate-lede {
+  color: var(--ink-2);
+  font-size: 15.5px;
+  margin: 12px auto 0;
+  max-width: 360px;
+  line-height: 1.55;
+}
+.reg-celebrate-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+/* --- responsive: spread → stacked banner --- */
+@media (max-width: 820px) {
+  .reg-spread {
+    flex-direction: column;
+  }
+  .reg-cover {
+    width: 100%;
+    padding: 24px 22px 20px;
+  }
+  .reg-cover h2 {
+    font-size: 22px;
+  }
+  .reg-cover-preview {
+    margin-top: 16px;
+    min-height: 0;
+  }
+  .reg-steps {
+    display: none;
+  }
+  .reg-form {
+    padding: 24px 20px 20px;
   }
 }

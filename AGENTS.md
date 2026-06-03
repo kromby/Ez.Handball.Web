@@ -27,7 +27,7 @@ Colocate each test next to its subject as `*.test.tsx`.
 ## How to write it
 
 - **Name things for readers.** Use full words. DeepSource rejects single-letter locals (it allows only `i`, `j`, `n`, `x`, `y`); so should you. `cornerRadius`, not `r`.
-- **Keep components small and focused.** Extract a child component before the JSX nests past four levels.
+- **Keep components small and focused.** Extract a child component when the JSX gets hard to read. Deep nesting is a smell, not a hard limit — extract because it clarifies, not to hit a number. (DeepSource's JSX-max-depth rule, JS-0415, is treated as advisory here — see House style.)
 - **Return early for loading and error states**, the way the pages already do: `if (isPending) return <Loading />`. Render the happy path last.
 - **Style through CSS classes** in `app.css`. Reserve inline styles for values computed at runtime (for example, the geometry in `SketchBox`).
 - **Let the server own the logic.** This UI is deliberately thin: it fetches, renders, and routes. Ranking, aggregation, and business rules belong to the API, not to React. Format and display what the API returns; do not recompute it.
@@ -64,4 +64,6 @@ These three failed before, on real data: a stats table dragged the whole sheet p
 
 ## House style
 
-DeepSource gates this repo. Keep it green: descriptive names, self-closing empty tags, JSX nesting of four or fewer levels, and consistent returns. Match the surrounding code's formatting rather than introducing your own.
+DeepSource gates this repo. Keep it green: descriptive names, self-closing empty tags, and consistent returns. Match the surrounding code's formatting rather than introducing your own.
+
+Fix DeepSource's **bug, security, and correctness** findings — those earn their keep. Treat its **style/antipattern** findings as advice, not law: apply them when they improve the code, skip them when they don't. In particular, **JSX max depth (JS-0415)** is **not** enforced here — don't extract components solely to drop a nesting level. It's ignored repo-wide via the DeepSource dashboard (Issue → Ignore → "For all files"); suppress a stray one inline with `// skipcq: JS-0415` if needed.
