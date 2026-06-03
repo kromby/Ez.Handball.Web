@@ -999,9 +999,23 @@ button {
   display: flex;
   flex-direction: column;
   gap: 9px;
-  max-height: 300px;
+  max-height: clamp(300px, 52vh, 540px);
   overflow-y: auto;
-  padding-right: 4px;
+  padding-right: 6px;
+  /* a slim, paper-toned scrollbar so it doesn't break the hand-drawn look */
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-2) transparent;
+}
+.reg-club-list::-webkit-scrollbar {
+  width: 8px;
+}
+.reg-club-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.reg-club-list::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 8px;
+  border: 2px solid var(--paper-2);
 }
 .reg-club-row {
   display: flex;
@@ -1018,21 +1032,6 @@ button {
 .reg-club-row-sub {
   font-size: 12.5px;
   color: var(--ink-2);
-}
-.reg-club-check {
-  width: 24px;
-  height: 24px;
-  border-radius: 999px;
-  flex: none;
-  display: grid;
-  place-items: center;
-  color: var(--paper-2);
-  box-shadow: inset 0 0 0 1.6px var(--line-2);
-  transition: all 0.15s;
-}
-.reg-club-check.is-on {
-  background: var(--ink);
-  box-shadow: none;
 }
 .reg-empty {
   text-align: center;

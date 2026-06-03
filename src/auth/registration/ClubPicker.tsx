@@ -33,9 +33,6 @@ function ClubRow({
           <div style={{ minWidth: 0, flex: 1 }}>
             <div className="reg-club-row-name">{club.name}</div>
           </div>
-          <div className={`reg-club-check${selected ? " is-on" : ""}`}>
-            {selected && <Icon name="check" size={14} sketch={false} />}
-          </div>
         </div>
       </SketchBox>
     </button>
