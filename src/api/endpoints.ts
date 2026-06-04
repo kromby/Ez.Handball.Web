@@ -47,10 +47,10 @@ export function getShortlist(): Promise<ShortlistResponse> {
   return authedGet<ShortlistResponse>("/api/users/me/shortlist");
 }
 
-export function addToShortlist(playerId: string): Promise<void> {
-  return authedSend<void>(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "PUT");
+export async function addToShortlist(playerId: string): Promise<void> {
+  await authedSend(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "PUT");
 }
 
-export function removeFromShortlist(playerId: string): Promise<void> {
-  return authedSend<void>(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "DELETE");
+export async function removeFromShortlist(playerId: string): Promise<void> {
+  await authedSend(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "DELETE");
 }

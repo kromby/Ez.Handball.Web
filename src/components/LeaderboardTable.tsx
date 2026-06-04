@@ -8,6 +8,11 @@ function metricValue(entry: LeaderboardEntry, metric: LeaderboardMetric): number
     case "yellowCards": return entry.yellowCards;
     case "twoMinuteSuspensions": return entry.twoMinuteSuspensions;
     case "redCards": return entry.redCards;
+    default: {
+      // Exhaustiveness guard: a new LeaderboardMetric without a case fails to compile here.
+      const unhandled: never = metric;
+      return unhandled;
+    }
   }
 }
 
