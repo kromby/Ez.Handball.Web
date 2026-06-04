@@ -10,7 +10,7 @@ const rows: Row[] = [
   { playerId: "p2", name: null, clubName: null, position: null },
 ];
 const after: PlayerColumn<Row>[] = [
-  { key: "pos", header: "Pos", align: "left", render: (r) => r.position ?? "—" },
+  { key: "pos", header: "Pos", render: (r) => r.position ?? "—" },
 ];
 
 test("renders a row per entry with player link, club, and after-columns", () => {
@@ -29,4 +29,15 @@ test("falls back to placeholders for null name and club", () => {
 test("shows the empty label when there are no rows", () => {
   renderWithProviders(<PlayerTable<Row> rows={[]} emptyLabel="Nothing here yet." />);
   expect(screen.getByText("Nothing here yet.")).toBeInTheDocument();
+});
+
+test("renders before-columns ahead of the player cell", () => {
+  const before: PlayerColumn<Row & { rank: number }>[] = [
+    { key: "rank", header: "#", align: "right", render: (r) => r.rank },
+  ];
+  const ranked = rows.map((r, i) => ({ ...r, rank: i + 1 }));
+  renderWithProviders(<PlayerTable<Row & { rank: number }> rows={ranked} before={before} after={after} />);
+  expect(screen.getByText("#")).toBeInTheDocument();
+  expect(screen.getByText("1")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Aron" })).toHaveAttribute("href", "/players/p1");
 });

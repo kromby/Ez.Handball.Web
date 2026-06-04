@@ -5,7 +5,7 @@ import { StarToggle } from "./StarToggle";
 export interface PlayerColumn<T> {
   key: string;
   header: string;
-  align?: "left" | "right";
+  align?: "right";
   render: (row: T) => ReactNode;
 }
 
@@ -15,7 +15,7 @@ interface PlayerRow {
   clubName: string | null;
 }
 
-const numClass = (align?: "left" | "right") => (align === "right" ? "num" : undefined);
+const numClass = (align?: "right") => (align === "right" ? "num" : undefined);
 
 export function PlayerTable<T extends PlayerRow>({
   rows,
