@@ -33,6 +33,12 @@ test("shows the empty state when the shortlist is empty", async () => {
   expect(await screen.findByText(/No players yet/i)).toBeInTheDocument();
 });
 
+test("shows an error view when the shortlist request fails", async () => {
+  vi.spyOn(api, "getShortlist").mockRejectedValue(new Error("boom"));
+  renderWithProviders(<ShortlistPage />, { auth: authed });
+  expect(await screen.findByText(/something went wrong/i)).toBeInTheDocument();
+});
+
 test("removing a player calls the remove endpoint", async () => {
   vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [item({})], count: 1, max: 20 });
   const remove = vi.spyOn(api, "removeFromShortlist").mockResolvedValue(undefined);
