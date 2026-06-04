@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import * as auth from "../api/authEndpoints";
 import type { AuthUser, RegisterRequest, UpdateProfileRequest } from "../api/types";
 import { AuthContext, type AuthStatus } from "./useAuth";
@@ -8,13 +9,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [user, setUser] = useState<AuthUser | null>(null);
   const bootstrapped = useRef(false);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     store.onSessionCleared(() => {
       setUser(null);
       setStatus("anonymous");
+      queryClient.clear();
     });
-  }, []);
+  }, [queryClient]);
 
   useEffect(() => {
     if (bootstrapped.current) return;
@@ -43,6 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function login(email: string, password: string) {
     const res = await auth.login({ email, password });
     store.setSession(res);
+    queryClient.clear();
     setUser(res.user);
     setStatus("authenticated");
   }
@@ -50,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function register(input: RegisterRequest) {
     const res = await auth.register(input);
     store.setSession(res);
+    queryClient.clear();
     setUser(res.user);
     setStatus("authenticated");
   }
@@ -64,6 +69,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       store.clearSession();
       setUser(null);
       setStatus("anonymous");
+      queryClient.clear();
     }
   }
 
