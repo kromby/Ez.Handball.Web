@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
 import { MatchList, type MatchSummary } from "../components/MatchList";
 import { Panel } from "../components/Panel";
+import { StarToggle } from "../components/StarToggle";
 import { StatTable } from "../components/StatTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { usePlayer, usePlayerHistory, usePlayerStats } from "../query/hooks";
@@ -39,10 +40,13 @@ export default function PlayerPage() {
   return (
     <section className="stack">
       <div className="page-head">
-        <h1 className="title">
-          {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
-          {p.name}
-        </h1>
+        <div className="title-row">
+          <h1 className="title">
+            {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
+            {p.name}
+          </h1>
+          <StarToggle playerId={playerId} />
+        </div>
         <p className="subtitle">{headerBits.join(" · ")}</p>
       </div>
 

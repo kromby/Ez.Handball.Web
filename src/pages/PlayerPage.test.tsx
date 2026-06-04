@@ -74,6 +74,30 @@ test("renders profile, history, and the player's match list", async () => {
   expect(screen.getByRole("link", { name: "View" })).toHaveAttribute("href", "/matches/m1");
 });
 
+test("shows the shortlist star on the player header when authenticated", async () => {
+  const user = {
+    id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const,
+    favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
+  };
+  vi.spyOn(api, "getPlayer").mockResolvedValue({
+    playerId: "7", name: "Ólafur Stefánsson", jerseyNumber: "7", dateOfBirth: null,
+    age: null, teamId: "tm", clubId: "c1", clubName: "Valur", gender: "karlar",
+  });
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [], count: 0, max: 20 });
+
+  renderWithProviders(
+    <Routes>
+      <Route path="/players/:playerId" element={<PlayerPage />} />
+    </Routes>,
+    { initialEntries: ["/players/7"], auth: { status: "authenticated", user } },
+  );
+
+  await waitFor(() => expect(screen.getByText("Ólafur Stefánsson")).toBeInTheDocument());
+  expect(await screen.findByRole("button", { name: /add to shortlist/i })).toBeInTheDocument();
+});
+
 test("renders not-found when the player 404s", async () => {
   const { ApiError } = await import("../api/client");
   vi.spyOn(api, "getPlayer").mockRejectedValue(new ApiError(404, "player_not_found", "x"));

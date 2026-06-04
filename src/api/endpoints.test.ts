@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -42,4 +42,29 @@ test("getMatch hits the match path", async () => {
   const spy = spyGet();
   await getMatch("99");
   expect(spy).toHaveBeenCalledWith("/api/matches/99");
+});
+
+function spyAuthedGet() {
+  return vi.spyOn(client, "authedGet").mockResolvedValue({} as never);
+}
+function spyAuthedSend() {
+  return vi.spyOn(client, "authedSend").mockResolvedValue(undefined as never);
+}
+
+test("getShortlist hits the shortlist path", async () => {
+  const spy = spyAuthedGet();
+  await getShortlist();
+  expect(spy).toHaveBeenCalledWith("/api/users/me/shortlist");
+});
+
+test("addToShortlist PUTs the encoded player id", async () => {
+  const spy = spyAuthedSend();
+  await addToShortlist("a/b");
+  expect(spy).toHaveBeenCalledWith("/api/users/me/shortlist/a%2Fb", "PUT");
+});
+
+test("removeFromShortlist DELETEs the encoded player id", async () => {
+  const spy = spyAuthedSend();
+  await removeFromShortlist("a/b");
+  expect(spy).toHaveBeenCalledWith("/api/users/me/shortlist/a%2Fb", "DELETE");
 });

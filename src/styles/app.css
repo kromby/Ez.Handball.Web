@@ -231,6 +231,11 @@ button {
   letter-spacing: -0.015em;
   margin: 0;
 }
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 .jersey {
   color: var(--amber-deep);
   font-weight: 800;
@@ -339,6 +344,29 @@ button {
 }
 .stats-table a:hover {
   color: var(--amber-deep);
+}
+
+/* ===================== star toggle (shortlist) ===================== */
+.star-toggle {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 1.1rem;
+  color: var(--ink-2);
+  transition: color 0.12s ease, opacity 0.12s ease;
+}
+.star-toggle.is-on {
+  color: var(--amber);
+}
+.star-toggle:hover:not(:disabled) {
+  color: var(--amber-deep);
+  opacity: 0.85;
+}
+.star-toggle:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 
 /* rank medals — hand-stamped chips */

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import { useShortlist } from "../query/hooks";
 
 /** Brand logomark: the hand-drawn handball tucked into a goal's top corner. */
 function LogoMark() {
@@ -22,10 +23,14 @@ function Wordmark() {
 
 function AuthArea() {
   const { status, user } = useAuth();
+  const { data } = useShortlist();
   if (status === "loading") return null;
   if (status === "authenticated" && user) {
     return (
       <nav className="nav-auth" aria-label="Account">
+        <Link to="/shortlist" className="nav-shortlist">
+          {data ? `Shortlist · ${data.count}` : "Shortlist"}
+        </Link>
         <Link to="/account" className="user-name">{user.displayName}</Link>
       </nav>
     );

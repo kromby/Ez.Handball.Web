@@ -1,6 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as api from "../api/endpoints";
-import type { LeaderboardMetric } from "../api/types";
+import type { LeaderboardMetric, ShortlistItem, ShortlistResponse } from "../api/types";
+import { useAuth } from "../auth/useAuth";
 
 export function useLeaderboard(metric: LeaderboardMetric, offset: number, limit: number) {
   return useQuery({
@@ -46,5 +47,65 @@ export function useClubs() {
     queryKey: ["clubs"],
     queryFn: () => api.getClubs(),
     staleTime: Infinity,
+  });
+}
+
+const SHORTLIST_KEY = ["shortlist"] as const;
+
+export function useShortlist() {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: SHORTLIST_KEY,
+    queryFn: () => api.getShortlist(),
+    enabled: status === "authenticated",
+  });
+}
+
+export function useAddToShortlist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (playerId: string) => api.addToShortlist(playerId),
+    onMutate: async (playerId: string) => {
+      await qc.cancelQueries({ queryKey: SHORTLIST_KEY });
+      const prev = qc.getQueryData<ShortlistResponse>(SHORTLIST_KEY);
+      if (prev && !prev.items.some((i) => i.playerId === playerId)) {
+        const optimistic: ShortlistItem = {
+          playerId, name: null, clubId: null, clubName: null, position: null,
+          gender: null, price: null, pickPercentage: null, createdAt: "",
+        };
+        qc.setQueryData<ShortlistResponse>(SHORTLIST_KEY, {
+          ...prev, items: [...prev.items, optimistic], count: prev.count + 1,
+        });
+      }
+      return { prev };
+    },
+    onError: (_err, _playerId, ctx) => {
+      if (ctx?.prev) qc.setQueryData(SHORTLIST_KEY, ctx.prev);
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: SHORTLIST_KEY }),
+  });
+}
+
+export function useRemoveFromShortlist() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (playerId: string) => api.removeFromShortlist(playerId),
+    onMutate: async (playerId: string) => {
+      await qc.cancelQueries({ queryKey: SHORTLIST_KEY });
+      const prev = qc.getQueryData<ShortlistResponse>(SHORTLIST_KEY);
+      if (prev) {
+        const wasMember = prev.items.some((i) => i.playerId === playerId);
+        qc.setQueryData<ShortlistResponse>(SHORTLIST_KEY, {
+          ...prev,
+          items: prev.items.filter((i) => i.playerId !== playerId),
+          count: Math.max(0, prev.count - (wasMember ? 1 : 0)),
+        });
+      }
+      return { prev };
+    },
+    onError: (_err, _playerId, ctx) => {
+      if (ctx?.prev) qc.setQueryData(SHORTLIST_KEY, ctx.prev);
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: SHORTLIST_KEY }),
   });
 }

@@ -1,18 +1,18 @@
-import { Link } from "react-router-dom";
 import type { LeaderboardEntry, LeaderboardMetric } from "../api/types";
+import { PlayerTable, type PlayerColumn } from "./PlayerTable";
 
 function metricValue(entry: LeaderboardEntry, metric: LeaderboardMetric): number {
   switch (metric) {
-    case "goals":
-      return entry.goals;
-    case "games":
-      return entry.games;
-    case "yellowCards":
-      return entry.yellowCards;
-    case "twoMinuteSuspensions":
-      return entry.twoMinuteSuspensions;
-    case "redCards":
-      return entry.redCards;
+    case "goals": return entry.goals;
+    case "games": return entry.games;
+    case "yellowCards": return entry.yellowCards;
+    case "twoMinuteSuspensions": return entry.twoMinuteSuspensions;
+    case "redCards": return entry.redCards;
+    default: {
+      // Exhaustiveness guard: a new LeaderboardMetric without a case fails to compile here.
+      const unhandled: never = metric;
+      return unhandled;
+    }
   }
 }
 
@@ -23,37 +23,18 @@ export function LeaderboardTable({
   entries: LeaderboardEntry[];
   metric: LeaderboardMetric;
 }) {
-  if (entries.length === 0) {
-    return <p className="status">No players found.</p>;
-  }
-  return (
-    <table className="stats-table leaderboard">
-      <thead>
-        <tr>
-          <th className="num">#</th>
-          <th>Player</th>
-          <th>Club</th>
-          <th className="num">Games</th>
-          <th className="num">Value</th>
-          <th className="num">Avg goals</th>
-        </tr>
-      </thead>
-      <tbody>
-        {entries.map((e) => (
-          <tr key={e.playerId}>
-            <td className="num">
-              <span className={e.rank <= 3 ? `rank-medal rank-${e.rank}` : ""}>{e.rank}</span>
-            </td>
-            <td>
-              <Link to={`/players/${encodeURIComponent(e.playerId)}`}>{e.name ?? "Unknown player"}</Link>
-            </td>
-            <td>{e.clubName ?? "—"}</td>
-            <td className="num">{e.games}</td>
-            <td className="num">{metricValue(e, metric)}</td>
-            <td className="num">{e.avgGoals.toFixed(2)}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
+  const before: PlayerColumn<LeaderboardEntry>[] = [
+    {
+      key: "rank",
+      header: "#",
+      align: "right",
+      render: (e) => <span className={e.rank <= 3 ? `rank-medal rank-${e.rank}` : ""}>{e.rank}</span>,
+    },
+  ];
+  const after: PlayerColumn<LeaderboardEntry>[] = [
+    { key: "games", header: "Games", align: "right", render: (e) => e.games },
+    { key: "value", header: "Value", align: "right", render: (e) => metricValue(e, metric) },
+    { key: "avg", header: "Avg goals", align: "right", render: (e) => e.avgGoals.toFixed(2) },
+  ];
+  return <PlayerTable<LeaderboardEntry> rows={entries} before={before} after={after} />;
 }

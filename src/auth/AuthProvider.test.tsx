@@ -1,6 +1,8 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import type { ReactNode } from "react";
 import { AuthProvider } from "./AuthProvider";
 import { useAuth } from "./useAuth";
 import * as auth from "../api/authEndpoints";
@@ -31,19 +33,26 @@ function Probe() {
   );
 }
 
+let queryClient: QueryClient;
+
+function wrapper({ children }: { children: ReactNode }) {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>{children}</AuthProvider>
+    </QueryClientProvider>
+  );
+}
+
 beforeEach(() => {
   localStorage.clear();
   store.clearSession();
+  queryClient = new QueryClient();
 });
 afterEach(() => vi.restoreAllMocks());
 
 describe("AuthProvider", () => {
   test("settles to anonymous when there is no stored token", async () => {
-    render(
-      <AuthProvider>
-        <Probe />
-      </AuthProvider>,
-    );
+    render(<Probe />, { wrapper });
     expect(await screen.findByText("status: anonymous")).toBeInTheDocument();
   });
 
@@ -52,22 +61,14 @@ describe("AuthProvider", () => {
     vi.spyOn(store, "refresh").mockResolvedValue(true);
     vi.spyOn(auth, "getMe").mockResolvedValue(user);
 
-    render(
-      <AuthProvider>
-        <Probe />
-      </AuthProvider>,
-    );
+    render(<Probe />, { wrapper });
     expect(await screen.findByText("status: authenticated")).toBeInTheDocument();
     expect(screen.getByText("user: Jon")).toBeInTheDocument();
   });
 
   test("login stores the session and flips to authenticated", async () => {
     vi.spyOn(auth, "login").mockResolvedValue(pair);
-    render(
-      <AuthProvider>
-        <Probe />
-      </AuthProvider>,
-    );
+    render(<Probe />, { wrapper });
     await screen.findByText("status: anonymous");
     await userEvent.click(screen.getByRole("button", { name: "login" }));
     expect(await screen.findByText("status: authenticated")).toBeInTheDocument();
@@ -77,11 +78,7 @@ describe("AuthProvider", () => {
   test("logout clears the session and calls the endpoint", async () => {
     vi.spyOn(auth, "login").mockResolvedValue(pair);
     const logoutSpy = vi.spyOn(auth, "logout").mockResolvedValue(undefined);
-    render(
-      <AuthProvider>
-        <Probe />
-      </AuthProvider>,
-    );
+    render(<Probe />, { wrapper });
     await screen.findByText("status: anonymous");
     await userEvent.click(screen.getByRole("button", { name: "login" }));
     await screen.findByText("status: authenticated");
@@ -89,5 +86,18 @@ describe("AuthProvider", () => {
     await waitFor(() => expect(screen.getByText("status: anonymous")).toBeInTheDocument());
     expect(logoutSpy).toHaveBeenCalledWith("r", false);
     expect(store.getAccessToken()).toBeNull();
+  });
+
+  test("logout clears the React Query cache to prevent cross-user leaks", async () => {
+    vi.spyOn(auth, "login").mockResolvedValue(pair);
+    vi.spyOn(auth, "logout").mockResolvedValue(undefined);
+    queryClient.setQueryData(["shortlist"], { playerIds: ["p1"] });
+    render(<Probe />, { wrapper });
+    await screen.findByText("status: anonymous");
+    await userEvent.click(screen.getByRole("button", { name: "login" }));
+    await screen.findByText("status: authenticated");
+    await userEvent.click(screen.getByRole("button", { name: "logout" }));
+    await waitFor(() => expect(screen.getByText("status: anonymous")).toBeInTheDocument());
+    expect(queryClient.getQueryData(["shortlist"])).toBeUndefined();
   });
 });
