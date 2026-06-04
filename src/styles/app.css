@@ -231,6 +231,11 @@ button {
   letter-spacing: -0.015em;
   margin: 0;
 }
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 .jersey {
   color: var(--amber-deep);
   font-weight: 800;

@@ -40,11 +40,13 @@ export default function PlayerPage() {
   return (
     <section className="stack">
       <div className="page-head">
-        <h1 className="title">
-          {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
-          {p.name}
+        <div className="title-row">
+          <h1 className="title">
+            {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
+            {p.name}
+          </h1>
           <StarToggle playerId={playerId} />
-        </h1>
+        </div>
         <p className="subtitle">{headerBits.join(" · ")}</p>
       </div>
 
