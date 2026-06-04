@@ -1,4 +1,4 @@
-import { apiGet } from "./client";
+import { apiGet, authedGet, authedSend } from "./client";
 import type {
   Club,
   Leaderboard,
@@ -7,6 +7,7 @@ import type {
   Player,
   PlayerHistoryResponse,
   PlayerStatsResponse,
+  ShortlistResponse,
 } from "./types";
 
 export function getLeaderboard(params: {
@@ -40,4 +41,16 @@ export function getMatch(id: string): Promise<MatchDetail> {
 
 export function getClubs(): Promise<Club[]> {
   return apiGet<Club[]>("/api/clubs");
+}
+
+export function getShortlist(): Promise<ShortlistResponse> {
+  return authedGet<ShortlistResponse>("/api/users/me/shortlist");
+}
+
+export function addToShortlist(playerId: string): Promise<void> {
+  return authedSend<void>(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "PUT");
+}
+
+export function removeFromShortlist(playerId: string): Promise<void> {
+  return authedSend<void>(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "DELETE");
 }

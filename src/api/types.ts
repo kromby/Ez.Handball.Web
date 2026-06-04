@@ -175,3 +175,21 @@ export interface Club {
   name: string;
   logoUrl: string | null;
 }
+
+export interface ShortlistItem {
+  playerId: string;
+  name: string | null;
+  clubId: string | null;
+  clubName: string | null;
+  position: string | null;
+  gender: string | null;
+  price: number | null;
+  pickPercentage: number | null;
+  createdAt: string;
+}
+
+export interface ShortlistResponse {
+  items: ShortlistItem[];
+  count: number;
+  max: number;
+}
