@@ -1137,3 +1137,9 @@ button {
   gap: 6px;
   align-items: center;
 }
+
+.nav-right {
+  display: inline-flex;
+  gap: 16px;
+  align-items: center;
+}
