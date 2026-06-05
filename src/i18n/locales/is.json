@@ -65,13 +65,13 @@
   },
   "shortlist": {
     "title": "Úrtakið þitt",
+    "notFound": "Úrtak fannst ekki",
     "empty": "Engir leikmenn enn — skoðaðu stigatöfluna og stjörnumerktu þá sem þú vilt fylgjast með.",
     "countOfMax": "{{count}} / {{max}}",
     "full": "Úrtak fullt ({{max}}/{{max}}) — fjarlægðu einn til að bæta við",
     "add": "Bæta {{name}} við úrtak",
     "remove": "Fjarlægja {{name}} úr úrtaki",
-    "label": "Úrtak",
-    "updateFailed": "Tókst ekki að uppfæra úrtakið þitt"
+    "label": "Úrtak"
   },
   "account": {
     "title": "Aðgangurinn þinn",

@@ -20,7 +20,7 @@ export default function ShortlistPage() {
         {data && <p className="subtitle">{t("shortlist.countOfMax", { count: data.count, max: data.max })}</p>}
       </div>
       {isPending && <Loading />}
-      {isError && <ErrorView error={error} notFoundLabel={t("leaderboard.notFound")} />}
+      {isError && <ErrorView error={error} notFoundLabel={t("shortlist.notFound")} />}
       {data && (
         <Panel>
           <PlayerTable<ShortlistItem>
