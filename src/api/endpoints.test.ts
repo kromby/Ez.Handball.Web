@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -67,4 +67,34 @@ test("removeFromShortlist DELETEs the encoded player id", async () => {
   const spy = spyAuthedSend();
   await removeFromShortlist("a/b");
   expect(spy).toHaveBeenCalledWith("/api/users/me/shortlist/a%2Fb", "DELETE");
+});
+
+test("getLeaderboard includes filters when present", async () => {
+  const spy = spyGet();
+  await getLeaderboard({ metric: "goals", season: "2025-26", tournamentId: "8444", gender: "karlar" });
+  expect(spy).toHaveBeenCalledWith("/api/leaderboard?metric=goals&season=2025-26&tournamentId=8444&gender=karlar");
+});
+
+test("getLeaderboard omits filters when absent", async () => {
+  const spy = spyGet();
+  await getLeaderboard({ metric: "goals" });
+  expect(spy).toHaveBeenCalledWith("/api/leaderboard?metric=goals");
+});
+
+test("getSeasons requests /api/seasons", async () => {
+  const spy = spyGet();
+  await getSeasons();
+  expect(spy).toHaveBeenCalledWith("/api/seasons");
+});
+
+test("getTournaments encodes the season into the query", async () => {
+  const spy = spyGet();
+  await getTournaments("2025-26");
+  expect(spy).toHaveBeenCalledWith("/api/tournaments?season=2025-26");
+});
+
+test("getGenders requests /api/genders", async () => {
+  const spy = spyGet();
+  await getGenders();
+  expect(spy).toHaveBeenCalledWith("/api/genders");
 });

@@ -28,6 +28,22 @@ export interface Leaderboard {
   entries: LeaderboardEntry[];
 }
 
+export interface Season {
+  label: string;
+  isCurrent: boolean;
+}
+
+export interface Tournament {
+  tournamentId: string;
+  name: string;
+  gender: string;
+}
+
+export interface Gender {
+  value: string;
+  label: string;
+}
+
 export interface Player {
   playerId: string;
   name: string;

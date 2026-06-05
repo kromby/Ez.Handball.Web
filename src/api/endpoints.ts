@@ -1,26 +1,47 @@
 import { apiGet, authedGet, authedSend } from "./client";
 import type {
   Club,
+  Gender,
   Leaderboard,
   LeaderboardMetric,
   MatchDetail,
   Player,
   PlayerHistoryResponse,
   PlayerStatsResponse,
+  Season,
   ShortlistResponse,
+  Tournament,
 } from "./types";
 
 export function getLeaderboard(params: {
   metric?: LeaderboardMetric;
   offset?: number;
   limit?: number;
+  season?: string;
+  tournamentId?: string;
+  gender?: string;
 }): Promise<Leaderboard> {
   const searchParams = new URLSearchParams();
   if (params.metric) searchParams.set("metric", params.metric);
   if (params.offset != null) searchParams.set("offset", String(params.offset));
   if (params.limit != null) searchParams.set("limit", String(params.limit));
+  if (params.season) searchParams.set("season", params.season);
+  if (params.tournamentId) searchParams.set("tournamentId", params.tournamentId);
+  if (params.gender) searchParams.set("gender", params.gender);
   const queryString = searchParams.toString();
   return apiGet<Leaderboard>(`/api/leaderboard${queryString ? `?${queryString}` : ""}`);
+}
+
+export function getSeasons(): Promise<Season[]> {
+  return apiGet<Season[]>("/api/seasons");
+}
+
+export function getTournaments(season: string): Promise<Tournament[]> {
+  return apiGet<Tournament[]>(`/api/tournaments?season=${encodeURIComponent(season)}`);
+}
+
+export function getGenders(): Promise<Gender[]> {
+  return apiGet<Gender[]>("/api/genders");
 }
 
 export function getPlayer(id: string): Promise<Player> {
