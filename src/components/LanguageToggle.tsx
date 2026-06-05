@@ -21,7 +21,7 @@ export function LanguageToggle() {
             key={code}
             type="button"
             aria-pressed={on}
-            onClick={() => void setLanguage(code)}
+            onClick={() => setLanguage(code)}
             style={{ all: "unset", cursor: "pointer" }}
           >
             <SketchBox tone={on ? "ink" : "paper"} radius={999} pad="4px 10px">

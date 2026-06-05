@@ -13,14 +13,19 @@ export const resources = {
 // Best initial guess before auth resolves; useLanguageSync reconciles after.
 const initialLanguage = readStoredLanguage() ?? DEFAULT_LANGUAGE;
 
-void i18next.use(initReactI18next).init({
-  resources,
-  lng: initialLanguage,
-  fallbackLng: DEFAULT_LANGUAGE,
-  supportedLngs: ["is", "en"],
-  interpolation: { escapeValue: false }, // React already escapes
-  react: { useSuspense: false },         // resources are bundled; render synchronously
-});
+i18next
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: initialLanguage,
+    fallbackLng: DEFAULT_LANGUAGE,
+    supportedLngs: ["is", "en"],
+    interpolation: { escapeValue: false }, // React already escapes
+    react: { useSuspense: false },         // resources are bundled; render synchronously
+  })
+  .catch(() => {
+    // Bundled resources initialise synchronously; a rejection here is non-fatal.
+  });
 
 export const i18n = i18next;
 export default i18next;

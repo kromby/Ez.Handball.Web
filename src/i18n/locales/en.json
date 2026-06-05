@@ -1,14 +1,14 @@
 {
   "brand": {
-    "name": "Olís deildin Fantasy",
-    "tagline": "your fantasy edge, drawn by hand"
+    "name": "Olís league - Fantasy",
+    "tagline": "Your team. Your tactics. Your league."
   },
   "common": {
     "loading": "Loading…",
     "error": "Something went wrong. Please try again."
   },
   "nav": {
-    "home": "Olís deildin Fantasy — home",
+    "home": "Olís league - Fantasy — home",
     "account": "Account",
     "login": "Log in",
     "register": "Register",

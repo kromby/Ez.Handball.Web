@@ -1,19 +1,19 @@
 {
   "brand": {
-    "name": "Olís deildin Fantasy",
-    "tagline": "fantasy-forskotið þitt, handteiknað"
+    "name": "Olís deildin - Fantasy",
+    "tagline": "Þitt lið. Þín taktík. Þín deild."
   },
   "common": {
     "loading": "Hleð…",
     "error": "Eitthvað fór úrskeiðis. Reyndu aftur."
   },
   "nav": {
-    "home": "Olís deildin Fantasy — forsíða",
+    "home": "Olís deildin - Fantasy — forsíða",
     "account": "Aðgangur",
     "login": "Skrá inn",
     "register": "Nýskráning",
-    "shortlist": "Úrtak",
-    "shortlistWithCount": "Úrtak · {{count}}",
+    "shortlist": "Æfingahópur",
+    "shortlistWithCount": "Æfingahópur · {{count}}",
     "language": "Tungumál"
   },
   "leaderboard": {
@@ -30,11 +30,11 @@
     "metricGoals": "Mörk",
     "metricGames": "Leikir",
     "metricYellowCards": "Gul spjöld",
-    "metricTwoMinSuspensions": "2-mín",
+    "metricTwoMinSuspensions": "2 mín",
     "metricRedCards": "Rauð spjöld",
     "paginationRange": "{{from}}–{{to}} af {{total}}",
     "noPlayers": "Engir leikmenn fundust.",
-    "metricGroupLabel": "Tölfræðiflokkur"
+    "metricGroupLabel": "Flokkur"
   },
   "match": {
     "notFound": "Leikur fannst ekki",
@@ -52,7 +52,7 @@
   },
   "player": {
     "notFound": "Leikmaður fannst ekki",
-    "seasonHistory": "Tímabilasaga",
+    "seasonHistory": "Tímabilin",
     "matches": "Leikir",
     "noMatches": "Engir leikir.",
     "total": "Samtals",
@@ -63,14 +63,14 @@
     "goalsCount": "{{count}} mörk"
   },
   "shortlist": {
-    "title": "Úrtakið þitt",
-    "notFound": "Úrtak fannst ekki",
+    "title": "Æfingahópurinn þinn",
+    "notFound": "Æfingahópur fannst ekki",
     "empty": "Engir leikmenn enn — skoðaðu stigatöfluna og stjörnumerktu þá sem þú vilt fylgjast með.",
     "countOfMax": "{{count}} / {{max}}",
-    "full": "Úrtak fullt ({{max}}/{{max}}) — fjarlægðu einn til að bæta við",
-    "add": "Bæta {{name}} við úrtak",
-    "remove": "Fjarlægja {{name}} úr úrtaki",
-    "label": "Úrtak",
+    "full": "Æfingahópurinn fullur ({{max}}/{{max}}) — fjarlægðu einn til að bæta við",
+    "add": "Bæta {{name}} í æfingahópinn",
+    "remove": "Fjarlægja {{name}} úr æfingahópnum",
+    "label": "Æfingahópur",
     "position": "Sæti"
   },
   "account": {
@@ -84,7 +84,7 @@
     "email": "Netfang",
     "password": "Lykilorð",
     "newPassword": "Nýtt lykilorð",
-    "displayName": "Birtingarnafn",
+    "displayName": "Þjálfara nafnið þitt",
     "favoriteClub": "Uppáhaldslið",
     "language": "Tungumál",
     "logIn": "Skrá inn",
@@ -99,8 +99,8 @@
     "saving": "Vista…",
     "profileSaved": "Prófíll vistaður.",
     "invalidClub": "Veldu gilt lið.",
-    "clubPrompt": "Hvaða liði heldurðu með?",
-    "clubHint": "Veldu lið — við setjum bókina þína upp strax.",
+    "clubPrompt": "Með hvaða liði heldur þú?",
+    "clubHint": "Veldu þitt uppáhaldslið.",
     "noClubsNamed": "ekkert lið með því nafni",
     "clubsLoadError": "Tókst ekki að hlaða liðum.",
     "crestDropHint": "merki liðsins þíns birtist hér ↘",
@@ -109,13 +109,13 @@
     "resendVerification": "Senda staðfestingu aftur",
     "verifyInvalid": "Þessi hlekkur er ógildur eða þegar notaður.",
     "verifyGoAccount": "Fara á aðganginn þinn",
-    "accountReady": "Aðgangurinn þinn er klár. Kafaðu í tölfræði deildarinnar.",
+    "accountReady": "Þú ert orðinn þjálfari! Nú þarftu að velja í sigurliðið.",
     "resendFailed": "Tókst ekki að senda aftur núna. Reyndu síðar.",
     "loggingIn": "Skrái inn…",
     "detailsTitle": "Upplýsingarnar þínar",
     "back": "Til baka",
-    "settingUp": "Setur upp bókina þína…",
-    "tapCrestHint": "veldu skjaldarmerki til að ljúka →",
+    "settingUp": "Þú verður bráðum þjálfari...",
+    "tapCrestHint": "veldu þitt félag til þess að ljúka →",
     "noAccount": "Enginn aðgangur?",
     "haveAccount": "Ertu þegar með aðgang?",
     "emailTaken": "Þetta netfang er þegar skráð.",
@@ -148,10 +148,10 @@
     "step2Sub": "veldu liðið þitt",
     "coverTagline": "helgarleikir bíða —",
     "coverHeadline": "Fylgstu með hverjum leik, leikmanni og liði.",
-    "celebrationSubline": "velkomin/n á bak við net",
+    "celebrationSubline": "velkomin/n á hliðarlínuna",
     "youreIn": "{{name}}, þú ert inni.",
-    "notebookReady": "Bókin þín er tilbúin og {{club}} er fest á forsíðuna. Kafaðu í tölfræðina.",
-    "exploreStats": "Kanna tölfræðina",
+    "notebookReady": "Þú ert orðin/n þjálfari vonandi stendur þú þig jafnvel og {{club}} ef ekki betur. Settu saman sigurliðið.",
+    "exploreStats": "Skoða tölfræði",
     "defaultManagerName": "þjálfari",
     "passwordStrengthWeak": "mjög veikt",
     "passwordStrengthFair": "á góðri leið",

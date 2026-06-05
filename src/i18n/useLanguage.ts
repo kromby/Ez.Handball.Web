@@ -12,7 +12,11 @@ export function useLanguageSync(): void {
 
   useEffect(() => {
     const resolved = resolveLanguage(status, user);
-    if (i18n.language !== resolved) void i18n.changeLanguage(resolved);
+    if (i18n.language !== resolved) {
+      i18n.changeLanguage(resolved).catch(() => {
+        // Non-fatal: keep the current language if the change fails.
+      });
+    }
   }, [i18n, status, user]);
 
   useEffect(() => {
@@ -34,7 +38,7 @@ export function useLanguage() {
 
   const setLanguage = useCallback(
     async (next: Language) => {
-      void i18n.changeLanguage(next);
+      await i18n.changeLanguage(next);
       writeStoredLanguage(next);
       if (status === "authenticated") {
         try {

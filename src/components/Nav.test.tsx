@@ -53,6 +53,6 @@ describe("Nav", () => {
 
   test("shows the new brand wordmark", () => {
     renderWithProviders(<Nav />, { auth: { status: "anonymous" } });
-    expect(screen.getByText("Olís deildin Fantasy")).toBeInTheDocument();
+    expect(screen.getByText("Olís league - Fantasy")).toBeInTheDocument();
   });
 });
