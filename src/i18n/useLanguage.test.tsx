@@ -54,4 +54,12 @@ describe("useLanguage", () => {
     await act(async () => { await result.current.setLanguage("is"); });
     expect(updateProfile).toHaveBeenCalledWith({ language: "is" });
   });
+
+  test("setLanguage keeps <html lang> in sync (via languageChanged)", async () => {
+    const { wrapper } = wrap({ status: "anonymous" });
+    // Mount the sync hook so the languageChanged listener is active, plus the toggle hook.
+    const { result } = renderHook(() => { useLanguageSync(); return useLanguage(); }, { wrapper });
+    await act(async () => { await result.current.setLanguage("is"); });
+    expect(document.documentElement.lang).toBe("is");
+  });
 });
