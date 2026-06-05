@@ -43,12 +43,12 @@ export default function LeaderboardPage() {
 
   // Merge param updates so filters compose; "" / undefined removes a param.
   const update = (next: Record<string, string | undefined>) => {
-    const p = new URLSearchParams(params);
+    const merged = new URLSearchParams(params);
     for (const [key, value] of Object.entries(next)) {
-      if (value == null || value === "") p.delete(key);
-      else p.set(key, value);
+      if (value == null || value === "") merged.delete(key);
+      else merged.set(key, value);
     }
-    setParams(p);
+    setParams(merged);
   };
 
   return (

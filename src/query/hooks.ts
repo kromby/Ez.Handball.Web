@@ -70,7 +70,7 @@ export function useTournaments(season: string | undefined) {
   return useQuery({
     queryKey: ["tournaments", season ?? null],
     queryFn: () => api.getTournaments(season as string),
-    enabled: !!season,
+    enabled: Boolean(season),
     staleTime: Infinity,
   });
 }

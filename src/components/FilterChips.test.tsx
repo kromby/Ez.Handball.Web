@@ -9,7 +9,7 @@ const options = [
 ];
 
 test("marks the selected option with aria-pressed", () => {
-  render(<FilterChips label="Gender" options={options} selected="karlar" onSelect={() => {}} />);
+  render(<FilterChips label="Gender" options={options} selected="karlar" onSelect={vi.fn()} />);
   expect(screen.getByRole("button", { name: "Karlar" })).toHaveAttribute("aria-pressed", "true");
   expect(screen.getByRole("button", { name: "All" })).toHaveAttribute("aria-pressed", "false");
 });
