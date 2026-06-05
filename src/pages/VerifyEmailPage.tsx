@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useSearchParams } from "react-router-dom";
 import { verifyEmail } from "../api/authEndpoints";
 import { ApiError } from "../api/client";
@@ -8,6 +9,7 @@ import { Loading } from "../components/StateViews";
 type State = "verifying" | "success" | "expired" | "invalid";
 
 export default function VerifyEmailPage() {
+  const { t } = useTranslation();
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const [state, setState] = useState<State>("verifying");
@@ -35,22 +37,22 @@ export default function VerifyEmailPage() {
   return (
     <section className="stack auth-card">
       <div className="page-head">
-        <h1 className="title">Email verification</h1>
+        <h1 className="title">{t("auth.verifyTitle")}</h1>
       </div>
       <Panel>
         {state === "verifying" && <Loading />}
         {state === "success" && (
           <p className="form-note" role="status">
-            Email verified. <Link to="/account">Go to your account</Link>
+            {t("auth.emailVerified")} <Link to="/account">{t("auth.verifyGoAccount")}</Link>
           </p>
         )}
         {state === "expired" && (
           <p className="form-error" role="alert">
-            This link has expired. Sign in and resend the verification email from your account.
+            {t("auth.verifyExpired")}
           </p>
         )}
         {state === "invalid" && (
-          <p className="form-error" role="alert">This link is invalid or already used.</p>
+          <p className="form-error" role="alert">{t("auth.verifyInvalid")}</p>
         )}
       </Panel>
     </section>

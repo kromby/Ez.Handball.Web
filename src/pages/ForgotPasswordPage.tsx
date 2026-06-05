@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { requestPasswordReset } from "../api/authEndpoints";
 import { Panel } from "../components/Panel";
 
 export default function ForgotPasswordPage() {
+  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [pending, setPending] = useState(false);
@@ -24,25 +26,25 @@ export default function ForgotPasswordPage() {
   return (
     <section className="stack auth-card">
       <div className="page-head">
-        <h1 className="title">Reset password</h1>
+        <h1 className="title">{t("auth.resetPasswordTitle")}</h1>
       </div>
       <Panel>
         {submitted ? (
           <p className="form-note" role="status">
-            If an account exists for that email, we&rsquo;ve sent reset instructions.
+            {t("auth.resetSentLong")}
           </p>
         ) : (
           <form className="auth-form" onSubmit={onSubmit} noValidate>
             <div className="field">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{t("auth.email")}</label>
               <input id="email" type="email" autoComplete="email" value={email}
                 onChange={(event) => setEmail(event.target.value)} />
             </div>
             <button className="btn-primary" type="submit" disabled={pending}>
-              {pending ? "Sending…" : "Send reset link"}
+              {pending ? t("auth.sending") : t("auth.sendResetLink")}
             </button>
             <p className="form-note">
-              <Link to="/login">Back to login</Link>
+              <Link to="/login">{t("auth.backToLogin")}</Link>
             </p>
           </form>
         )}

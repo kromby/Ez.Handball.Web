@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { ApiError } from "../api/client";
 import type { Language } from "../api/types";
 import { ErrorView, Loading } from "../components/StateViews";
@@ -7,6 +8,7 @@ import { useClubs } from "../query/hooks";
 
 /** The profile-editing form on the account page: display name, language, club. */
 export function ProfileForm() {
+  const { t } = useTranslation();
   const { user, updateProfile } = useAuth();
   const clubs = useClubs();
   const [displayName, setDisplayName] = useState(user?.displayName ?? "");
@@ -23,12 +25,12 @@ export function ProfileForm() {
     setPending(true);
     try {
       await updateProfile({ displayName, language, favoriteClubId });
-      setMessage("Profile saved.");
+      setMessage(t("auth.profileSaved"));
     } catch (err) {
       setError(
         err instanceof ApiError && err.code === "invalid_club"
-          ? "Please choose a valid club."
-          : "Something went wrong. Please try again.",
+          ? t("auth.invalidClub")
+          : t("common.error"),
       );
     } finally {
       setPending(false);
@@ -49,7 +51,7 @@ export function ProfileForm() {
       )}
 
       <div className="field">
-        <label htmlFor="displayName">Display name</label>
+        <label htmlFor="displayName">{t("auth.displayName")}</label>
         <input
           id="displayName"
           type="text"
@@ -59,7 +61,7 @@ export function ProfileForm() {
       </div>
 
       <div className="field">
-        <label htmlFor="language">Language</label>
+        <label htmlFor="language">{t("auth.language")}</label>
         <select id="language" value={language} onChange={(event) => setLanguage(event.target.value as Language)}>
           <option value="is">Íslenska</option>
           <option value="en">English</option>
@@ -67,9 +69,9 @@ export function ProfileForm() {
       </div>
 
       <div className="field">
-        <label htmlFor="favoriteClubId">Favorite club</label>
+        <label htmlFor="favoriteClubId">{t("auth.favoriteClub")}</label>
         {clubs.isPending && <Loading />}
-        {clubs.isError && <ErrorView error={clubs.error} notFoundLabel="No clubs found" />}
+        {clubs.isError && <ErrorView error={clubs.error} notFoundLabel={t("auth.noClubsNamed")} />}
         {clubs.data && (
           <select id="favoriteClubId" value={favoriteClubId} onChange={(event) => setFavoriteClubId(event.target.value)}>
             {clubs.data.map((club) => (
@@ -82,7 +84,7 @@ export function ProfileForm() {
       </div>
 
       <button className="btn-primary" type="submit" disabled={pending}>
-        {pending ? "Saving…" : "Save changes"}
+        {pending ? t("auth.saving") : t("auth.save")}
       </button>
     </form>
   );
