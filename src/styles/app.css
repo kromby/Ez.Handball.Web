@@ -1131,3 +1131,9 @@ button {
     padding: 24px 20px 20px;
   }
 }
+
+.nav-lang {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
