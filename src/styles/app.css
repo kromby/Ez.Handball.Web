@@ -1143,3 +1143,22 @@ button {
   gap: 16px;
   align-items: center;
 }
+
+.leaderboard-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+}
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+.filter-chips-label {
+  font-weight: 700;
+  font-size: 13px;
+  opacity: 0.7;
+  margin-right: 4px;
+}

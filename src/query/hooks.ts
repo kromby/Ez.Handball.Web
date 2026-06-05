@@ -3,10 +3,18 @@ import * as api from "../api/endpoints";
 import type { LeaderboardMetric, ShortlistItem, ShortlistResponse } from "../api/types";
 import { useAuth } from "../auth/useAuth";
 
-export function useLeaderboard(metric: LeaderboardMetric, offset: number, limit: number) {
+export function useLeaderboard(
+  metric: LeaderboardMetric,
+  offset: number,
+  limit: number,
+  filters: { season?: string; tournamentId?: string; gender?: string } = {},
+  options: { enabled?: boolean } = {},
+) {
+  const { season, tournamentId, gender } = filters;
   return useQuery({
-    queryKey: ["leaderboard", metric, offset, limit],
-    queryFn: () => api.getLeaderboard({ metric, offset, limit }),
+    queryKey: ["leaderboard", metric, offset, limit, season ?? null, tournamentId ?? null, gender ?? null],
+    queryFn: () => api.getLeaderboard({ metric, offset, limit, season, tournamentId, gender }),
+    enabled: options.enabled ?? true,
   });
 }
 
@@ -46,6 +54,31 @@ export function useClubs() {
   return useQuery({
     queryKey: ["clubs"],
     queryFn: () => api.getClubs(),
+    staleTime: Infinity,
+  });
+}
+
+export function useSeasons() {
+  return useQuery({
+    queryKey: ["seasons"],
+    queryFn: () => api.getSeasons(),
+    staleTime: Infinity,
+  });
+}
+
+export function useTournaments(season: string | undefined) {
+  return useQuery({
+    queryKey: ["tournaments", season ?? null],
+    queryFn: () => api.getTournaments(season as string),
+    enabled: Boolean(season),
+    staleTime: Infinity,
+  });
+}
+
+export function useGenders() {
+  return useQuery({
+    queryKey: ["genders"],
+    queryFn: () => api.getGenders(),
     staleTime: Infinity,
   });
 }

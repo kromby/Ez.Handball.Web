@@ -34,7 +34,12 @@
     "metricRedCards": "Red cards",
     "paginationRange": "{{from}}–{{to}} of {{total}}",
     "noPlayers": "No players found.",
-    "metricGroupLabel": "Ranking metric"
+    "metricGroupLabel": "Ranking metric",
+    "filterSeason": "Season",
+    "filterTournament": "Tournament",
+    "filterGender": "Gender",
+    "filterAllTournaments": "All tournaments",
+    "filterAllGenders": "All"
   },
   "match": {
     "notFound": "Match not found",

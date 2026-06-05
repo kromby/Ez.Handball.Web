@@ -34,7 +34,12 @@
     "metricRedCards": "Rauð spjöld",
     "paginationRange": "{{from}}–{{to}} af {{total}}",
     "noPlayers": "Engir leikmenn fundust.",
-    "metricGroupLabel": "Flokkur"
+    "metricGroupLabel": "Flokkur",
+    "filterSeason": "Tímabil",
+    "filterTournament": "Mót",
+    "filterGender": "Kyn",
+    "filterAllTournaments": "Öll mót",
+    "filterAllGenders": "Bæði"
   },
   "match": {
     "notFound": "Leikur fannst ekki",
