@@ -17,6 +17,26 @@
     "shortlistWithCount": "Úrtak · {{count}}",
     "language": "Tungumál"
   },
+  "leaderboard": {
+    "title": "Stigatafla",
+    "notFound": "Stigatafla fannst ekki",
+    "player": "Leikmaður",
+    "club": "Félag",
+    "games": "Leikir",
+    "goals": "Mörk",
+    "avgGoals": "Mörk að meðaltali",
+    "value": "Gildi",
+    "rank": "Sæti",
+    "prev": "Fyrri",
+    "next": "Næsti",
+    "metricGoals": "Mörk",
+    "metricGames": "Leikir",
+    "metricYellowCards": "Gul spjöld",
+    "metricTwoMinSuspensions": "2-mín",
+    "metricRedCards": "Rauð spjöld",
+    "paginationRange": "{{from}}–{{to}} af {{total}}",
+    "noPlayers": "Engir leikmenn fundust."
+  },
   "auth": {
     "loginTitle": "Velkomin/n aftur",
     "registerTitle": "Búðu til fantasy-bókina þína",

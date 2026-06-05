@@ -17,6 +17,26 @@
     "shortlistWithCount": "Shortlist · {{count}}",
     "language": "Language"
   },
+  "leaderboard": {
+    "title": "Leaderboard",
+    "notFound": "Leaderboard not found",
+    "player": "Player",
+    "club": "Club",
+    "games": "Games",
+    "goals": "Goals",
+    "avgGoals": "Avg goals",
+    "value": "Value",
+    "rank": "Rank",
+    "prev": "Previous",
+    "next": "Next",
+    "metricGoals": "Goals",
+    "metricGames": "Games",
+    "metricYellowCards": "Yellow cards",
+    "metricTwoMinSuspensions": "2-min",
+    "metricRedCards": "Red cards",
+    "paginationRange": "{{from}}–{{to}} of {{total}}",
+    "noPlayers": "No players found."
+  },
   "auth": {
     "loginTitle": "Welcome back",
     "registerTitle": "Build your fantasy notebook",

@@ -1,4 +1,5 @@
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import type { LeaderboardMetric } from "../api/types";
 import { ErrorView, Loading } from "../components/StateViews";
 import { LeaderboardTable } from "../components/LeaderboardTable";
@@ -15,6 +16,7 @@ function parseMetric(raw: string | null): LeaderboardMetric {
 }
 
 export default function LeaderboardPage() {
+  const { t } = useTranslation();
   const [params, setParams] = useSearchParams();
   const metric = parseMetric(params.get("metric"));
   const offset = Math.max(0, Number(params.get("offset") ?? "0") || 0);
@@ -31,11 +33,11 @@ export default function LeaderboardPage() {
   return (
     <section className="stack">
       <div className="page-head">
-        <h2 className="title">Leaderboard</h2>
+        <h2 className="title">{t("leaderboard.title")}</h2>
         <MetricSwitcher value={metric} onChange={setMetric} />
       </div>
       {isPending && <Loading />}
-      {isError && <ErrorView error={error} notFoundLabel="Leaderboard not found" />}
+      {isError && <ErrorView error={error} notFoundLabel={t("leaderboard.notFound")} />}
       {data && (
         <Panel>
           <LeaderboardTable entries={data.entries} metric={metric} />

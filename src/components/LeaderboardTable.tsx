@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { LeaderboardEntry, LeaderboardMetric } from "../api/types";
 import { PlayerTable, type PlayerColumn } from "./PlayerTable";
 
@@ -23,6 +24,7 @@ export function LeaderboardTable({
   entries: LeaderboardEntry[];
   metric: LeaderboardMetric;
 }) {
+  const { t } = useTranslation();
   const before: PlayerColumn<LeaderboardEntry>[] = [
     {
       key: "rank",
@@ -32,9 +34,9 @@ export function LeaderboardTable({
     },
   ];
   const after: PlayerColumn<LeaderboardEntry>[] = [
-    { key: "games", header: "Games", align: "right", render: (e) => e.games },
-    { key: "value", header: "Value", align: "right", render: (e) => metricValue(e, metric) },
-    { key: "avg", header: "Avg goals", align: "right", render: (e) => e.avgGoals.toFixed(2) },
+    { key: "games", header: t("leaderboard.games"), align: "right", render: (e) => e.games },
+    { key: "value", header: t("leaderboard.value"), align: "right", render: (e) => metricValue(e, metric) },
+    { key: "avg", header: t("leaderboard.avgGoals"), align: "right", render: (e) => e.avgGoals.toFixed(2) },
   ];
   return <PlayerTable<LeaderboardEntry> rows={entries} before={before} after={after} />;
 }
