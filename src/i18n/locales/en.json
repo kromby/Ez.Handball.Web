@@ -54,6 +54,7 @@
     "back": "Back",
     "settingUp": "Setting up your notebook…",
     "tapCrestHint": "tap a crest to finish →",
+    "noAccount": "No account?",
     "haveAccount": "Already have an account?",
     "emailTaken": "That email is already registered.",
     "weakPassword": "Password must be at least 8 characters.",
