@@ -5,8 +5,7 @@
   },
   "common": {
     "loading": "Loading…",
-    "error": "Something went wrong. Please try again.",
-    "retry": "Try again"
+    "error": "Something went wrong. Please try again."
   },
   "nav": {
     "home": "Olís deildin Fantasy — home",
@@ -26,7 +25,6 @@
     "goals": "Goals",
     "avgGoals": "Avg goals",
     "value": "Value",
-    "rank": "Rank",
     "prev": "Previous",
     "next": "Next",
     "metricGoals": "Goals",
@@ -83,7 +81,6 @@
   },
   "auth": {
     "loginTitle": "Welcome back",
-    "registerTitle": "Build your fantasy notebook",
     "email": "Email",
     "password": "Password",
     "newPassword": "New password",
@@ -96,7 +93,6 @@
     "forgotPassword": "Forgot your password?",
     "backToLogin": "Back to login",
     "resetTitle": "Set a new password",
-    "resetCta": "Reset password",
     "resetSent": "Sent — check your inbox.",
     "resetMissingToken": "This reset link is missing its token.",
     "save": "Save changes",
@@ -106,6 +102,8 @@
     "clubPrompt": "Who do you support?",
     "clubHint": "Tap a club — we'll set up your notebook straight away.",
     "noClubsNamed": "no clubs by that name",
+    "clubsLoadError": "Couldn't load clubs.",
+    "crestDropHint": "your club's crest lands here ↘",
     "verifyTitle": "Email verification",
     "verifyPlease": "Please verify your email to secure your account.",
     "resendVerification": "Resend verification",

@@ -71,7 +71,7 @@ export function ProfileForm() {
       <div className="field">
         <label htmlFor="favoriteClubId">{t("auth.favoriteClub")}</label>
         {clubs.isPending && <Loading />}
-        {clubs.isError && <ErrorView error={clubs.error} notFoundLabel={t("auth.noClubsNamed")} />}
+        {clubs.isError && <ErrorView error={clubs.error} notFoundLabel={t("auth.clubsLoadError")} />}
         {clubs.data && (
           <select id="favoriteClubId" value={favoriteClubId} onChange={(event) => setFavoriteClubId(event.target.value)}>
             {clubs.data.map((club) => (

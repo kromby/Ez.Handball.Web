@@ -34,10 +34,10 @@ export function RegisterCover({ club, step, done }: { club: Club | null; step: n
             boxShadow: "0 1px 0 #fff8 inset, 0 2px 6px -2px rgba(40,36,29,.35)",
           }}
         >
-          <img src="/assets/logo.png" alt="Ez.Handball" width={30} height={30} style={{ display: "block", objectFit: "contain" }} />
+          <img src="/assets/logo.png" alt={t("brand.name")} width={30} height={30} style={{ display: "block", objectFit: "contain" }} />
         </span>
         <span style={{ fontFamily: "var(--serif, Spectral, serif)", fontWeight: 800, fontSize: 18, color: "#fbf4e2", letterSpacing: ".02em" }}>
-          Ez.Handball
+          {t("brand.name")}
         </span>
       </div>
 
@@ -56,7 +56,7 @@ export function RegisterCover({ club, step, done }: { club: Club | null; step: n
           <div className="reg-cover-placeholder">
             <img src="/assets/ball.png" alt="" width={52} height={52} style={{ display: "block" }} />
             <div className="scribble" style={{ fontSize: 17, color: "#f3ead2cc", maxWidth: 150 }}>
-              your club&rsquo;s crest lands here ↘
+              {t("auth.crestDropHint")}
             </div>
           </div>
         )}

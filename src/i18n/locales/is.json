@@ -5,8 +5,7 @@
   },
   "common": {
     "loading": "Hleð…",
-    "error": "Eitthvað fór úrskeiðis. Reyndu aftur.",
-    "retry": "Reyna aftur"
+    "error": "Eitthvað fór úrskeiðis. Reyndu aftur."
   },
   "nav": {
     "home": "Olís deildin Fantasy — forsíða",
@@ -26,7 +25,6 @@
     "goals": "Mörk",
     "avgGoals": "Mörk að meðaltali",
     "value": "Gildi",
-    "rank": "Sæti",
     "prev": "Fyrri",
     "next": "Næsti",
     "metricGoals": "Mörk",
@@ -83,7 +81,6 @@
   },
   "auth": {
     "loginTitle": "Velkomin/n aftur",
-    "registerTitle": "Búðu til fantasy-bókina þína",
     "email": "Netfang",
     "password": "Lykilorð",
     "newPassword": "Nýtt lykilorð",
@@ -96,7 +93,6 @@
     "forgotPassword": "Gleymt lykilorð?",
     "backToLogin": "Til baka í innskráningu",
     "resetTitle": "Veldu nýtt lykilorð",
-    "resetCta": "Endurstilla lykilorð",
     "resetSent": "Sent — athugaðu pósthólfið þitt.",
     "resetMissingToken": "Þennan hlekk vantar auðkenni.",
     "save": "Vista breytingar",
@@ -106,6 +102,8 @@
     "clubPrompt": "Hvaða liði heldurðu með?",
     "clubHint": "Veldu lið — við setjum bókina þína upp strax.",
     "noClubsNamed": "ekkert lið með því nafni",
+    "clubsLoadError": "Tókst ekki að hlaða liðum.",
+    "crestDropHint": "merki liðsins þíns birtist hér ↘",
     "verifyTitle": "Staðfesting netfangs",
     "verifyPlease": "Staðfestu netfangið þitt til að tryggja aðganginn.",
     "resendVerification": "Senda staðfestingu aftur",

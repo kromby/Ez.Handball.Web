@@ -41,7 +41,7 @@ function mapFieldError(
  * whole form (the backend register is a single call), landing on a celebration.
  */
 export default function RegisterPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { register } = useAuth();
   const navigate = useNavigate();
   const clubs = useClubs();
@@ -64,8 +64,7 @@ export default function RegisterPage() {
     if (password.length < 8 || password.length > 128) next.password = t("auth.passwordRange");
     if (displayName.trim().length < 1 || displayName.length > 60) next.displayName = t("auth.displayNameRange");
     return next;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [email, password, displayName]);
+  }, [email, password, displayName, i18n.language]);
 
   const shownError = (name: string) => serverErrors[name] ?? (touched[name] ? liveErrors[name] : undefined);
   const selectedClub = clubId && clubs.data ? clubs.data.find((club) => club.clubId === clubId) ?? null : null;
@@ -199,7 +198,7 @@ export default function RegisterPage() {
                   </p>
                 )}
                 {clubs.isPending && <Loading />}
-                {clubs.isError && <ErrorView error={clubs.error} notFoundLabel={t("auth.noClubsNamed")} />}
+                {clubs.isError && <ErrorView error={clubs.error} notFoundLabel={t("auth.clubsLoadError")} />}
                 {clubs.data && <ClubPicker clubs={clubs.data} value={clubId} onChange={pickClub} />}
                 <div className="reg-actions">
                   <button className="btn btn--ghost" onClick={() => setStep(0)} disabled={submitting}>
