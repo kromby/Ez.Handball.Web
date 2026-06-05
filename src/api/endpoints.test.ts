@@ -89,8 +89,8 @@ test("getSeasons requests /api/seasons", async () => {
 
 test("getTournaments encodes the season into the query", async () => {
   const spy = spyGet();
-  await getTournaments("2025-26");
-  expect(spy).toHaveBeenCalledWith("/api/tournaments?season=2025-26");
+  await getTournaments("2025/26");
+  expect(spy).toHaveBeenCalledWith("/api/tournaments?season=2025%2F26");
 });
 
 test("getGenders requests /api/genders", async () => {
