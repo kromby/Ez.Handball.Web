@@ -142,7 +142,7 @@ export default function RegisterPage() {
                   <RegField
                     id="displayName"
                     label={t("auth.displayName")}
-                    placeholder="e.g. Halla"
+                    placeholder={t("auth.displayNamePlaceholder")}
                     value={displayName}
                     onChange={update("displayName", setDisplayName)}
                     onBlur={() => touch("displayName")}
@@ -164,7 +164,7 @@ export default function RegisterPage() {
                       label={t("auth.password")}
                       type="password"
                       placeholder="••••••••"
-                      hint="8+ characters"
+                      hint={t("auth.passwordHint")}
                       value={password}
                       onChange={update("password", setPassword)}
                       onBlur={() => touch("password")}
@@ -182,7 +182,7 @@ export default function RegisterPage() {
                 <div className="reg-actions">
                   <div className="reg-actions-spacer" />
                   <button className="btn btn--amber" onClick={goClub}>
-                    Continue <Icon name="arrow" size={16} sketch={false} />
+                    {t("auth.continue")} <Icon name="arrow" size={16} sketch={false} />
                   </button>
                 </div>
                 <p className="reg-have-account">

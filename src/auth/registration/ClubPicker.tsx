@@ -66,8 +66,8 @@ export function ClubPicker({
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search clubs…"
-              aria-label="Search clubs"
+              placeholder={t("auth.searchClubs")}
+              aria-label={t("auth.searchClubsLabel")}
             />
           </div>
         </SketchBox>

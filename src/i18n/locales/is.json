@@ -35,7 +35,8 @@
     "metricTwoMinSuspensions": "2-mín",
     "metricRedCards": "Rauð spjöld",
     "paginationRange": "{{from}}–{{to}} af {{total}}",
-    "noPlayers": "Engir leikmenn fundust."
+    "noPlayers": "Engir leikmenn fundust.",
+    "metricGroupLabel": "Tölfræðiflokkur"
   },
   "match": {
     "notFound": "Leikur fannst ekki",
@@ -71,7 +72,8 @@
     "full": "Úrtak fullt ({{max}}/{{max}}) — fjarlægðu einn til að bæta við",
     "add": "Bæta {{name}} við úrtak",
     "remove": "Fjarlægja {{name}} úr úrtaki",
-    "label": "Úrtak"
+    "label": "Úrtak",
+    "position": "Sæti"
   },
   "account": {
     "title": "Aðgangurinn þinn",
@@ -135,6 +137,26 @@
     "setNewPassword": "Stilla nýtt lykilorð",
     "passwordUpdated": "Lykilorð uppfært.",
     "verifyExpired": "Þessi hlekkur er útrunninn. Skráðu þig inn og sendu staðfestingarpóst aftur frá aðganginum þínum.",
-    "emailVerified": "Netfang staðfest."
+    "emailVerified": "Netfang staðfest.",
+    "displayNamePlaceholder": "t.d. Halla",
+    "passwordHint": "8+ stafir",
+    "searchClubs": "Leita að liðum…",
+    "searchClubsLabel": "Leita að liðum",
+    "continue": "Áfram",
+    "showPassword": "SÝNA",
+    "hidePassword": "FELA",
+    "step1Sub": "nafn, netfang & lykilorð",
+    "step2Title": "Liðið þitt",
+    "step2Sub": "veldu liðið þitt",
+    "coverTagline": "helgarleikir bíða —",
+    "coverHeadline": "Fylgstu með hverjum leik, leikmanni og liði.",
+    "celebrationSubline": "velkomin/n á bak við net",
+    "youreIn": "{{name}}, þú ert inni.",
+    "notebookReady": "Bókin þín er tilbúin og {{club}} er fest á forsíðuna. Kafaðu í tölfræðina.",
+    "exploreStats": "Kanna tölfræðina",
+    "defaultManagerName": "þjálfari",
+    "passwordStrengthWeak": "mjög veikt",
+    "passwordStrengthFair": "á góðri leið",
+    "passwordStrengthStrong": "sterk gripið"
   }
 }

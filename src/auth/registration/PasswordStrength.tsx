@@ -1,10 +1,12 @@
 import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
-const LABELS = ["", "tooth & nail", "getting there", "iron grip"];
 const COLORS = ["var(--line-2)", "var(--bad)", "var(--amber)", "var(--good)"];
 
 /** Three pencil ticks rating password strength, with a handwritten label. */
 export function PasswordStrength({ value }: { value: string }) {
+  const { t } = useTranslation();
+  const LABELS = ["", t("auth.passwordStrengthWeak"), t("auth.passwordStrengthFair"), t("auth.passwordStrengthStrong")];
   const score = useMemo(() => {
     let points = 0;
     if (value.length >= 8) points += 1;

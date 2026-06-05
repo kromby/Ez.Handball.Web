@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { Language } from "../../api/types";
 import { SketchBox } from "../../components/SketchBox";
 
@@ -9,8 +10,9 @@ const LANGS: [Language, string][] = [
 
 /** Pencil chips for the language preference (replaces a native select). */
 export function LanguagePicker({ value, onChange }: { value: Language; onChange: (value: Language) => void }) {
+  const { t } = useTranslation();
   return (
-    <div className="reg-lang" role="group" aria-label="Language">
+    <div className="reg-lang" role="group" aria-label={t("auth.language")}>
       {LANGS.map(([code, name]) => {
         const on = value === code;
         return (

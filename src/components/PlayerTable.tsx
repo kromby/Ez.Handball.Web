@@ -54,7 +54,7 @@ export function PlayerTable<T extends PlayerRow>({
               <td key={c.key} className={numClass(c.align)}>{c.render(row)}</td>
             ))}
             <td>
-              <Link to={`/players/${encodeURIComponent(row.playerId)}`}>{row.name ?? "Unknown player"}</Link>
+              <Link to={`/players/${encodeURIComponent(row.playerId)}`}>{row.name ?? t("match.unknownPlayer")}</Link>
             </td>
             <td>{row.clubName ?? "—"}</td>
             {after.map((c) => (

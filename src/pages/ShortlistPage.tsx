@@ -5,13 +5,13 @@ import { PlayerTable, type PlayerColumn } from "../components/PlayerTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useShortlist } from "../query/hooks";
 
-const after: PlayerColumn<ShortlistItem>[] = [
-  { key: "position", header: "Pos", render: (r) => r.position ?? "—" },
-];
-
 export default function ShortlistPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, error } = useShortlist();
+
+  const after: PlayerColumn<ShortlistItem>[] = [
+    { key: "position", header: t("shortlist.position"), render: (r) => r.position ?? "—" },
+  ];
 
   return (
     <section className="stack">

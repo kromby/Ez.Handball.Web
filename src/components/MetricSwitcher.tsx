@@ -25,7 +25,7 @@ export function MetricSwitcher({
 }) {
   const { t } = useTranslation();
   return (
-    <div className="metric-switcher" role="tablist" aria-label="Ranking metric">
+    <div className="metric-switcher" role="tablist" aria-label={t("leaderboard.metricGroupLabel")}>
       {METRICS.map((m) => (
         <button
           key={m.value}

@@ -35,7 +35,8 @@
     "metricTwoMinSuspensions": "2-min",
     "metricRedCards": "Red cards",
     "paginationRange": "{{from}}–{{to}} of {{total}}",
-    "noPlayers": "No players found."
+    "noPlayers": "No players found.",
+    "metricGroupLabel": "Ranking metric"
   },
   "match": {
     "notFound": "Match not found",
@@ -71,7 +72,8 @@
     "full": "Shortlist full ({{max}}/{{max}}) — remove one to add more",
     "add": "Add {{name}} to shortlist",
     "remove": "Remove {{name}} from shortlist",
-    "label": "Shortlist"
+    "label": "Shortlist",
+    "position": "Pos"
   },
   "account": {
     "title": "Your account",
@@ -135,6 +137,26 @@
     "setNewPassword": "Set new password",
     "passwordUpdated": "Password updated.",
     "verifyExpired": "This link has expired. Sign in and resend the verification email from your account.",
-    "emailVerified": "Email verified."
+    "emailVerified": "Email verified.",
+    "displayNamePlaceholder": "e.g. Halla",
+    "passwordHint": "8+ characters",
+    "searchClubs": "Search clubs…",
+    "searchClubsLabel": "Search clubs",
+    "continue": "Continue",
+    "showPassword": "SHOW",
+    "hidePassword": "HIDE",
+    "step1Sub": "name, email & password",
+    "step2Title": "Your club",
+    "step2Sub": "pick who you support",
+    "coverTagline": "match weekend awaits —",
+    "coverHeadline": "Follow every match, player and club.",
+    "celebrationSubline": "welcome to the back court",
+    "youreIn": "You're in, {{name}}.",
+    "notebookReady": "Your notebook's set up and {{club}} is pinned to the cover. Dive into the stats.",
+    "exploreStats": "Explore the stats",
+    "defaultManagerName": "manager",
+    "passwordStrengthWeak": "tooth & nail",
+    "passwordStrengthFair": "getting there",
+    "passwordStrengthStrong": "iron grip"
   }
 }
