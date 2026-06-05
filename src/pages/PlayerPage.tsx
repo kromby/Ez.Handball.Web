@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
 import { MatchList, type MatchSummary } from "../components/MatchList";
@@ -24,13 +25,14 @@ function formatBirthday(iso: string | null): string {
 }
 
 export default function PlayerPage() {
+  const { t } = useTranslation();
   const { playerId = "" } = useParams();
   const profile = usePlayer(playerId);
   const history = usePlayerHistory(playerId);
   const stats = usePlayerStats(playerId);
 
   if (profile.isPending) return <Loading />;
-  if (profile.isError) return <ErrorView error={profile.error} notFoundLabel="Player not found" />;
+  if (profile.isError) return <ErrorView error={profile.error} notFoundLabel={t("player.notFound")} />;
 
   const p = profile.data;
   const headerBits = [p.clubName, p.age != null ? `Age ${p.age}` : null, formatBirthday(p.dateOfBirth)].filter(
@@ -51,21 +53,21 @@ export default function PlayerPage() {
       </div>
 
       <Panel>
-        <h2 className="section-title">Season history</h2>
+        <h2 className="section-title">{t("player.seasonHistory")}</h2>
         {history.isPending && <Loading />}
-        {history.isError && <ErrorView error={history.error} notFoundLabel="No history" />}
+        {history.isError && <ErrorView error={history.error} notFoundLabel={t("player.noHistory")} />}
         {history.data &&
           (history.data.history.length === 0 ? (
-            <p className="status">No matches played yet.</p>
+            <p className="status">{t("match.noMatches")}</p>
           ) : (
             <StatTable entries={history.data.history} totals={history.data.totals} />
           ))}
       </Panel>
 
       <Panel>
-        <h2 className="section-title">Matches</h2>
+        <h2 className="section-title">{t("player.matches")}</h2>
         {stats.isPending && <Loading />}
-        {stats.isError && <ErrorView error={stats.error} notFoundLabel="No matches" />}
+        {stats.isError && <ErrorView error={stats.error} notFoundLabel={t("player.noMatches")} />}
         {stats.data && <MatchList matches={stats.data.stats.map(toSummary)} />}
       </Panel>
     </section>

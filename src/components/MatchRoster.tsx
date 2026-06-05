@@ -1,13 +1,15 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { MatchPlayerLine } from "../api/types";
 import { Panel } from "./Panel";
 
 function RosterRow({ player }: { player: MatchPlayerLine }) {
+  const { t } = useTranslation();
   return (
     <tr>
       <td className="num">{player.jerseyNumber ?? ""}</td>
       <td>
-        <Link to={`/players/${encodeURIComponent(player.playerId)}`}>{player.name ?? "Unknown player"}</Link>
+        <Link to={`/players/${encodeURIComponent(player.playerId)}`}>{player.name ?? t("match.unknownPlayer")}</Link>
       </td>
       <td className="num">{player.goals}</td>
       <td className="num">{player.yellowCards}</td>
@@ -18,16 +20,17 @@ function RosterRow({ player }: { player: MatchPlayerLine }) {
 }
 
 function RosterTable({ players }: { players: MatchPlayerLine[] }) {
+  const { t } = useTranslation();
   return (
     <table className="stats-table">
       <thead>
         <tr>
           <th className="num">#</th>
-          <th>Player</th>
-          <th className="num">Goals</th>
-          <th className="num">Yellow</th>
-          <th className="num">2-min</th>
-          <th className="num">Red</th>
+          <th>{t("leaderboard.player")}</th>
+          <th className="num">{t("leaderboard.goals")}</th>
+          <th className="num">{t("match.yellow")}</th>
+          <th className="num">{t("leaderboard.metricTwoMinSuspensions")}</th>
+          <th className="num">{t("match.red")}</th>
         </tr>
       </thead>
       <tbody>

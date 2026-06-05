@@ -37,6 +37,31 @@
     "paginationRange": "{{from}}–{{to}} of {{total}}",
     "noPlayers": "No players found."
   },
+  "match": {
+    "title": "Match",
+    "notFound": "Match not found",
+    "noMatches": "No matches played yet.",
+    "venue": "Venue",
+    "attendance": "Attendance",
+    "season": "Season",
+    "tournament": "Tournament",
+    "halfTime": "Half-time",
+    "home": "Home",
+    "away": "Away",
+    "unknownPlayer": "Unknown player",
+    "yellow": "Yellow",
+    "red": "Red"
+  },
+  "player": {
+    "notFound": "Player not found",
+    "seasonHistory": "Season history",
+    "matches": "Matches",
+    "noMatches": "No matches.",
+    "total": "Total",
+    "detail": "Detail",
+    "view": "View",
+    "noHistory": "No history"
+  },
   "auth": {
     "loginTitle": "Welcome back",
     "registerTitle": "Build your fantasy notebook",

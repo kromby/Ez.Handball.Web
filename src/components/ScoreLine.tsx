@@ -1,8 +1,10 @@
+import { useTranslation } from "react-i18next";
 import type { MatchTeam } from "../api/types";
 
 /** The match result as a bold scoreboard: big amber final scores, with the
     half-time line shown small underneath only when it wasn't 0–0. */
 export function ScoreLine({ home, away }: { home: MatchTeam; away: MatchTeam }) {
+  const { t } = useTranslation();
   const showHalfTime = home.score.firstHalf !== 0 || away.score.firstHalf !== 0;
   return (
     <div className="scoreline">
@@ -17,7 +19,7 @@ export function ScoreLine({ home, away }: { home: MatchTeam; away: MatchTeam }) 
       </div>
       {showHalfTime && (
         <p className="scoreline-half">
-          Half-time {home.score.firstHalf}–{away.score.firstHalf}
+          {t("match.halfTime")} {home.score.firstHalf}–{away.score.firstHalf}
         </p>
       )}
     </div>

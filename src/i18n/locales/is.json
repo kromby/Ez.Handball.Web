@@ -37,6 +37,31 @@
     "paginationRange": "{{from}}–{{to}} af {{total}}",
     "noPlayers": "Engir leikmenn fundust."
   },
+  "match": {
+    "title": "Leikur",
+    "notFound": "Leikur fannst ekki",
+    "noMatches": "Engir leikir spilaðir enn.",
+    "venue": "Leikvangur",
+    "attendance": "Áhorfendur",
+    "season": "Tímabil",
+    "tournament": "Mót",
+    "halfTime": "Hálfleikur",
+    "home": "Heimalið",
+    "away": "Gestir",
+    "unknownPlayer": "Óþekktur leikmaður",
+    "yellow": "Gul",
+    "red": "Rauð"
+  },
+  "player": {
+    "notFound": "Leikmaður fannst ekki",
+    "seasonHistory": "Tímabilasaga",
+    "matches": "Leikir",
+    "noMatches": "Engir leikir.",
+    "total": "Samtals",
+    "detail": "Nánar",
+    "view": "Skoða",
+    "noHistory": "Engin saga"
+  },
   "auth": {
     "loginTitle": "Velkomin/n aftur",
     "registerTitle": "Búðu til fantasy-bókina þína",

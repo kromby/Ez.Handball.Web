@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { ScoreLine } from "../components/ScoreLine";
 import { MatchRoster } from "../components/MatchRoster";
@@ -19,11 +20,12 @@ function formatDate(iso: string): string {
 }
 
 export default function MatchPage() {
+  const { t } = useTranslation();
   const { matchId = "" } = useParams();
   const { data, isPending, isError, error } = useMatch(matchId);
 
   if (isPending) return <Loading />;
-  if (isError) return <ErrorView error={error} notFoundLabel="Match not found" />;
+  if (isError) return <ErrorView error={error} notFoundLabel={t("match.notFound")} />;
 
   const meta = [
     formatDate(data.date),
@@ -44,8 +46,8 @@ export default function MatchPage() {
       </Panel>
 
       <div className="rosters">
-        <MatchRoster title={data.homeTeam.clubName ?? "Home"} players={data.homeTeam.players} />
-        <MatchRoster title={data.awayTeam.clubName ?? "Away"} players={data.awayTeam.players} />
+        <MatchRoster title={data.homeTeam.clubName ?? t("match.home")} players={data.homeTeam.players} />
+        <MatchRoster title={data.awayTeam.clubName ?? t("match.away")} players={data.awayTeam.players} />
       </div>
     </section>
   );
