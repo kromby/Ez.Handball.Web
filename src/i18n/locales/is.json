@@ -1,0 +1,20 @@
+{
+  "brand": {
+    "name": "Olís deildin Fantasy",
+    "tagline": "fantasy-forskotið þitt, handteiknað"
+  },
+  "common": {
+    "loading": "Hleð…",
+    "error": "Eitthvað fór úrskeiðis. Reyndu aftur.",
+    "retry": "Reyna aftur"
+  },
+  "nav": {
+    "home": "Olís deildin Fantasy — forsíða",
+    "account": "Aðgangur",
+    "login": "Skrá inn",
+    "register": "Nýskráning",
+    "shortlist": "Úrtak",
+    "shortlistWithCount": "Úrtak · {{count}}",
+    "language": "Tungumál"
+  }
+}
