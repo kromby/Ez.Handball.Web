@@ -1,11 +1,19 @@
+import { useTranslation } from "react-i18next";
 import type { LeaderboardMetric } from "../api/types";
 
-export const METRICS: { value: LeaderboardMetric; label: string }[] = [
-  { value: "goals", label: "Goals" },
-  { value: "games", label: "Games" },
-  { value: "yellowCards", label: "Yellow cards" },
-  { value: "twoMinuteSuspensions", label: "2-min" },
-  { value: "redCards", label: "Red cards" },
+type MetricLabelKey =
+  | "leaderboard.metricGoals"
+  | "leaderboard.metricGames"
+  | "leaderboard.metricYellowCards"
+  | "leaderboard.metricTwoMinSuspensions"
+  | "leaderboard.metricRedCards";
+
+export const METRICS: { value: LeaderboardMetric; labelKey: MetricLabelKey }[] = [
+  { value: "goals", labelKey: "leaderboard.metricGoals" },
+  { value: "games", labelKey: "leaderboard.metricGames" },
+  { value: "yellowCards", labelKey: "leaderboard.metricYellowCards" },
+  { value: "twoMinuteSuspensions", labelKey: "leaderboard.metricTwoMinSuspensions" },
+  { value: "redCards", labelKey: "leaderboard.metricRedCards" },
 ];
 
 export function MetricSwitcher({
@@ -15,8 +23,9 @@ export function MetricSwitcher({
   value: LeaderboardMetric;
   onChange: (m: LeaderboardMetric) => void;
 }) {
+  const { t } = useTranslation();
   return (
-    <div className="metric-switcher" role="tablist" aria-label="Ranking metric">
+    <div className="metric-switcher" role="tablist" aria-label={t("leaderboard.metricGroupLabel")}>
       {METRICS.map((m) => (
         <button
           key={m.value}
@@ -26,7 +35,7 @@ export function MetricSwitcher({
           className={m.value === value ? "metric-tab active" : "metric-tab"}
           onClick={() => onChange(m.value)}
         >
-          {m.label}
+          {t(m.labelKey)}
         </button>
       ))}
     </div>

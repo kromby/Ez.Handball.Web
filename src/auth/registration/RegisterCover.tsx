@@ -1,12 +1,8 @@
+import { useTranslation } from "react-i18next";
 import type { Club } from "../../api/types";
 import { clubColor } from "./clubColor";
 import { ClubCrest } from "./ClubCrest";
 import { Icon } from "./Icon";
-
-const STEPS: [string, string][] = [
-  ["Your details", "name, email & password"],
-  ["Your club", "pick who you support"],
-];
 
 function coverBackground(club: Club | null): string {
   if (!club) return "linear-gradient(160deg, #322c22, var(--ink))";
@@ -20,6 +16,11 @@ function coverBackground(club: Club | null): string {
  * moment of this flow.
  */
 export function RegisterCover({ club, step, done }: { club: Club | null; step: number; done: boolean }) {
+  const { t } = useTranslation();
+  const STEPS: [string, string][] = [
+    [t("auth.detailsTitle"), t("auth.step1Sub")],
+    [t("auth.step2Title"), t("auth.step2Sub")],
+  ];
   return (
     <div className="reg-cover" style={{ background: coverBackground(club) }}>
       <div style={{ display: "flex", alignItems: "center", gap: 11 }}>
@@ -33,19 +34,15 @@ export function RegisterCover({ club, step, done }: { club: Club | null; step: n
             boxShadow: "0 1px 0 #fff8 inset, 0 2px 6px -2px rgba(40,36,29,.35)",
           }}
         >
-          <img src="/assets/logo.png" alt="Ez.Handball" width={30} height={30} style={{ display: "block", objectFit: "contain" }} />
+          <img src="/assets/logo.png" alt={t("brand.name")} width={30} height={30} style={{ display: "block", objectFit: "contain" }} />
         </span>
         <span style={{ fontFamily: "var(--serif, Spectral, serif)", fontWeight: 800, fontSize: 18, color: "#fbf4e2", letterSpacing: ".02em" }}>
-          Ez.Handball
+          {t("brand.name")}
         </span>
       </div>
 
-      <div className="scribble reg-cover-scribble">match weekend awaits —</div>
-      <h2>
-        Follow every match,
-        <br />
-        player and club.
-      </h2>
+      <div className="scribble reg-cover-scribble">{t("auth.coverTagline")}</div>
+      <h2>{t("auth.coverHeadline")}</h2>
 
       <div className="reg-cover-preview">
         {club ? (
@@ -59,7 +56,7 @@ export function RegisterCover({ club, step, done }: { club: Club | null; step: n
           <div className="reg-cover-placeholder">
             <img src="/assets/ball.png" alt="" width={52} height={52} style={{ display: "block" }} />
             <div className="scribble" style={{ fontSize: 17, color: "#f3ead2cc", maxWidth: 150 }}>
-              your club&rsquo;s crest lands here ↘
+              {t("auth.crestDropHint")}
             </div>
           </div>
         )}

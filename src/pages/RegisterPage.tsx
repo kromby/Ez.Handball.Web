@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import type { Language } from "../api/types";
@@ -13,14 +14,23 @@ import { PasswordStrength } from "../auth/registration/PasswordStrength";
 import { RegField } from "../auth/registration/RegField";
 import { RegisterCover } from "../auth/registration/RegisterCover";
 
+interface FieldMessages {
+  emailTaken: string;
+  weakPassword: string;
+  checkField: string;
+}
+
 /** Maps a backend error to the form field it belongs to (step 0). */
-function mapFieldError(err: ApiError): { field: string; message: string } | null {
-  if (err.code === "email_taken") return { field: "email", message: "That email is already registered." };
-  if (err.code === "weak_password") return { field: "password", message: "Password must be at least 8 characters." };
+function mapFieldError(
+  err: ApiError,
+  messages: FieldMessages,
+): { field: string; message: string } | null {
+  if (err.code === "email_taken") return { field: "email", message: messages.emailTaken };
+  if (err.code === "weak_password") return { field: "password", message: messages.weakPassword };
   if (err.code === "validation_error" && err.details?.field) {
     const known: Record<string, string> = { email: "email", password: "password", displayName: "displayName" };
     const field = known[err.details.field];
-    if (field) return { field, message: "Please check this field." };
+    if (field) return { field, message: messages.checkField };
   }
   return null;
 }
@@ -31,6 +41,7 @@ function mapFieldError(err: ApiError): { field: string; message: string } | null
  * whole form (the backend register is a single call), landing on a celebration.
  */
 export default function RegisterPage() {
+  const { t, i18n } = useTranslation();
   const { register } = useAuth();
   const navigate = useNavigate();
   const clubs = useClubs();
@@ -49,11 +60,11 @@ export default function RegisterPage() {
 
   const liveErrors = useMemo(() => {
     const next: Record<string, string> = {};
-    if (!/^\S+@\S+\.\S+$/.test(email)) next.email = "Enter a valid email address.";
-    if (password.length < 8 || password.length > 128) next.password = "Password must be 8–128 characters.";
-    if (displayName.trim().length < 1 || displayName.length > 60) next.displayName = "Display name must be 1–60 characters.";
+    if (!/^\S+@\S+\.\S+$/.test(email)) next.email = t("auth.emailFormat");
+    if (password.length < 8 || password.length > 128) next.password = t("auth.passwordRange");
+    if (displayName.trim().length < 1 || displayName.length > 60) next.displayName = t("auth.displayNameRange");
     return next;
-  }, [email, password, displayName]);
+  }, [email, password, displayName, i18n.language]);
 
   const shownError = (name: string) => serverErrors[name] ?? (touched[name] ? liveErrors[name] : undefined);
   const selectedClub = clubId && clubs.data ? clubs.data.find((club) => club.clubId === clubId) ?? null : null;
@@ -76,22 +87,26 @@ export default function RegisterPage() {
 
   function handleRegisterError(err: unknown) {
     if (!(err instanceof ApiError)) {
-      setFormError("Something went wrong. Please try again.");
+      setFormError(t("common.error"));
       return;
     }
-    const fieldError = mapFieldError(err);
+    const fieldError = mapFieldError(err, {
+      emailTaken: t("auth.emailTaken"),
+      weakPassword: t("auth.weakPassword"),
+      checkField: t("auth.checkField"),
+    });
     if (fieldError) {
       setServerErrors((prev) => ({ ...prev, [fieldError.field]: fieldError.message }));
       setTouched((prev) => ({ ...prev, [fieldError.field]: true }));
       setClubId(null);
       setStep(0);
     } else if (err.code === "invalid_club") {
-      setFormError("That club isn't valid. Please pick another.");
+      setFormError(t("auth.invalidClubPick"));
       setClubId(null);
     } else if (err.status === 429) {
-      setFormError("Too many attempts, please wait a moment.");
+      setFormError(t("auth.tooManyAttempts"));
     } else {
-      setFormError("Something went wrong. Please try again.");
+      setFormError(t("common.error"));
     }
   }
 
@@ -120,13 +135,13 @@ export default function RegisterPage() {
               <Celebration displayName={displayName} club={selectedClub} onEnter={() => navigate("/")} />
             ) : step === 0 ? (
               <div className="reg-page">
-                <h2>Your details</h2>
-                <p className="reg-lede">Takes about a minute.</p>
+                <h2>{t("auth.detailsTitle")}</h2>
+                <p className="reg-lede">{t("auth.registerHint")}</p>
                 <div className="reg-fields">
                   <RegField
                     id="displayName"
-                    label="Display name"
-                    placeholder="e.g. Halla"
+                    label={t("auth.displayName")}
+                    placeholder={t("auth.displayNamePlaceholder")}
                     value={displayName}
                     onChange={update("displayName", setDisplayName)}
                     onBlur={() => touch("displayName")}
@@ -134,7 +149,7 @@ export default function RegisterPage() {
                   />
                   <RegField
                     id="email"
-                    label="Email"
+                    label={t("auth.email")}
                     type="email"
                     placeholder="you@club.is"
                     value={email}
@@ -145,10 +160,10 @@ export default function RegisterPage() {
                   <div>
                     <RegField
                       id="password"
-                      label="Password"
+                      label={t("auth.password")}
                       type="password"
                       placeholder="••••••••"
-                      hint="8+ characters"
+                      hint={t("auth.passwordHint")}
                       value={password}
                       onChange={update("password", setPassword)}
                       onBlur={() => touch("password")}
@@ -158,7 +173,7 @@ export default function RegisterPage() {
                   </div>
                   <div>
                     <div className="reg-field-label" style={{ marginBottom: 9 }}>
-                      Language
+                      {t("auth.language")}
                     </div>
                     <LanguagePicker value={language} onChange={setLanguage} />
                   </div>
@@ -166,37 +181,37 @@ export default function RegisterPage() {
                 <div className="reg-actions">
                   <div className="reg-actions-spacer" />
                   <button className="btn btn--amber" onClick={goClub}>
-                    Continue <Icon name="arrow" size={16} sketch={false} />
+                    {t("auth.continue")} <Icon name="arrow" size={16} sketch={false} />
                   </button>
                 </div>
                 <p className="reg-have-account">
-                  Already have an account? <Link to="/login">Log in</Link>
+                  {t("auth.haveAccount")} <Link to="/login">{t("auth.logIn")}</Link>
                 </p>
               </div>
             ) : (
               <div className="reg-page">
-                <h2>Who do you support?</h2>
-                <p className="reg-lede">Tap a club &mdash; we&rsquo;ll set up your notebook straight away.</p>
+                <h2>{t("auth.clubPrompt")}</h2>
+                <p className="reg-lede">{t("auth.clubHint")}</p>
                 {formError && (
                   <p className="form-error" role="alert">
                     {formError}
                   </p>
                 )}
                 {clubs.isPending && <Loading />}
-                {clubs.isError && <ErrorView error={clubs.error} notFoundLabel="No clubs found" />}
+                {clubs.isError && <ErrorView error={clubs.error} notFoundLabel={t("auth.clubsLoadError")} />}
                 {clubs.data && <ClubPicker clubs={clubs.data} value={clubId} onChange={pickClub} />}
                 <div className="reg-actions">
                   <button className="btn btn--ghost" onClick={() => setStep(0)} disabled={submitting}>
-                    Back
+                    {t("auth.back")}
                   </button>
                   <div className="reg-actions-spacer" />
                   {submitting ? (
                     <span className="reg-busy">
-                      <span className="reg-spin" /> Setting up your notebook&hellip;
+                      <span className="reg-spin" /> {t("auth.settingUp")}
                     </span>
                   ) : (
                     <span className="scribble" style={{ fontSize: 17, color: "var(--ink-3)" }}>
-                      tap a crest to finish &rarr;
+                      {t("auth.tapCrestHint")}
                     </span>
                   )}
                 </div>

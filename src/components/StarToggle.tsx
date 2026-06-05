@@ -1,8 +1,10 @@
 import type { MouseEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { useAuth } from "../auth/useAuth";
 import { useAddToShortlist, useRemoveFromShortlist, useShortlist } from "../query/hooks";
 
-export function StarToggle({ playerId }: { playerId: string }) {
+export function StarToggle({ playerId, name }: { playerId: string; name?: string | null }) {
+  const { t } = useTranslation();
   const { status } = useAuth();
   const { data } = useShortlist();
   const add = useAddToShortlist();
@@ -13,6 +15,8 @@ export function StarToggle({ playerId }: { playerId: string }) {
 
   const member = data.items.some((i) => i.playerId === playerId);
   const atCap = !member && data.count >= data.max;
+
+  const playerName = name ?? t("match.unknownPlayer");
 
   const onClick = (e: MouseEvent) => {
     e.preventDefault();
@@ -26,9 +30,9 @@ export function StarToggle({ playerId }: { playerId: string }) {
       type="button"
       className={`star-toggle${member ? " is-on" : ""}`}
       aria-pressed={member}
-      aria-label={member ? "Remove from shortlist" : "Add to shortlist"}
+      aria-label={member ? t("shortlist.remove", { name: playerName }) : t("shortlist.add", { name: playerName })}
       disabled={atCap}
-      title={atCap ? `Shortlist full (${data.max}/${data.max}) — remove one to add more` : undefined}
+      title={atCap ? t("shortlist.full", { max: data.max }) : undefined}
       onClick={onClick}
     >
       {member ? "★" : "☆"}

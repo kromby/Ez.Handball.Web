@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { PlayerHistoryEntry, PlayerHistoryTotals } from "../api/types";
 
 export function StatTable({
@@ -7,19 +8,20 @@ export function StatTable({
   entries: PlayerHistoryEntry[];
   totals: PlayerHistoryTotals | null;
 }) {
+  const { t } = useTranslation();
   return (
     <table className="stats-table">
       <thead>
         <tr>
-          <th>Club</th>
-          <th>Tournament</th>
-          <th className="num">Season</th>
-          <th className="num">Games</th>
-          <th className="num">Goals</th>
-          <th className="num">Avg goals</th>
-          <th className="num">Yellow</th>
-          <th className="num">2-min</th>
-          <th className="num">Red</th>
+          <th>{t("leaderboard.club")}</th>
+          <th>{t("match.tournament")}</th>
+          <th className="num">{t("match.season")}</th>
+          <th className="num">{t("leaderboard.games")}</th>
+          <th className="num">{t("leaderboard.goals")}</th>
+          <th className="num">{t("leaderboard.avgGoals")}</th>
+          <th className="num">{t("match.yellow")}</th>
+          <th className="num">{t("leaderboard.metricTwoMinSuspensions")}</th>
+          <th className="num">{t("match.red")}</th>
         </tr>
       </thead>
       <tbody>
@@ -42,7 +44,7 @@ export function StatTable({
           <tr>
             <td />
             <td>
-              <strong>Total</strong>
+              <strong>{t("player.total")}</strong>
             </td>
             <td className="num" />
             <td className="num">{totals.games}</td>

@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from "react";
+import { useTranslation } from "react-i18next";
 import { SketchBox } from "../../components/SketchBox";
 
 /** A sketch-bordered text/email/password input with an inline error or hint. */
@@ -23,6 +24,7 @@ export function RegField({
   error?: string;
   hint?: string;
 }) {
+  const { t } = useTranslation();
   const [show, setShow] = useState(false);
   const isPassword = type === "password";
   const inputType = isPassword && show ? "text" : type;
@@ -54,7 +56,7 @@ export function RegField({
           />
           {isPassword && (
             <button type="button" tabIndex={-1} className="reg-input-toggle" onClick={() => setShow((s) => !s)}>
-              {show ? "HIDE" : "SHOW"}
+              {show ? t("auth.hidePassword") : t("auth.showPassword")}
             </button>
           )}
         </div>

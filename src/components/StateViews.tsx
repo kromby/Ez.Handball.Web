@@ -1,7 +1,9 @@
+import { useTranslation } from "react-i18next";
 import { ApiError } from "../api/client";
 
 export function Loading() {
-  return <p className="status">Loading…</p>;
+  const { t } = useTranslation();
+  return <p className="status">{t("common.loading")}</p>;
 }
 
 export function NotFound({ label }: { label: string }) {
@@ -9,8 +11,9 @@ export function NotFound({ label }: { label: string }) {
 }
 
 export function ErrorView({ error, notFoundLabel }: { error: unknown; notFoundLabel: string }) {
+  const { t } = useTranslation();
   if (error instanceof ApiError && error.status === 404) {
     return <NotFound label={notFoundLabel} />;
   }
-  return <p className="error">Something went wrong. Please try again.</p>;
+  return <p className="error">{t("common.error")}</p>;
 }

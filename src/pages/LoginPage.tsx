@@ -1,10 +1,12 @@
 import { useState, type FormEvent } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { AuthCard } from "../auth/AuthCard";
 import { useAuth } from "../auth/useAuth";
 
 export default function LoginPage() {
+  const { t } = useTranslation();
   const { login } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,8 +26,8 @@ export default function LoginPage() {
     } catch (err) {
       setError(
         err instanceof ApiError && err.status === 429
-          ? "Too many attempts, please wait a moment."
-          : "That email or password didn't match.",
+          ? t("auth.tooManyAttempts")
+          : t("auth.loginMismatch"),
       );
     } finally {
       setPending(false);
@@ -33,7 +35,7 @@ export default function LoginPage() {
   }
 
   return (
-    <AuthCard title="Log in">
+    <AuthCard title={t("auth.loginTitle")}>
       <form className="auth-form" onSubmit={onSubmit} noValidate>
         {error && (
           <p className="form-error" role="alert">
@@ -41,7 +43,7 @@ export default function LoginPage() {
           </p>
         )}
         <div className="field">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">{t("auth.email")}</label>
           <input
             id="email"
             type="email"
@@ -51,7 +53,7 @@ export default function LoginPage() {
           />
         </div>
         <div className="field">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">{t("auth.password")}</label>
           <input
             id="password"
             type="password"
@@ -61,13 +63,13 @@ export default function LoginPage() {
           />
         </div>
         <button className="btn-primary" type="submit" disabled={pending}>
-          {pending ? "Logging in…" : "Log in"}
+          {pending ? t("auth.loggingIn") : t("auth.logIn")}
         </button>
         <p className="form-note">
-          <Link to="/forgot-password">Forgot your password?</Link>
+          <Link to="/forgot-password">{t("auth.forgotPassword")}</Link>
         </p>
         <p className="form-note">
-          No account? <Link to="/register">Register</Link>
+          {t("auth.noAccount")} <Link to="/register">{t("auth.register")}</Link>
         </p>
       </form>
     </AuthCard>

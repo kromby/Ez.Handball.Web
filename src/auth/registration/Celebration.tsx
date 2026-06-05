@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { Club } from "../../api/types";
 import { ClubCrest } from "./ClubCrest";
 import { Icon } from "./Icon";
@@ -12,7 +13,8 @@ export function Celebration({
   club: Club | null;
   onEnter: () => void;
 }) {
-  const firstName = displayName.trim() ? displayName.trim().split(/\s+/)[0] : "manager";
+  const { t } = useTranslation();
+  const firstName = displayName.trim() ? displayName.trim().split(/\s+/)[0] : t("auth.defaultManagerName");
 
   return (
     <div className="reg-celebrate reg-page">
@@ -49,22 +51,19 @@ export function Celebration({
       </div>
 
       <div className="scribble" style={{ fontSize: 21, color: "var(--amber-deep)", marginBottom: 4 }}>
-        welcome to the back court
+        {t("auth.celebrationSubline")}
       </div>
-      <h2>You&rsquo;re in, {firstName}.</h2>
+      <h2>{t("auth.youreIn", { name: firstName })}</h2>
       <p className="reg-celebrate-lede">
         {club ? (
-          <>
-            Your notebook&rsquo;s set up and <b style={{ color: "var(--ink)" }}>{club.name}</b> is pinned to the cover. Dive into the
-            stats.
-          </>
+          t("auth.notebookReady", { club: club.name })
         ) : (
-          <>Your account&rsquo;s ready. Dive into the league&rsquo;s stats.</>
+          t("auth.accountReady")
         )}
       </p>
       <div className="reg-celebrate-actions">
         <button className="btn btn--amber" onClick={onEnter}>
-          Explore the stats <Icon name="arrow" size={17} sketch={false} />
+          {t("auth.exploreStats")} <Icon name="arrow" size={17} sketch={false} />
         </button>
       </div>
     </div>

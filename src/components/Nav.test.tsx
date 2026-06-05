@@ -44,4 +44,15 @@ describe("Nav", () => {
     renderWithProviders(<Nav />, { auth: { status: "anonymous" } });
     expect(screen.queryByRole("link", { name: /Shortlist/ })).not.toBeInTheDocument();
   });
+
+  test("renders the language toggle for everyone", () => {
+    renderWithProviders(<Nav />, { auth: { status: "anonymous" } });
+    expect(screen.getByRole("button", { name: "IS" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "EN" })).toBeInTheDocument();
+  });
+
+  test("shows the new brand wordmark", () => {
+    renderWithProviders(<Nav />, { auth: { status: "anonymous" } });
+    expect(screen.getByText("Olís league - Fantasy")).toBeInTheDocument();
+  });
 });

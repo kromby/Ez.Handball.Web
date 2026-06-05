@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import type { Club } from "../../api/types";
 import { SketchBox } from "../../components/SketchBox";
 import { ClubCrest, type CrestShape } from "./ClubCrest";
@@ -49,6 +50,7 @@ export function ClubPicker({
   onChange: (clubId: string) => void;
   shape?: CrestShape;
 }) {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const list = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -64,8 +66,8 @@ export function ClubPicker({
             <input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search clubs…"
-              aria-label="Search clubs"
+              placeholder={t("auth.searchClubs")}
+              aria-label={t("auth.searchClubsLabel")}
             />
           </div>
         </SketchBox>
@@ -80,7 +82,7 @@ export function ClubPicker({
             onClick={() => onChange(club.clubId)}
           />
         ))}
-        {list.length === 0 && <div className="reg-empty scribble">no clubs by that name</div>}
+        {list.length === 0 && <div className="reg-empty scribble">{t("auth.noClubsNamed")}</div>}
       </div>
     </div>
   );
