@@ -1,5 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import { Nav } from "./components/Nav";
+import { useLanguageSync } from "./i18n/useLanguage";
 import { HomeOrLegacyRedirect } from "./components/LegacyPlayerRedirect";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import MatchPage from "./pages/MatchPage";
@@ -13,6 +14,7 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 
 export default function App() {
+  useLanguageSync();
   return (
     <div className="app-shell">
       <Nav />
