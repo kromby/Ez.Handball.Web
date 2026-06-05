@@ -30,7 +30,7 @@ export default function MatchPage() {
   const meta = [
     formatDate(data.date),
     data.venue,
-    data.attendance != null ? `${data.attendance} att.` : null,
+    data.attendance != null ? t("match.attendanceShort", { count: data.attendance }) : null,
     data.tournamentName,
     data.season,
   ].filter(Boolean) as string[];
@@ -39,7 +39,7 @@ export default function MatchPage() {
     <section className="stack">
       <Panel className="match-info">
         <h1 className="visually-hidden">
-          {data.homeTeam.clubName ?? "—"} vs {data.awayTeam.clubName ?? "—"}
+          {data.homeTeam.clubName ?? "—"} {t("match.versus")} {data.awayTeam.clubName ?? "—"}
         </h1>
         <p className="match-meta">{meta.join(" · ")}</p>
         <ScoreLine home={data.homeTeam} away={data.awayTeam} />

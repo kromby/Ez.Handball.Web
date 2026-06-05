@@ -38,11 +38,10 @@
     "noPlayers": "No players found."
   },
   "match": {
-    "title": "Match",
     "notFound": "Match not found",
     "noMatches": "No matches played yet.",
-    "venue": "Venue",
-    "attendance": "Attendance",
+    "attendanceShort": "{{count}} att.",
+    "versus": "vs",
     "season": "Season",
     "tournament": "Tournament",
     "halfTime": "Half-time",
@@ -60,7 +59,9 @@
     "total": "Total",
     "detail": "Detail",
     "view": "View",
-    "noHistory": "No history"
+    "noHistory": "No history",
+    "age": "Age {{age}}",
+    "goalsCount": "{{count}} goals"
   },
   "auth": {
     "loginTitle": "Welcome back",

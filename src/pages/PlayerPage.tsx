@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import type { TFunction } from "i18next";
 import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
 import { MatchList, type MatchSummary } from "../components/MatchList";
@@ -8,12 +9,12 @@ import { StatTable } from "../components/StatTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { usePlayer, usePlayerHistory, usePlayerStats } from "../query/hooks";
 
-function toSummary(stat: PlayerStat): MatchSummary {
+function toSummary(stat: PlayerStat, t: TFunction): MatchSummary {
   return {
     matchId: stat.matchId,
     season: stat.season,
     tournamentName: stat.tournamentName,
-    context: `${stat.clubName ?? "—"} · ${stat.goals} goals`,
+    context: `${stat.clubName ?? "—"} · ${t("player.goalsCount", { count: stat.goals })}`,
   };
 }
 
@@ -35,7 +36,7 @@ export default function PlayerPage() {
   if (profile.isError) return <ErrorView error={profile.error} notFoundLabel={t("player.notFound")} />;
 
   const p = profile.data;
-  const headerBits = [p.clubName, p.age != null ? `Age ${p.age}` : null, formatBirthday(p.dateOfBirth)].filter(
+  const headerBits = [p.clubName, p.age != null ? t("player.age", { age: p.age }) : null, formatBirthday(p.dateOfBirth)].filter(
     Boolean,
   );
 
@@ -68,7 +69,7 @@ export default function PlayerPage() {
         <h2 className="section-title">{t("player.matches")}</h2>
         {stats.isPending && <Loading />}
         {stats.isError && <ErrorView error={stats.error} notFoundLabel={t("player.noMatches")} />}
-        {stats.data && <MatchList matches={stats.data.stats.map(toSummary)} />}
+        {stats.data && <MatchList matches={stats.data.stats.map((s) => toSummary(s, t))} />}
       </Panel>
     </section>
   );

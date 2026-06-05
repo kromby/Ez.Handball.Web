@@ -38,11 +38,10 @@
     "noPlayers": "Engir leikmenn fundust."
   },
   "match": {
-    "title": "Leikur",
     "notFound": "Leikur fannst ekki",
     "noMatches": "Engir leikir spilaðir enn.",
-    "venue": "Leikvangur",
-    "attendance": "Áhorfendur",
+    "attendanceShort": "{{count}} áhorf.",
+    "versus": "á móti",
     "season": "Tímabil",
     "tournament": "Mót",
     "halfTime": "Hálfleikur",
@@ -60,7 +59,9 @@
     "total": "Samtals",
     "detail": "Nánar",
     "view": "Skoða",
-    "noHistory": "Engin saga"
+    "noHistory": "Engin saga",
+    "age": "Aldur {{age}}",
+    "goalsCount": "{{count}} mörk"
   },
   "auth": {
     "loginTitle": "Velkomin/n aftur",
