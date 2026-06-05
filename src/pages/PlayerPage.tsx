@@ -48,7 +48,7 @@ export default function PlayerPage() {
             {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
             {p.name}
           </h1>
-          <StarToggle playerId={playerId} />
+          <StarToggle playerId={playerId} name={p.name} />
         </div>
         <p className="subtitle">{headerBits.join(" · ")}</p>
       </div>

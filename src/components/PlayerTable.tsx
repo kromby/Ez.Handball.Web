@@ -35,7 +35,7 @@ export function PlayerTable<T extends PlayerRow>({
     <table className="stats-table">
       <thead>
         <tr>
-          <th aria-label="Shortlist" />
+          <th aria-label={t("shortlist.label")} />
           {before.map((c) => (
             <th key={c.key} className={numClass(c.align)}>{c.header}</th>
           ))}
@@ -49,7 +49,7 @@ export function PlayerTable<T extends PlayerRow>({
       <tbody>
         {rows.map((row) => (
           <tr key={row.playerId}>
-            <td><StarToggle playerId={row.playerId} /></td>
+            <td><StarToggle playerId={row.playerId} name={row.name} /></td>
             {before.map((c) => (
               <td key={c.key} className={numClass(c.align)}>{c.render(row)}</td>
             ))}

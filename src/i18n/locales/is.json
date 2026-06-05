@@ -63,6 +63,22 @@
     "age": "Aldur {{age}}",
     "goalsCount": "{{count}} mörk"
   },
+  "shortlist": {
+    "title": "Úrtakið þitt",
+    "empty": "Engir leikmenn enn — skoðaðu stigatöfluna og stjörnumerktu þá sem þú vilt fylgjast með.",
+    "countOfMax": "{{count}} / {{max}}",
+    "full": "Úrtak fullt ({{max}}/{{max}}) — fjarlægðu einn til að bæta við",
+    "add": "Bæta {{name}} við úrtak",
+    "remove": "Fjarlægja {{name}} úr úrtaki",
+    "label": "Úrtak",
+    "updateFailed": "Tókst ekki að uppfæra úrtakið þitt"
+  },
+  "account": {
+    "title": "Aðgangurinn þinn",
+    "sessions": "Setur",
+    "logOut": "Skrá út",
+    "logOutEverywhere": "Skrá út alls staðar"
+  },
   "auth": {
     "loginTitle": "Velkomin/n aftur",
     "registerTitle": "Búðu til fantasy-bókina þína",

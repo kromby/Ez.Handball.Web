@@ -95,7 +95,7 @@ test("shows the shortlist star on the player header when authenticated", async (
   );
 
   await waitFor(() => expect(screen.getByText("Ólafur Stefánsson")).toBeInTheDocument());
-  expect(await screen.findByRole("button", { name: /add to shortlist/i })).toBeInTheDocument();
+  expect(await screen.findByRole("button", { name: /add ólafur stefánsson to shortlist/i })).toBeInTheDocument();
 });
 
 test("renders not-found when the player 404s", async () => {

@@ -63,6 +63,22 @@
     "age": "Age {{age}}",
     "goalsCount": "{{count}} goals"
   },
+  "shortlist": {
+    "title": "Your shortlist",
+    "empty": "No players yet — scout the leaderboard and star the ones you want on your radar.",
+    "countOfMax": "{{count}} / {{max}}",
+    "full": "Shortlist full ({{max}}/{{max}}) — remove one to add more",
+    "add": "Add {{name}} to shortlist",
+    "remove": "Remove {{name}} from shortlist",
+    "label": "Shortlist",
+    "updateFailed": "Couldn't update your shortlist"
+  },
+  "account": {
+    "title": "Your account",
+    "sessions": "Sessions",
+    "logOut": "Log out",
+    "logOutEverywhere": "Log out everywhere"
+  },
   "auth": {
     "loginTitle": "Welcome back",
     "registerTitle": "Build your fantasy notebook",

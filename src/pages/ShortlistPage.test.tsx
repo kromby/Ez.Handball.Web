@@ -43,7 +43,7 @@ test("removing a player calls the remove endpoint", async () => {
   vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [item({})], count: 1, max: 20 });
   const remove = vi.spyOn(api, "removeFromShortlist").mockResolvedValue(undefined);
   renderWithProviders(<ShortlistPage />, { auth: authed });
-  const star = await screen.findByRole("button", { name: /remove from shortlist/i });
+  const star = await screen.findByRole("button", { name: /remove aron pálmarsson from shortlist/i });
   fireEvent.click(star);
   await waitFor(() => expect(remove).toHaveBeenCalledWith("p1"));
 });

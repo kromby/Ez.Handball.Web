@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import type { ShortlistItem } from "../api/types";
 import { Panel } from "../components/Panel";
 import { PlayerTable, type PlayerColumn } from "../components/PlayerTable";
@@ -9,22 +10,23 @@ const after: PlayerColumn<ShortlistItem>[] = [
 ];
 
 export default function ShortlistPage() {
+  const { t } = useTranslation();
   const { data, isPending, isError, error } = useShortlist();
 
   return (
     <section className="stack">
       <div className="page-head">
-        <h1 className="title">Your shortlist</h1>
-        {data && <p className="subtitle">{data.count} / {data.max}</p>}
+        <h1 className="title">{t("shortlist.title")}</h1>
+        {data && <p className="subtitle">{t("shortlist.countOfMax", { count: data.count, max: data.max })}</p>}
       </div>
       {isPending && <Loading />}
-      {isError && <ErrorView error={error} notFoundLabel="Shortlist not found" />}
+      {isError && <ErrorView error={error} notFoundLabel={t("leaderboard.notFound")} />}
       {data && (
         <Panel>
           <PlayerTable<ShortlistItem>
             rows={data.items}
             after={after}
-            emptyLabel="No players yet — star players from the leaderboard to track them."
+            emptyLabel={t("shortlist.empty")}
           />
         </Panel>
       )}

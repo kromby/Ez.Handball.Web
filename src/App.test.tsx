@@ -30,6 +30,8 @@ test("legacy ?playerId redirects to the player route", () => {
 });
 
 test("renders the match page at /matches/:id", () => {
+  // Persist English preference so the loading text resolves to English.
+  localStorage.setItem(LANG_STORAGE_KEY, "en");
   renderWithProviders(<App />, { initialEntries: ["/matches/99"] });
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
 });
