@@ -26,11 +26,13 @@ export function FilterChips({
             key={o.value}
             type="button"
             aria-pressed={on}
-            className={on ? "metric-tab active" : "metric-tab"}
             onClick={() => onSelect(o.value)}
+            style={{ all: "unset", cursor: "pointer" }}
           >
-            <SketchBox tone={on ? "ink" : "paper"} radius={999} pad="4px 10px">
-              <span>{o.label}</span>
+            <SketchBox tone={on ? "ink" : "paper"} radius={999} pad="6px 14px">
+              <span style={{ fontWeight: 700, fontSize: 14, color: on ? "var(--paper-2)" : "var(--ink-2)" }}>
+                {o.label}
+              </span>
             </SketchBox>
           </button>
         );
