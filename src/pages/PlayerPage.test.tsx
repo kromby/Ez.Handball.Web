@@ -2,6 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import { Route, Routes } from "react-router-dom";
 import { afterEach, expect, test, vi } from "vitest";
 import * as api from "../api/endpoints";
+import type { AuthUser } from "../api/types";
 import PlayerPage from "./PlayerPage";
 import { renderWithProviders } from "../test/renderWithQuery";
 
@@ -105,4 +106,45 @@ test("renders not-found when the player 404s", async () => {
   vi.spyOn(api, "getPlayerStats").mockRejectedValue(new ApiError(404, "player_not_found", "x"));
   setup();
   await waitFor(() => expect(screen.getByText(/player not found/i)).toBeInTheDocument());
+});
+
+const authed = {
+  status: "authenticated" as const,
+  user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const, favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } as AuthUser,
+};
+
+function mockPlayerPageQueries(owned: boolean) {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "tm", clubId: "c1", clubName: "Aalvik", gender: "karlar", position: "LB", price: { amount: 9_000_000, currency: "ISK" } } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [], count: 0, max: 20 });
+  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { LB: 3 } });
+  vi.spyOn(api, "getSquad").mockResolvedValue({
+    flavor: "fantasy",
+    players: owned ? [{ playerId: "7", name: "Vik", clubId: "c1", clubName: "Aalvik", position: "LB", gender: "karlar", price: { amount: 9_000_000, currency: "ISK" }, pricePaid: { amount: 9_000_000, currency: "ISK" } }] : [],
+    budgetUsed: { amount: owned ? 9_000_000 : 0, currency: "ISK" },
+    remainingBudget: { amount: owned ? 91_000_000 : 100_000_000, currency: "ISK" },
+    squadValue: { amount: owned ? 9_000_000 : 0, currency: "ISK" },
+  });
+}
+
+function renderPlayer() {
+  return renderWithProviders(
+    <Routes>
+      <Route path="/players/:playerId" element={<PlayerPage />} />
+    </Routes>,
+    { initialEntries: ["/players/7"], auth: authed },
+  );
+}
+
+test("shows an enabled Buy button when the player is not owned", async () => {
+  mockPlayerPageQueries(false);
+  renderPlayer();
+  expect(await screen.findByRole("button", { name: /buy/i })).toBeEnabled();
+});
+
+test("shows a Sell button when the player is owned", async () => {
+  mockPlayerPageQueries(true);
+  renderPlayer();
+  expect(await screen.findByRole("button", { name: /sell/i })).toBeInTheDocument();
 });

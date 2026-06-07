@@ -2,12 +2,14 @@ import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
+import { BuyButton } from "../components/BuyButton";
 import { MatchList, type MatchSummary } from "../components/MatchList";
 import { Panel } from "../components/Panel";
+import { SellButton } from "../components/SellButton";
 import { StarToggle } from "../components/StarToggle";
 import { StatTable } from "../components/StatTable";
 import { ErrorView, Loading } from "../components/StateViews";
-import { usePlayer, usePlayerHistory, usePlayerStats } from "../query/hooks";
+import { usePlayer, usePlayerHistory, usePlayerStats, useSquad } from "../query/hooks";
 
 function toSummary(stat: PlayerStat, t: TFunction): MatchSummary {
   return {
@@ -31,11 +33,13 @@ export default function PlayerPage() {
   const profile = usePlayer(playerId);
   const history = usePlayerHistory(playerId);
   const stats = usePlayerStats(playerId);
+  const squad = useSquad();
 
   if (profile.isPending) return <Loading />;
   if (profile.isError) return <ErrorView error={profile.error} notFoundLabel={t("player.notFound")} />;
 
   const p = profile.data;
+  const owned = squad.data?.players.some((sp) => sp.playerId === p.playerId) ?? false;
   const headerBits = [p.clubName, p.age != null ? t("player.age", { age: p.age }) : null, formatBirthday(p.dateOfBirth)].filter(
     Boolean,
   );
@@ -49,6 +53,11 @@ export default function PlayerPage() {
             {p.name}
           </h1>
           <StarToggle playerId={playerId} name={p.name} />
+          {owned ? (
+            <SellButton player={{ playerId: p.playerId, name: p.name }} />
+          ) : (
+            <BuyButton player={{ playerId: p.playerId, name: p.name, position: p.position ?? null, price: p.price ?? null }} />
+          )}
         </div>
         <p className="subtitle">{headerBits.join(" · ")}</p>
       </div>
