@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import type { LeaderboardMetric } from "../api/types";
@@ -7,7 +8,8 @@ import { LeaderboardFilters } from "../components/LeaderboardFilters";
 import { METRICS, MetricSwitcher } from "../components/MetricSwitcher";
 import { Pagination } from "../components/Pagination";
 import { Panel } from "../components/Panel";
-import { useGenders, useLeaderboard, useSeasons, useTournaments } from "../query/hooks";
+import { useGenders, useLeaderboard, usePlayerPool, useSeasons, useTournaments } from "../query/hooks";
+import { useAuth } from "../auth/useAuth";
 
 const LIMIT = 50;
 const VALID = new Set(METRICS.map((m) => m.value));
@@ -41,6 +43,18 @@ export default function LeaderboardPage() {
     { enabled: leaderboardReady },
   );
 
+  const { status } = useAuth();
+  // Fetch a wide pool slice for the same scope so leaderboard rows can resolve price/position.
+  const pool = usePlayerPool(
+    { season, tournamentId, gender, limit: 200 },
+    { enabled: status === "authenticated" && leaderboardReady },
+  );
+  const buyLookup = useMemo(() => {
+    const map = new Map<string, { position: string; price: import("../api/types").Money }>();
+    for (const e of pool.data?.entries ?? []) map.set(e.playerId, { position: e.position, price: e.price });
+    return (playerId: string) => map.get(playerId);
+  }, [pool.data]);
+
   // Merge param updates so filters compose; "" / undefined removes a param.
   const update = (next: Record<string, string | undefined>) => {
     const merged = new URLSearchParams(params);
@@ -72,7 +86,11 @@ export default function LeaderboardPage() {
       {isError && <ErrorView error={error} notFoundLabel={t("leaderboard.notFound")} />}
       {data && (
         <Panel>
-          <LeaderboardTable entries={data.entries} metric={metric} />
+          <LeaderboardTable
+              entries={data.entries}
+              metric={metric}
+              buyLookup={status === "authenticated" ? buyLookup : undefined}
+            />
           <Pagination
             offset={data.offset}
             limit={data.limit}
