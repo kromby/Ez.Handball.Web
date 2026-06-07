@@ -1206,4 +1206,5 @@ button {
 .squad-row-price { margin-left: auto; color: var(--ink-2); }
 .squad-row-now { color: var(--ink-3); }
 .eyebrow { color: var(--amber-deep); font-weight: 700; font-style: italic; }
-.chip { border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px; font-weight: 700; }
+.market-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px; font-weight: 700; white-space: nowrap; }
