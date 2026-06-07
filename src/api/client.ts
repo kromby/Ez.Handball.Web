@@ -1,12 +1,18 @@
 import { baseUrl } from "./config";
 import { expireSession, getAccessToken, refresh } from "../auth/tokenStore";
 
+export interface ApiViolation {
+  code: string;
+  message: string;
+}
+
 export class ApiError extends Error {
   constructor(
     public readonly status: number,
     public readonly code: string | null,
     message: string,
     public readonly details?: { field?: string },
+    public readonly violations?: ApiViolation[],
   ) {
     super(message);
     this.name = "ApiError";
@@ -21,14 +27,17 @@ async function readJson<T>(res: Response): Promise<T> {
 async function toError(res: Response): Promise<ApiError> {
   let code: string | null = null;
   let details: { field?: string } | undefined;
+  let violations: ApiViolation[] | undefined;
   try {
-    const body = (await readJson<{ error?: unknown; details?: { field?: string } }>(res)) ?? {};
+    const body =
+      (await readJson<{ error?: unknown; details?: { field?: string }; violations?: unknown }>(res)) ?? {};
     code = typeof body.error === "string" ? body.error : null;
     if (body.details && typeof body.details === "object") details = body.details;
+    if (Array.isArray(body.violations)) violations = body.violations as ApiViolation[];
   } catch {
     code = null;
   }
-  return new ApiError(res.status, code, `HTTP ${res.status}${code ? ` (${code})` : ""}`, details);
+  return new ApiError(res.status, code, `HTTP ${res.status}${code ? ` (${code})` : ""}`, details, violations);
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
