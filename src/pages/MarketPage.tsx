@@ -79,12 +79,14 @@ export default function MarketPage() {
           selected={gender ?? ""}
           onSelect={(v) => update({ gender: v, offset: undefined })}
         />
-        <FilterChips
-          label={t("market.sortBy")}
-          options={SORTS.map((s) => ({ value: s, label: t(`market.sort${s}`) }))}
-          selected={sort}
-          onSelect={(v) => update({ sort: v, offset: undefined })}
-        />
+        <div className="market-sort">
+          <FilterChips
+            label={t("market.sortBy")}
+            options={SORTS.map((s) => ({ value: s, label: t(`market.sort${s}`) }))}
+            selected={sort}
+            onSelect={(v) => update({ sort: v, offset: undefined })}
+          />
+        </div>
       </div>
 
       {pool.isPending && <Loading />}

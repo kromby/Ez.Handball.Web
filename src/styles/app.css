@@ -1192,7 +1192,8 @@ button {
 .sell-btn { border: 2px solid var(--ink-2); background: transparent; border-radius: 8px; padding: 4px 12px; font-weight: 700; cursor: pointer; }
 .pos-chip { display: inline-block; background: var(--ink); color: var(--paper-2); border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
 .market-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
-.market-filters { display: flex; flex-wrap: wrap; gap: 12px; }
+.market-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.market-sort { margin-left: auto; }
 .budget-bar { height: 10px; background: var(--paper-3); border-radius: 999px; overflow: hidden; }
 .budget-bar-fill { height: 100%; background: var(--amber-deep); }
 .budget-chips { display: flex; flex-wrap: wrap; gap: 18px; margin: 10px 0 0; }
