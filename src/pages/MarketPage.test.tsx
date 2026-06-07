@@ -37,3 +37,12 @@ test("does not render an Owned sort option", async () => {
   await screen.findByText("Bergström");
   expect(screen.queryByRole("button", { name: /owned/i })).not.toBeInTheDocument();
 });
+
+test("position chips show the localized short code with the full name as tooltip", async () => {
+  mock();
+  renderWithProviders(<ToastProvider><MarketPage /></ToastProvider>, { auth: authed, initialEntries: ["/market"] });
+  // en: positionsShort.GK = "GK" (visible), positions.GK = "Goalkeeper" (tooltip + accessible name)
+  const gk = await screen.findByRole("button", { name: "Goalkeeper" });
+  expect(gk).toHaveTextContent("GK");
+  expect(gk).toHaveAttribute("title", "Goalkeeper");
+});

@@ -226,5 +226,15 @@
     "RB": "Hægri skytta",
     "P": "Lína",
     "LP": "Línumaður"
+  },
+  "positionsShort": {
+    "GK": "MV",
+    "LW": "VH",
+    "RW": "HH",
+    "LB": "VS",
+    "CB": "MS",
+    "RB": "HS",
+    "P": "L",
+    "LP": "LM"
   }
 }

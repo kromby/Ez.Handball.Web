@@ -51,6 +51,7 @@ export default function MarketPage() {
 
   const positionCodes = constraints.data ? Object.keys(constraints.data.posLimits) : [];
   const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
+  const posShort = (code: string) => t(`positionsShort.${code}`, { defaultValue: code });
 
   return (
     <section className="stack">
@@ -68,7 +69,7 @@ export default function MarketPage() {
       <div className="market-filters">
         <FilterChips
           label={t("market.filterPosition")}
-          options={[{ value: "", label: t("market.allPositions") }, ...positionCodes.map((c) => ({ value: c, label: c, title: posLabel(c) }))]}
+          options={[{ value: "", label: t("market.allPositions") }, ...positionCodes.map((c) => ({ value: c, label: posShort(c), title: posLabel(c) }))]}
           selected={position ?? ""}
           onSelect={(v) => update({ position: v, offset: undefined })}
         />

@@ -226,5 +226,15 @@
     "RB": "Right back",
     "P": "Pivot",
     "LP": "Line player"
+  },
+  "positionsShort": {
+    "GK": "GK",
+    "LW": "LW",
+    "RW": "RW",
+    "LB": "LB",
+    "CB": "CB",
+    "RB": "RB",
+    "P": "P",
+    "LP": "LP"
   }
 }
