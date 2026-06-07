@@ -32,6 +32,7 @@ function AuthArea() {
   if (status === "authenticated" && user) {
     return (
       <nav className="nav-auth" aria-label={t("nav.account")}>
+        <Link to="/squad" className="nav-link">{t("nav.mySquad")}</Link>
         <Link to="/shortlist" className="nav-shortlist">
           {data ? t("nav.shortlistWithCount", { count: data.count }) : t("nav.shortlist")}
         </Link>
