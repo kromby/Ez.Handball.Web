@@ -14,7 +14,9 @@
     "register": "Nýskráning",
     "shortlist": "Æfingahópur",
     "shortlistWithCount": "Æfingahópur · {{count}}",
-    "language": "Tungumál"
+    "language": "Tungumál",
+    "market": "Félagaskipti",
+    "mySquad": "Liðið mitt"
   },
   "leaderboard": {
     "title": "Stigatafla",
@@ -160,6 +162,69 @@
     "defaultManagerName": "þjálfari",
     "passwordStrengthWeak": "mjög veikt",
     "passwordStrengthFair": "á góðri leið",
-    "passwordStrengthStrong": "sterk gripið"
+    "passwordStrengthStrong": "sterk gripið",
+    "teamName": "Nafn liðs",
+    "teamNamePlaceholder": "t.d. Pivot Club",
+    "teamNameRange": "1–60 stafir."
+  },
+  "buy": {
+    "buy": "Kaupa",
+    "buyWithPrice": "Kaupa · {{price}}",
+    "buyName": "Kaupa {{name}}",
+    "inSquadShort": "Í liðinu",
+    "inSquad": "{{name}} er í liðinu þínu",
+    "reasonSquadFull": "Liðið er fullskipað",
+    "reasonPositionLimit": "Hámarki í stöðunni náð",
+    "reasonInsufficientBudget": "Yfir eftirstandandi fjárhag",
+    "reasonUnavailable": "Ekki hægt að kaupa hér",
+    "reasonOwned": "Þegar í liðinu þínu",
+    "errorNoTeam": "Stofnaðu liðið þitt fyrst.",
+    "errorNotFound": "Leikmaður fannst ekki."
+  },
+  "sell": {
+    "sell": "Selja",
+    "sellName": "Selja {{name}}",
+    "confirmTitle": "Selja {{name}}?",
+    "confirmBody": "Söluþóknun leggst á hagnað; fjárhagurinn uppfærist þegar salan klárast.",
+    "cancel": "Hætta við",
+    "errorNotInSquad": "Sá leikmaður er ekki í liðinu þínu."
+  },
+  "market": {
+    "eyebrow": "byggðu liðið þitt",
+    "title": "Félagaskipti",
+    "budgetLeft": "Eftir af fjárhag · {{amount}}",
+    "shortlisted": "Á lista · {{count}}",
+    "filterPosition": "Staða",
+    "allPositions": "Allar",
+    "sortBy": "Raða eftir",
+    "sortRating": "Einkunn",
+    "sortPrice": "Verði",
+    "position": "Staða",
+    "rating": "Einkunn",
+    "price": "Verð",
+    "notFound": "Markaður fannst ekki",
+    "empty": "Engir leikmenn passa við þessar síur."
+  },
+  "squad": {
+    "title": "Liðið mitt",
+    "notFound": "Lið fannst ekki",
+    "remaining": "Eftir af fjárhag",
+    "budgetUsed": "Bundið í liði",
+    "squadValue": "Verðmæti liðs",
+    "size": "Leikmenn",
+    "paid": "greitt {{price}}",
+    "now": "nú {{price}}",
+    "empty": "Liðið þitt er tómt.",
+    "goToMarket": "Fara á markaðinn"
+  },
+  "positions": {
+    "GK": "Markvörður",
+    "LW": "Vinstri horn",
+    "RW": "Hægri horn",
+    "LB": "Vinstri skytta",
+    "CB": "Miðjuskytta",
+    "RB": "Hægri skytta",
+    "P": "Lína",
+    "LP": "Línumaður"
   }
 }
