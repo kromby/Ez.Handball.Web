@@ -119,6 +119,9 @@ test("getPlayerPool builds the query string from params", async () => {
   expect(url).toContain("season=2025-26");
   expect(url).toContain("position=GK");
   expect(url).toContain("sort=Price");
+  // offset=0 must survive (the `!= null` guard, not a truthy check)
+  expect(url).toContain("offset=0");
+  expect(url).toContain("limit=50");
 });
 
 test("getPlayerPool omits empty params", async () => {
