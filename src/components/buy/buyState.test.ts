@@ -39,6 +39,10 @@ test("buyable when all rules pass", () => {
   expect(evaluateBuy({ playerId: "p2", position: "GK", price: { amount: 10, currency: "ISK" } }, emptySquad, constraints).state).toBe("buyable");
 });
 
-test("unavailable when price or position is missing", () => {
+test("unavailable when position is missing", () => {
   expect(evaluateBuy({ playerId: "p2", position: null, price: { amount: 10, currency: "ISK" } }, emptySquad, constraints).state).toBe("unavailable");
+});
+
+test("unavailable when price is missing", () => {
+  expect(evaluateBuy({ playerId: "p2", position: "GK", price: null }, emptySquad, constraints).state).toBe("unavailable");
 });
