@@ -1,5 +1,6 @@
-import { screen } from "@testing-library/react";
+import { screen, fireEvent } from "@testing-library/react";
 import { afterEach, expect, test, vi } from "vitest";
+import { ApiError } from "../api/client";
 import * as api from "../api/endpoints";
 import type { AuthUser } from "../api/types";
 import { BuyButton } from "./BuyButton";
@@ -58,4 +59,22 @@ test("is enabled and labelled with the price when buyable", async () => {
   const btn = await screen.findByRole("button");
   expect(btn).toBeEnabled();
   expect(btn).toHaveTextContent(/12M ISK/);
+});
+
+test("toasts the rule message when buy is rejected with a 422 violation", async () => {
+  mockBackend();
+  vi.spyOn(api, "buyPlayer").mockRejectedValue(new ApiError(422, null, "HTTP 422", undefined, [{ code: "squad_full", message: "x" }]));
+  renderBtn({ playerId: "p2", position: "GK", price: { amount: 12_000_000, currency: "ISK" } });
+  const btn = await screen.findByRole("button");
+  fireEvent.click(btn);
+  expect(await screen.findByRole("status")).toHaveTextContent(/squad is full/i);
+});
+
+test("toasts a set-up-your-team message on a 409 no_team", async () => {
+  mockBackend();
+  vi.spyOn(api, "buyPlayer").mockRejectedValue(new ApiError(409, "no_team", "HTTP 409"));
+  renderBtn({ playerId: "p2", position: "GK", price: { amount: 12_000_000, currency: "ISK" } });
+  const btn = await screen.findByRole("button");
+  fireEvent.click(btn);
+  expect(await screen.findByRole("status")).toHaveTextContent(/team/i);
 });

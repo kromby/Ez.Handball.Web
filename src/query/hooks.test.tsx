@@ -6,7 +6,7 @@ import * as api from "../api/endpoints";
 import { AuthContext } from "../auth/useAuth";
 import { buildAuth, queryWrapper } from "../test/renderWithQuery";
 import { createQueryClient } from "./queryClient";
-import { useLeaderboard, usePlayer, useSquad, useBuyPlayer } from "./hooks";
+import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer } from "./hooks";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -56,4 +56,16 @@ test("useBuyPlayer writes the returned squad into the cache on success", async (
   const { result } = renderHook(() => useBuyPlayer(), { wrapper });
   await act(async () => { await result.current.mutateAsync("123"); });
   expect(client.getQueryData(["squad", "fantasy"])).toMatchObject({ remainingBudget: { amount: 91 } });
+});
+
+test("useSellPlayer writes the returned squad into the cache on success", async () => {
+  const squad = { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 33, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } };
+  vi.spyOn(api, "sellPlayer").mockResolvedValue(squad as never);
+  const client = createQueryClient();
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  );
+  const { result } = renderHook(() => useSellPlayer(), { wrapper });
+  await act(async () => { await result.current.mutateAsync("p1"); });
+  expect(client.getQueryData(["squad", "fantasy"])).toMatchObject({ remainingBudget: { amount: 33 } });
 });

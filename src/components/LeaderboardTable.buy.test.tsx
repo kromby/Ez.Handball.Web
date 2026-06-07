@@ -23,3 +23,15 @@ test("renders an enabled Buy button when the player is in the pool lookup", asyn
   );
   expect(await screen.findByRole("button", { name: /buy/i })).toBeEnabled();
 });
+
+test("renders a disabled Buy when the player is not in the pool lookup", async () => {
+  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { LB: 3 } });
+  vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 100_000_000, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
+  vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [], count: 0, max: 20 });
+  renderWithProviders(
+    <ToastProvider><LeaderboardTable entries={[entry]} metric="goals" buyLookup={() => undefined} /></ToastProvider>,
+    { auth: authed },
+  );
+  const btn = await screen.findByRole("button", { name: /buy/i });
+  expect(btn).toBeDisabled();
+});
