@@ -20,3 +20,18 @@ test("calls onSelect with the chosen value", async () => {
   await userEvent.click(screen.getByRole("button", { name: "Karlar" }));
   expect(onSelect).toHaveBeenCalledWith("karlar");
 });
+
+test("shows the acronym label with the full name as tooltip + accessible name", () => {
+  render(
+    <FilterChips
+      label="Position"
+      options={[{ value: "CB", label: "CB", title: "Centre back" }]}
+      selected=""
+      onSelect={vi.fn()}
+    />,
+  );
+  // Accessible name comes from the title (full name); visible text is the acronym.
+  const btn = screen.getByRole("button", { name: "Centre back" });
+  expect(btn).toHaveAttribute("title", "Centre back");
+  expect(btn).toHaveTextContent("CB");
+});

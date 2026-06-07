@@ -3,6 +3,8 @@ import { SketchBox } from "./SketchBox";
 export interface FilterOption {
   value: string;
   label: string;
+  /** Optional full-text tooltip when `label` is an abbreviation (also the accessible name). */
+  title?: string;
 }
 
 export function FilterChips({
@@ -26,6 +28,8 @@ export function FilterChips({
             key={o.value}
             type="button"
             aria-pressed={on}
+            title={o.title}
+            aria-label={o.title}
             onClick={() => onSelect(o.value)}
             style={{ all: "unset", cursor: "pointer" }}
           >
