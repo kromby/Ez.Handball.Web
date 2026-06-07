@@ -10,6 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AccountPage from "./pages/AccountPage";
 import ShortlistPage from "./pages/ShortlistPage";
 import SquadPage from "./pages/SquadPage";
+import MarketPage from "./pages/MarketPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
@@ -33,6 +34,7 @@ export default function App() {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/shortlist" element={<ShortlistPage />} />
             <Route path="/squad" element={<SquadPage />} />
+            <Route path="/market" element={<MarketPage />} />
           </Route>
         </Routes>
       </main>
