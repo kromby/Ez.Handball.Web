@@ -16,14 +16,14 @@ test("confirm fires onConfirm, cancel fires onCancel", () => {
 
 test("renders nothing when closed", () => {
   const { container } = render(
-    <ConfirmDialog open={false} title="x" body="y" confirmLabel="ok" cancelLabel="no" onConfirm={() => {}} onCancel={() => {}} />,
+    <ConfirmDialog open={false} title="x" body="y" confirmLabel="ok" cancelLabel="no" onConfirm={vi.fn()} onCancel={vi.fn()} />,
   );
   expect(container).toBeEmptyDOMElement();
 });
 
 test("Escape triggers cancel", () => {
   const onCancel = vi.fn();
-  render(<ConfirmDialog open title="x" body="y" confirmLabel="ok" cancelLabel="no" onConfirm={() => {}} onCancel={onCancel} />);
+  render(<ConfirmDialog open title="x" body="y" confirmLabel="ok" cancelLabel="no" onConfirm={vi.fn()} onCancel={onCancel} />);
   fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
   expect(onCancel).toHaveBeenCalledTimes(1);
 });

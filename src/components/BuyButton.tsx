@@ -72,7 +72,8 @@ export function BuyButton({ player }: { player: BuyButtonPlayer }) {
   }
 
   if (ev.state === "blocked") {
-    const reason = t(REASON_KEY[ev.reason!]);
+    // evaluateBuy always sets a reason for "blocked"; fall back defensively rather than assert.
+    const reason = t(ev.reason ? REASON_KEY[ev.reason] : "buy.reasonUnavailable");
     return (
       <button type="button" className="buy-btn" disabled title={reason} aria-label={`${t("buy.buy")} — ${reason}`}>
         {t("buy.buy")}

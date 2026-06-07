@@ -6,7 +6,11 @@ interface ToastValue {
 
 const ToastContext = createContext<ToastValue | null>(null);
 
-const NOOP_TOAST: ToastValue = { show: () => {} };
+const NOOP_TOAST: ToastValue = {
+  show: () => {
+    /* no-op: used when a component calls useToast() outside a ToastProvider (e.g. in tests) */
+  },
+};
 
 /**
  * Returns the toast API, or a no-op when no provider is mounted. Being lenient
