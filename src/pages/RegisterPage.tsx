@@ -28,7 +28,7 @@ function mapFieldError(
   if (err.code === "email_taken") return { field: "email", message: messages.emailTaken };
   if (err.code === "weak_password") return { field: "password", message: messages.weakPassword };
   if (err.code === "validation_error" && err.details?.field) {
-    const known: Record<string, string> = { email: "email", password: "password", displayName: "displayName" };
+    const known: Record<string, string> = { email: "email", password: "password", displayName: "displayName", teamName: "teamName" };
     const field = known[err.details.field];
     if (field) return { field, message: messages.checkField };
   }
@@ -48,6 +48,7 @@ export default function RegisterPage() {
 
   const [step, setStep] = useState(0);
   const [displayName, setDisplayName] = useState("");
+  const [teamName, setTeamName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [language, setLanguage] = useState<Language>("is");
@@ -63,8 +64,9 @@ export default function RegisterPage() {
     if (!/^\S+@\S+\.\S+$/.test(email)) next.email = t("auth.emailFormat");
     if (password.length < 8 || password.length > 128) next.password = t("auth.passwordRange");
     if (displayName.trim().length < 1 || displayName.length > 60) next.displayName = t("auth.displayNameRange");
+    if (teamName.trim().length < 1 || teamName.length > 60) next.teamName = t("auth.teamNameRange");
     return next;
-  }, [email, password, displayName, i18n.language]);
+  }, [email, password, displayName, teamName, i18n.language]);
 
   const shownError = (name: string) => serverErrors[name] ?? (touched[name] ? liveErrors[name] : undefined);
   const selectedClub = clubId && clubs.data ? clubs.data.find((club) => club.clubId === clubId) ?? null : null;
@@ -81,7 +83,7 @@ export default function RegisterPage() {
   const touch = (name: string) => setTouched((prev) => ({ ...prev, [name]: true }));
 
   function goClub() {
-    setTouched({ displayName: true, email: true, password: true });
+    setTouched({ displayName: true, teamName: true, email: true, password: true });
     if (Object.keys(liveErrors).length === 0) setStep(1);
   }
 
@@ -115,7 +117,7 @@ export default function RegisterPage() {
     setClubId(id);
     setSubmitting(true);
     try {
-      await register({ email, password, displayName, language, favoriteClubId: id });
+      await register({ email, password, displayName, language, favoriteClubId: id, teamName });
       setDone(true);
     } catch (err) {
       handleRegisterError(err);
@@ -146,6 +148,15 @@ export default function RegisterPage() {
                     onChange={update("displayName", setDisplayName)}
                     onBlur={() => touch("displayName")}
                     error={shownError("displayName")}
+                  />
+                  <RegField
+                    id="teamName"
+                    label={t("auth.teamName")}
+                    placeholder={t("auth.teamNamePlaceholder")}
+                    value={teamName}
+                    onChange={update("teamName", setTeamName)}
+                    onBlur={() => touch("teamName")}
+                    error={shownError("teamName")}
                   />
                   <RegField
                     id="email"
