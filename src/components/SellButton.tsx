@@ -5,7 +5,7 @@ import { useSellPlayer } from "../query/hooks";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { useToast } from "./Toast";
 
-function errorKey(err: unknown): string {
+function errorKey(err: unknown) {
   if (err instanceof ApiError) {
     if (err.code === "not_in_squad") return "sell.errorNotInSquad";
     if (err.code === "no_team") return "buy.errorNoTeam";

@@ -8,11 +8,11 @@ import { useBuyPlayer, useSquad, useSquadConstraints } from "../query/hooks";
 import { evaluateBuy, type BuyReason } from "./buy/buyState";
 import { useToast } from "./Toast";
 
-const REASON_KEY: Record<BuyReason, string> = {
+const REASON_KEY = {
   squad_full: "buy.reasonSquadFull",
   position_limit: "buy.reasonPositionLimit",
   insufficient_budget: "buy.reasonInsufficientBudget",
-};
+} as const satisfies Record<BuyReason, string>;
 
 export interface BuyButtonPlayer {
   playerId: string;
@@ -21,8 +21,9 @@ export interface BuyButtonPlayer {
   price: Money | null;
 }
 
-/** Maps a buy failure (server) to a localized message key. */
-function errorKey(err: unknown): string {
+/** Maps a buy failure (server) to a localized message key. Return type is the
+ * inferred union of literal i18n keys so it satisfies the typed `t()`. */
+function errorKey(err: unknown) {
   if (err instanceof ApiError) {
     if (err.violations && err.violations.length > 0) {
       const first = err.violations[0].code as BuyReason;
