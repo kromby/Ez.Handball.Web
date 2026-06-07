@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -97,4 +97,44 @@ test("getGenders requests /api/genders", async () => {
   const spy = spyGet();
   await getGenders();
   expect(spy).toHaveBeenCalledWith("/api/genders");
+});
+
+test("getSquad calls the authed squad endpoint", async () => {
+  const spy = spyAuthedGet();
+  await getSquad();
+  expect(spy).toHaveBeenCalledWith("/api/users/me/squad?flavor=fantasy");
+});
+
+test("getSquadConstraints calls the public constraints endpoint", async () => {
+  const spy = spyGet();
+  await getSquadConstraints();
+  expect(spy).toHaveBeenCalledWith("/api/squad/constraints?flavor=fantasy");
+});
+
+test("getPlayerPool builds the query string from params", async () => {
+  const spy = spyGet();
+  await getPlayerPool({ season: "2025-26", position: "GK", sort: "Price", offset: 0, limit: 50 });
+  const url = spy.mock.calls[0][0] as string;
+  expect(url).toContain("/api/players/pool?");
+  expect(url).toContain("season=2025-26");
+  expect(url).toContain("position=GK");
+  expect(url).toContain("sort=Price");
+});
+
+test("getPlayerPool omits empty params", async () => {
+  const spy = spyGet();
+  await getPlayerPool({});
+  expect(spy).toHaveBeenCalledWith("/api/players/pool");
+});
+
+test("buyPlayer POSTs the playerId + flavor body", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await buyPlayer("123");
+  expect(spy).toHaveBeenCalledWith("/api/users/me/squad/players", "POST", { playerId: "123", flavor: "fantasy" });
+});
+
+test("sellPlayer DELETEs the encoded player id with flavor", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await sellPlayer("a/b");
+  expect(spy).toHaveBeenCalledWith("/api/users/me/squad/players/a%2Fb?flavor=fantasy", "DELETE");
 });

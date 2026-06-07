@@ -7,9 +7,13 @@ import type {
   MatchDetail,
   Player,
   PlayerHistoryResponse,
+  PlayerPool,
   PlayerStatsResponse,
+  PoolSort,
   Season,
   ShortlistResponse,
+  Squad,
+  SquadConstraints,
   Tournament,
 } from "./types";
 
@@ -74,4 +78,44 @@ export async function addToShortlist(playerId: string): Promise<void> {
 
 export async function removeFromShortlist(playerId: string): Promise<void> {
   await authedSend(`/api/users/me/shortlist/${encodeURIComponent(playerId)}`, "DELETE");
+}
+
+export function getSquad(flavor = "fantasy"): Promise<Squad> {
+  return authedGet<Squad>(`/api/users/me/squad?flavor=${encodeURIComponent(flavor)}`);
+}
+
+export function getSquadConstraints(flavor = "fantasy"): Promise<SquadConstraints> {
+  return apiGet<SquadConstraints>(`/api/squad/constraints?flavor=${encodeURIComponent(flavor)}`);
+}
+
+export function getPlayerPool(params: {
+  season?: string;
+  tournamentId?: string;
+  gender?: string;
+  position?: string;
+  sort?: PoolSort;
+  offset?: number;
+  limit?: number;
+}): Promise<PlayerPool> {
+  const sp = new URLSearchParams();
+  if (params.season) sp.set("season", params.season);
+  if (params.tournamentId) sp.set("tournamentId", params.tournamentId);
+  if (params.gender) sp.set("gender", params.gender);
+  if (params.position) sp.set("position", params.position);
+  if (params.sort) sp.set("sort", params.sort);
+  if (params.offset != null) sp.set("offset", String(params.offset));
+  if (params.limit != null) sp.set("limit", String(params.limit));
+  const qs = sp.toString();
+  return apiGet<PlayerPool>(`/api/players/pool${qs ? `?${qs}` : ""}`);
+}
+
+export function buyPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
+  return authedSend<Squad>("/api/users/me/squad/players", "POST", { playerId, flavor });
+}
+
+export function sellPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
+  return authedSend<Squad>(
+    `/api/users/me/squad/players/${encodeURIComponent(playerId)}?flavor=${encodeURIComponent(flavor)}`,
+    "DELETE",
+  );
 }
