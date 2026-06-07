@@ -224,7 +224,6 @@
     "LB": "Left back",
     "CB": "Centre back",
     "RB": "Right back",
-    "P": "Pivot",
     "LP": "Line player"
   },
   "positionsShort": {
@@ -234,7 +233,6 @@
     "LB": "LB",
     "CB": "CB",
     "RB": "RB",
-    "P": "P",
     "LP": "LP"
   }
 }

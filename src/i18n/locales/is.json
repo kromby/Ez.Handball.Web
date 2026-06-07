@@ -222,9 +222,8 @@
     "LW": "Vinstri horn",
     "RW": "Hægri horn",
     "LB": "Vinstri skytta",
-    "CB": "Miðjuskytta",
+    "CB": "Miðja",
     "RB": "Hægri skytta",
-    "P": "Lína",
     "LP": "Línumaður"
   },
   "positionsShort": {
@@ -232,9 +231,8 @@
     "LW": "VH",
     "RW": "HH",
     "LB": "VS",
-    "CB": "MS",
+    "CB": "MI",
     "RB": "HS",
-    "P": "L",
     "LP": "LM"
   }
 }
