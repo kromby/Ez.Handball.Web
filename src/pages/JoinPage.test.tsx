@@ -45,3 +45,11 @@ test("shows an expired message on 410", async () => {
   render();
   expect(await screen.findByText(/has expired/i)).toBeInTheDocument();
 });
+
+test("shows a generic join error when joining fails non-404/410", async () => {
+  vi.spyOn(api, "previewInvite").mockResolvedValue({ leagueId: "L1", name: "Office", season: "2025-26", memberCount: 3 });
+  vi.spyOn(api, "joinMiniLeague").mockRejectedValue(new ApiError(500, null, "HTTP 500"));
+  render();
+  fireEvent.click(await screen.findByRole("button", { name: /join league/i }));
+  expect(await screen.findByText(/couldn't join/i)).toBeInTheDocument();
+});

@@ -5,8 +5,16 @@ import { Panel } from "../components/Panel";
 import { Loading } from "../components/StateViews";
 import { useInvitePreview, useJoinMiniLeague } from "../query/hooks";
 
-function messageKey(err: unknown): "invite.expired" | "invite.invalid" {
+// Preview only fails with 410 (expired) or 404 (invalid).
+function previewMessageKey(err: unknown): "invite.expired" | "invite.invalid" {
   return err instanceof ApiError && err.status === 410 ? "invite.expired" : "invite.invalid";
+}
+
+// Join can also fail generically (e.g. a 400/500) — fall back to a join-specific message.
+function joinMessageKey(err: unknown): "invite.expired" | "invite.invalid" | "invite.joinError" {
+  if (err instanceof ApiError && err.status === 410) return "invite.expired";
+  if (err instanceof ApiError && err.status === 404) return "invite.invalid";
+  return "invite.joinError";
 }
 
 export default function JoinPage() {
@@ -21,7 +29,7 @@ export default function JoinPage() {
     return (
       <section className="stack">
         <Panel>
-          <p className="error" role="alert">{t(messageKey(preview.error))}</p>
+          <p className="error" role="alert">{t(previewMessageKey(preview.error))}</p>
         </Panel>
       </section>
     );
@@ -45,7 +53,7 @@ export default function JoinPage() {
             {join.isPending ? t("invite.joining") : t("invite.join")}
           </button>
         </div>
-        {join.isError && <p className="error" role="alert">{t(messageKey(join.error))}</p>}
+        {join.isError && <p className="error" role="alert">{t(joinMessageKey(join.error))}</p>}
       </Panel>
     </section>
   );
