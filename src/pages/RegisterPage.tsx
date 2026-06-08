@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import type { Language } from "../api/types";
 import { ErrorView, Loading } from "../components/StateViews";
@@ -44,6 +44,8 @@ export default function RegisterPage() {
   const { t, i18n } = useTranslation();
   const { register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
   const clubs = useClubs();
 
   const [step, setStep] = useState(0);
@@ -134,7 +136,7 @@ export default function RegisterPage() {
         <div className="reg-form">
           <div className="reg-form-inner">
             {done ? (
-              <Celebration displayName={displayName} club={selectedClub} onEnter={() => navigate("/")} />
+              <Celebration displayName={displayName} club={selectedClub} onEnter={() => navigate(from ?? "/")} />
             ) : step === 0 ? (
               <div className="reg-page">
                 <h2>{t("auth.detailsTitle")}</h2>

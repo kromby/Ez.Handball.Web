@@ -1,11 +1,17 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
+import { Route, Routes, useParams } from "react-router-dom";
 import RegisterPage from "./RegisterPage";
 import { renderWithProviders } from "../test/renderWithQuery";
 import { ApiError } from "../api/client";
 import * as endpoints from "../api/endpoints";
 import type { Club } from "../api/types";
+
+function JoinProbe() {
+  const { token } = useParams();
+  return <div>join {token}</div>;
+}
 
 const clubs: Club[] = [
   { clubId: "385", name: "Afturelding", logoUrl: null },
@@ -80,4 +86,20 @@ describe("RegisterPage (two-step)", () => {
     expect(screen.getByRole("heading", { name: "Your details" })).toBeInTheDocument();
     expect(register).not.toHaveBeenCalled();
   });
+});
+
+test("after registering from an invite, the celebration returns to the join page", async () => {
+  const register = vi.fn().mockResolvedValue(undefined);
+  renderWithProviders(
+    <Routes>
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/invite/:token" element={<JoinProbe />} />
+    </Routes>,
+    { auth: { register }, initialEntries: [{ pathname: "/register", state: { from: { pathname: "/invite/tok1" } } }] },
+  );
+  await fillDetails();
+  await userEvent.click(screen.getByRole("button", { name: /Continue/ }));
+  await userEvent.click(await screen.findByRole("button", { name: /Afturelding/ }));
+  await userEvent.click(await screen.findByRole("button", { name: /Explore the stats/i }));
+  expect(await screen.findByText("join tok1")).toBeInTheDocument();
 });
