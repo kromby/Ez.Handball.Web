@@ -16,7 +16,8 @@
     "shortlistWithCount": "Shortlist · {{count}}",
     "language": "Language",
     "market": "Market",
-    "mySquad": "My Squad"
+    "mySquad": "My Squad",
+    "leagues": "Leagues"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -234,5 +235,31 @@
     "CB": "CB",
     "RB": "RB",
     "LP": "LP"
+  },
+  "leagues": {
+    "title": "Mini-leagues",
+    "blurb": "Create a private league and share the link with friends. Joining opens up soon.",
+    "nameLabel": "League name",
+    "namePlaceholder": "e.g. Office Olís",
+    "nameInvalid": "1–60 characters.",
+    "create": "Create league",
+    "creating": "Creating…",
+    "seasonNote": "Your league is created for the current season.",
+    "noCurrentSeason": "There's no active season yet — leagues open when the season starts.",
+    "notFound": "League not found",
+    "members": "Members",
+    "you": "{{name}} (you)",
+    "memberShort": "Member {{id}}",
+    "roleCreator": "creator",
+    "roleMember": "member",
+    "badgeCreator": "You · creator",
+    "badgeMember": "Member",
+    "badgeNotMember": "You're not a member of this league",
+    "membersOnlyYou": "Just you so far.",
+    "memberCount": "{{count}} members",
+    "share": "Share",
+    "shareNote": "Anyone with the link (and an account) can view this league. One-click join arrives with the invite flow.",
+    "copyLink": "Copy link",
+    "copied": "Copied"
   }
 }

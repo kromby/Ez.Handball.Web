@@ -16,7 +16,8 @@
     "shortlistWithCount": "Æfingahópur · {{count}}",
     "language": "Tungumál",
     "market": "Félagaskipti",
-    "mySquad": "Liðið mitt"
+    "mySquad": "Liðið mitt",
+    "leagues": "Deildir"
   },
   "leaderboard": {
     "title": "Stigatafla",
@@ -234,5 +235,31 @@
     "CB": "MI",
     "RB": "HS",
     "LP": "LM"
+  },
+  "leagues": {
+    "title": "Einkadeildir",
+    "blurb": "Stofnaðu einkadeild og deildu hlekknum með vinum. Hægt verður að ganga í deildir fljótlega.",
+    "nameLabel": "Nafn deildar",
+    "namePlaceholder": "t.d. Vinnudeildin",
+    "nameInvalid": "1–60 stafir.",
+    "create": "Stofna deild",
+    "creating": "Stofna…",
+    "seasonNote": "Deildin þín er stofnuð fyrir yfirstandandi tímabil.",
+    "noCurrentSeason": "Það er ekkert virkt tímabil í gangi — deildir opnast þegar tímabilið hefst.",
+    "notFound": "Deild fannst ekki",
+    "members": "Meðlimir",
+    "you": "{{name}} (þú)",
+    "memberShort": "Meðlimur {{id}}",
+    "roleCreator": "stofnandi",
+    "roleMember": "meðlimur",
+    "badgeCreator": "Þú · stofnandi",
+    "badgeMember": "Meðlimur",
+    "badgeNotMember": "Þú ert ekki meðlimur í þessari deild",
+    "membersOnlyYou": "Bara þú enn sem komið er.",
+    "memberCount": "{{count}} meðlimir",
+    "share": "Deila",
+    "shareNote": "Hver sem er með hlekkinn (og aðgang) getur skoðað deildina. Hægt verður að ganga í deildina með einum smelli þegar boðsflæðið kemur.",
+    "copyLink": "Afrita hlekk",
+    "copied": "Afritað"
   }
 }

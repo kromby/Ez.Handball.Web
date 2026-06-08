@@ -11,6 +11,8 @@ import AccountPage from "./pages/AccountPage";
 import ShortlistPage from "./pages/ShortlistPage";
 import SquadPage from "./pages/SquadPage";
 import MarketPage from "./pages/MarketPage";
+import LeaguesPage from "./pages/LeaguesPage";
+import LeaguePage from "./pages/LeaguePage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
@@ -35,6 +37,8 @@ export default function App() {
             <Route path="/shortlist" element={<ShortlistPage />} />
             <Route path="/squad" element={<SquadPage />} />
             <Route path="/market" element={<MarketPage />} />
+            <Route path="/leagues" element={<LeaguesPage />} />
+            <Route path="/leagues/:id" element={<LeaguePage />} />
           </Route>
         </Routes>
       </main>

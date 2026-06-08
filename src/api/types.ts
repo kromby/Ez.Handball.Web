@@ -271,3 +271,20 @@ export interface PlayerPool {
   limit: number;
   entries: PoolEntry[];
 }
+
+export interface MiniLeagueMember {
+  userId: string;
+  role: string; // "creator" | "member"
+  joinedAt: string;
+}
+
+export interface MiniLeague {
+  id: string;
+  name: string;
+  season: string;
+  creatorUserId: string;
+  memberCount: number;
+  role: string | null; // caller's role, or null if not a member
+  createdAt: string;
+  members: MiniLeagueMember[];
+}

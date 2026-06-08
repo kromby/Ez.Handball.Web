@@ -1208,3 +1208,5 @@ button {
 .eyebrow { color: var(--amber-deep); font-weight: 700; font-style: italic; }
 .market-chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .chip { border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px; font-weight: 700; white-space: nowrap; }
+.share-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
+.share-link { background: var(--paper-3); border-radius: 8px; padding: 4px 10px; font-size: 13px; word-break: break-all; }

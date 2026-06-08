@@ -6,7 +6,7 @@ import * as api from "../api/endpoints";
 import { AuthContext } from "../auth/useAuth";
 import { buildAuth, queryWrapper } from "../test/renderWithQuery";
 import { createQueryClient } from "./queryClient";
-import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer } from "./hooks";
+import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useCreateMiniLeague } from "./hooks";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -68,4 +68,23 @@ test("useSellPlayer writes the returned squad into the cache on success", async 
   const { result } = renderHook(() => useSellPlayer(), { wrapper });
   await act(async () => { await result.current.mutateAsync("p1"); });
   expect(client.getQueryData(["squad", "fantasy"])).toMatchObject({ remainingBudget: { amount: 33 } });
+});
+
+test("useMiniLeague is disabled when not authenticated", () => {
+  const spy = vi.spyOn(api, "getMiniLeague");
+  renderHook(() => useMiniLeague("abc"), { wrapper: anonymousWrapper() });
+  expect(spy).not.toHaveBeenCalled();
+});
+
+test("useCreateMiniLeague returns the created league", async () => {
+  const league = { id: "abc", name: "L", season: "2025-26", creatorUserId: "u1", memberCount: 1, role: "creator", createdAt: "", members: [] };
+  vi.spyOn(api, "createMiniLeague").mockResolvedValue(league as never);
+  const client = createQueryClient();
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  );
+  const { result } = renderHook(() => useCreateMiniLeague(), { wrapper });
+  let created: unknown;
+  await act(async () => { created = await result.current.mutateAsync("L"); });
+  expect(created).toMatchObject({ id: "abc" });
 });

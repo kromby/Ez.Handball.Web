@@ -45,6 +45,11 @@ describe("Nav", () => {
     expect(screen.queryByRole("link", { name: /Shortlist/ })).not.toBeInTheDocument();
   });
 
+  test("shows a Leagues link to /leagues when authenticated", () => {
+    renderWithProviders(<Nav />, { auth: { status: "authenticated", user } });
+    expect(screen.getByRole("link", { name: "Leagues" })).toHaveAttribute("href", "/leagues");
+  });
+
   test("renders the language toggle for everyone", () => {
     renderWithProviders(<Nav />, { auth: { status: "anonymous" } });
     expect(screen.getByRole("button", { name: "IS" })).toBeInTheDocument();
