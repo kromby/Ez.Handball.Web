@@ -14,7 +14,9 @@
     "register": "Register",
     "shortlist": "Shortlist",
     "shortlistWithCount": "Shortlist · {{count}}",
-    "language": "Language"
+    "language": "Language",
+    "market": "Market",
+    "mySquad": "My Squad"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -160,6 +162,77 @@
     "defaultManagerName": "manager",
     "passwordStrengthWeak": "tooth & nail",
     "passwordStrengthFair": "getting there",
-    "passwordStrengthStrong": "iron grip"
+    "passwordStrengthStrong": "iron grip",
+    "teamName": "Team name",
+    "teamNamePlaceholder": "e.g. Pivot Club",
+    "teamNameRange": "1–60 characters."
+  },
+  "buy": {
+    "buy": "Buy",
+    "buyWithPrice": "Buy · {{price}}",
+    "buyName": "Buy {{name}}",
+    "inSquadShort": "In squad",
+    "inSquad": "{{name}} is in your squad",
+    "reasonSquadFull": "Squad is full",
+    "reasonPositionLimit": "Position limit reached",
+    "reasonInsufficientBudget": "Over your remaining budget",
+    "reasonUnavailable": "Not available to buy here",
+    "reasonOwned": "Already in your squad",
+    "errorNoTeam": "Set up your team first.",
+    "errorNotFound": "Player not found."
+  },
+  "sell": {
+    "sell": "Sell",
+    "sellName": "Sell {{name}}",
+    "confirmTitle": "Sell {{name}}?",
+    "confirmBody": "A sell-on fee applies to any profit; your budget updates when the sale completes.",
+    "cancel": "Cancel",
+    "errorNotInSquad": "That player isn't in your squad."
+  },
+  "market": {
+    "eyebrow": "build your squad",
+    "title": "Transfer Market",
+    "budgetLeft": "Budget left · {{amount}}",
+    "shortlisted": "Shortlisted · {{count}}",
+    "filterPosition": "Position",
+    "allPositions": "All",
+    "sortBy": "Sort by",
+    "sortRating": "Rating",
+    "sortPrice": "Price",
+    "position": "Pos",
+    "rating": "Rating",
+    "price": "Price",
+    "notFound": "Market not found",
+    "empty": "No players match these filters."
+  },
+  "squad": {
+    "title": "My Squad",
+    "notFound": "Squad not found",
+    "remaining": "Budget left",
+    "budgetUsed": "In squad",
+    "squadValue": "Squad value",
+    "size": "Players",
+    "paid": "paid {{price}}",
+    "now": "now {{price}}",
+    "empty": "Your squad is empty.",
+    "goToMarket": "Go to the Market"
+  },
+  "positions": {
+    "GK": "Goalkeeper",
+    "LW": "Left wing",
+    "RW": "Right wing",
+    "LB": "Left back",
+    "CB": "Centre back",
+    "RB": "Right back",
+    "LP": "Line player"
+  },
+  "positionsShort": {
+    "GK": "GK",
+    "LW": "LW",
+    "RW": "RW",
+    "LB": "LB",
+    "CB": "CB",
+    "RB": "RB",
+    "LP": "LP"
   }
 }

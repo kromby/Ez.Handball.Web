@@ -22,6 +22,7 @@ test("register posts to /api/auth/register", async () => {
     displayName: "Jon",
     language: "is" as const,
     favoriteClubId: "385",
+    teamName: "Team Jon",
   };
   await auth.register(body);
   expect(spy).toHaveBeenCalledWith("/api/auth/register", body);

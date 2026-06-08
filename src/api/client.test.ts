@@ -145,3 +145,18 @@ describe("authed requests", () => {
     expect(err).toMatchObject({ status: 400, code: "validation_error", details: { field: "email" } });
   });
 });
+
+test("apiPost maps a 422 body's violations onto ApiError.violations", async () => {
+  const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+    new Response(JSON.stringify({ violations: [{ code: "squad_full", message: "Squad is full" }] }), {
+      status: 422,
+      headers: { "Content-Type": "application/json" },
+    }),
+  );
+  const { apiPost } = await import("./client");
+  await expect(apiPost("/x", {})).rejects.toMatchObject({
+    status: 422,
+    violations: [{ code: "squad_full", message: "Squad is full" }],
+  });
+  fetchMock.mockRestore();
+});

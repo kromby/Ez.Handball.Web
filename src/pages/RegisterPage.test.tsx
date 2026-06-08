@@ -19,6 +19,7 @@ afterEach(() => vi.restoreAllMocks());
 
 async function fillDetails() {
   await userEvent.type(screen.getByLabelText("Display name"), "Halla");
+  await userEvent.type(screen.getByLabelText("Team name"), "Pivot Club");
   await userEvent.type(screen.getByLabelText("Email"), "a@b.is");
   await userEvent.type(screen.getByLabelText("Password"), "hunter2hunter2");
 }
@@ -40,6 +41,7 @@ describe("RegisterPage (two-step)", () => {
       displayName: "Halla",
       language: "is",
       favoriteClubId: "385",
+      teamName: "Pivot Club",
     });
     expect(await screen.findByText(/you.re in/i)).toBeInTheDocument();
   });
@@ -65,5 +67,17 @@ describe("RegisterPage (two-step)", () => {
 
     expect(await screen.findByText("That email is already registered.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Your details" })).toBeInTheDocument();
+  });
+
+  test("requires a team name before continuing", async () => {
+    const register = vi.fn();
+    renderWithProviders(<RegisterPage />, { auth: { register } });
+    await userEvent.type(screen.getByLabelText("Display name"), "Halla");
+    await userEvent.type(screen.getByLabelText("Email"), "a@b.is");
+    await userEvent.type(screen.getByLabelText("Password"), "hunter2hunter2");
+    // team name left blank
+    await userEvent.click(screen.getByRole("button", { name: /Continue/ }));
+    expect(screen.getByRole("heading", { name: "Your details" })).toBeInTheDocument();
+    expect(register).not.toHaveBeenCalled();
   });
 });

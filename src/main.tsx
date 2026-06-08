@@ -5,6 +5,7 @@ import { BrowserRouter } from "react-router-dom";
 import { I18nextProvider } from "react-i18next";
 import App from "./App";
 import { AuthProvider } from "./auth/AuthProvider";
+import { ToastProvider } from "./components/Toast";
 import { createQueryClient } from "./query/queryClient";
 import { i18n } from "./i18n";
 import "./styles/app.css";
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <AuthProvider>
-            <App />
+            <ToastProvider>
+              <App />
+            </ToastProvider>
           </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>

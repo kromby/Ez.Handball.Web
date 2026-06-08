@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as api from "../api/endpoints";
-import type { LeaderboardMetric, ShortlistItem, ShortlistResponse } from "../api/types";
+import type { LeaderboardMetric, PoolSort, ShortlistItem, ShortlistResponse, Squad } from "../api/types";
 import { useAuth } from "../auth/useAuth";
 
 export function useLeaderboard(
@@ -140,5 +140,60 @@ export function useRemoveFromShortlist() {
       if (ctx?.prev) qc.setQueryData(SHORTLIST_KEY, ctx.prev);
     },
     onSettled: () => qc.invalidateQueries({ queryKey: SHORTLIST_KEY }),
+  });
+}
+
+const SQUAD_KEY = (flavor = "fantasy") => ["squad", flavor] as const;
+
+export function useSquad(flavor = "fantasy") {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: SQUAD_KEY(flavor),
+    queryFn: () => api.getSquad(flavor),
+    enabled: status === "authenticated",
+  });
+}
+
+export function useSquadConstraints(flavor = "fantasy", options: { enabled?: boolean } = {}) {
+  return useQuery({
+    queryKey: ["squad-constraints", flavor],
+    queryFn: () => api.getSquadConstraints(flavor),
+    staleTime: Infinity,
+    enabled: options.enabled ?? true,
+  });
+}
+
+export function useBuyPlayer(flavor = "fantasy") {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (playerId: string) => api.buyPlayer(playerId, flavor),
+    onSuccess: (squad: Squad) => qc.setQueryData(SQUAD_KEY(flavor), squad),
+    onSettled: () => qc.invalidateQueries({ queryKey: SQUAD_KEY(flavor) }),
+  });
+}
+
+export function usePlayerPool(params: {
+  season?: string;
+  tournamentId?: string;
+  gender?: string;
+  position?: string;
+  sort?: PoolSort;
+  offset?: number;
+  limit?: number;
+}, options: { enabled?: boolean } = {}) {
+  const { season, tournamentId, gender, position, sort, offset, limit } = params;
+  return useQuery({
+    queryKey: ["player-pool", season ?? null, tournamentId ?? null, gender ?? null, position ?? null, sort ?? "Rating", offset ?? 0, limit ?? 50],
+    queryFn: () => api.getPlayerPool(params),
+    enabled: options.enabled ?? true,
+  });
+}
+
+export function useSellPlayer(flavor = "fantasy") {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (playerId: string) => api.sellPlayer(playerId, flavor),
+    onSuccess: (squad: Squad) => qc.setQueryData(SQUAD_KEY(flavor), squad),
+    onSettled: () => qc.invalidateQueries({ queryKey: SQUAD_KEY(flavor) }),
   });
 }

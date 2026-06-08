@@ -54,6 +54,8 @@ export interface Player {
   clubId: string;
   clubName: string | null;
   gender: string;
+  position?: string | null;  // ADD — optional
+  price?: Money | null;      // ADD — optional
 }
 
 export interface PlayerHistoryEntry {
@@ -173,6 +175,7 @@ export interface RegisterRequest {
   displayName: string;
   language: Language;
   favoriteClubId: string;
+  teamName: string;          // ADD
 }
 
 export interface LoginRequest {
@@ -208,4 +211,63 @@ export interface ShortlistResponse {
   items: ShortlistItem[];
   count: number;
   max: number;
+}
+
+export interface Money {
+  amount: number;
+  currency: string;
+}
+
+export interface SquadPlayer {
+  playerId: string;
+  name: string | null;
+  clubId: string | null;
+  clubName: string | null;
+  position: string | null;
+  gender: string | null;
+  price: Money | null;   // current market value
+  pricePaid: Money;      // locked at purchase
+}
+
+export interface Squad {
+  flavor: string;
+  players: SquadPlayer[];
+  budgetUsed: Money;       // Σ pricePaid (tied up in squad)
+  remainingBudget: Money;  // authoritative stored cash balance
+  squadValue: Money;       // Σ current price
+}
+
+export interface SquadConstraints {
+  ruleSetVersion: number;
+  maxSquadSize: number;
+  startingCap: Money;
+  posLimits: Record<string, number>;
+}
+
+export interface BuyViolation {
+  code: string;
+  message: string;
+}
+
+export type PoolSort = "Rating" | "Price"; // "PickPercentage" exists server-side but hidden until ownership data ships
+
+export interface PoolEntry {
+  rank: number;
+  playerId: string;
+  name: string | null;
+  clubId: string;
+  clubName: string | null;
+  gender: string;
+  position: string;
+  price: Money;
+  rating: number;
+  pickPercentage: number | null; // always null for now
+}
+
+export interface PlayerPool {
+  sort: string;
+  total: number;
+  offset: number;
+  limit: number;
+  entries: PoolEntry[];
 }

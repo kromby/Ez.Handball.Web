@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
-import type { LeaderboardEntry, LeaderboardMetric } from "../api/types";
+import type { LeaderboardEntry, LeaderboardMetric, Money } from "../api/types";
 import { PlayerTable, type PlayerColumn } from "./PlayerTable";
+import { BuyButton } from "./BuyButton";
 
 function metricValue(entry: LeaderboardEntry, metric: LeaderboardMetric): number {
   switch (metric) {
@@ -20,9 +21,11 @@ function metricValue(entry: LeaderboardEntry, metric: LeaderboardMetric): number
 export function LeaderboardTable({
   entries,
   metric,
+  buyLookup,
 }: {
   entries: LeaderboardEntry[];
   metric: LeaderboardMetric;
+  buyLookup?: (playerId: string) => { position: string; price: Money } | undefined;
 }) {
   const { t } = useTranslation();
   const before: PlayerColumn<LeaderboardEntry>[] = [
@@ -38,5 +41,15 @@ export function LeaderboardTable({
     { key: "value", header: t("leaderboard.value"), align: "right", render: (e) => metricValue(e, metric) },
     { key: "avg", header: t("leaderboard.avgGoals"), align: "right", render: (e) => e.avgGoals.toFixed(2) },
   ];
+  if (buyLookup) {
+    after.push({
+      key: "buy",
+      header: "",
+      render: (e) => {
+        const info = buyLookup(e.playerId);
+        return <BuyButton player={{ playerId: e.playerId, name: e.name, position: info?.position ?? null, price: info?.price ?? null }} />;
+      },
+    });
+  }
   return <PlayerTable<LeaderboardEntry> rows={entries} before={before} after={after} />;
 }

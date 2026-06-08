@@ -1162,3 +1162,49 @@ button {
   opacity: 0.7;
   margin-right: 4px;
 }
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: var(--ink);
+  color: var(--paper-2);
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* ConfirmDialog */
+.dialog-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; z-index: 900; }
+.dialog { background: var(--paper-2); border-radius: 14px; padding: 22px; max-width: 360px; width: calc(100% - 32px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+.dialog-title { margin: 0 0 8px; }
+.dialog-body { margin: 0 0 18px; color: var(--ink-2); }
+.dialog-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* Squad-builder */
+.buy-btn { border: 2px solid var(--ink); background: var(--paper-2); border-radius: 8px; padding: 4px 12px; font-weight: 700; cursor: pointer; }
+.buy-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.buy-btn--on { background: var(--amber-deep); color: var(--paper-2); border-color: var(--amber-deep); }
+.buy-owned { color: var(--ink-3); font-weight: 700; white-space: nowrap; }
+.sell-btn { border: 2px solid var(--ink-2); background: transparent; border-radius: 8px; padding: 4px 12px; font-weight: 700; cursor: pointer; }
+.pos-chip { display: inline-block; background: var(--ink); color: var(--paper-2); border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
+.market-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.market-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.market-sort { margin-left: auto; }
+.budget-bar { height: 10px; background: var(--paper-3); border-radius: 999px; overflow: hidden; }
+.budget-bar-fill { height: 100%; background: var(--amber-deep); }
+.budget-chips { display: flex; flex-wrap: wrap; gap: 18px; margin: 10px 0 0; }
+.budget-chips dt { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.budget-chips dd { margin: 2px 0 0; font-weight: 800; font-size: 18px; }
+.position-group { margin-bottom: 16px; }
+.position-group-head { display: flex; justify-content: space-between; font-weight: 700; color: var(--ink-2); border-bottom: 1px solid var(--paper-3); padding-bottom: 4px; }
+.position-group-list { list-style: none; padding: 0; margin: 6px 0 0; }
+.squad-row { display: flex; align-items: center; gap: 12px; padding: 6px 0; }
+.squad-row-price { margin-left: auto; color: var(--ink-2); }
+.squad-row-now { color: var(--ink-3); }
+.eyebrow { color: var(--amber-deep); font-weight: 700; font-style: italic; }
+.market-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip { border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px; font-weight: 700; white-space: nowrap; }
