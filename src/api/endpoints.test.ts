@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -152,4 +152,28 @@ test("getMiniLeague calls the authed get for /api/mini-leagues/:id", async () =>
   const spy = spyAuthedGet();
   await getMiniLeague("abc123");
   expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc123");
+});
+
+test("getInvite calls authedGet for /api/mini-leagues/:id/invite", async () => {
+  const spy = spyAuthedGet();
+  await getInvite("L1");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/L1/invite");
+});
+
+test("generateInvite POSTs to /api/mini-leagues/:id/invite with empty body", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await generateInvite("L1");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/L1/invite", "POST", {});
+});
+
+test("previewInvite calls authedGet for /api/mini-leagues/invite/:token", async () => {
+  const spy = spyAuthedGet();
+  await previewInvite("tok1");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/invite/tok1");
+});
+
+test("joinMiniLeague POSTs to /api/mini-leagues/join with token body", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await joinMiniLeague("tok1");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/join", "POST", { token: "tok1" });
 });
