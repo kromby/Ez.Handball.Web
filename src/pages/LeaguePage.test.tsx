@@ -42,7 +42,7 @@ test("maps 404 to a not-found message", async () => {
 });
 
 test("copy-link writes the league permalink to the clipboard", async () => {
-  const writeText = vi.fn().mockResolvedValue(undefined);
+  const writeText = vi.fn(() => Promise.resolve());
   Object.assign(navigator, { clipboard: { writeText } });
   vi.spyOn(api, "getMiniLeague").mockResolvedValue({
     id: "abc", name: "Office", season: "2025-26", creatorUserId: "u1", memberCount: 1, role: "creator", createdAt: "", members: [{ userId: "u1", role: "creator", joinedAt: "" }],

@@ -32,10 +32,15 @@ export default function LeaguePage() {
       : t("leagues.memberShort", { id: m.userId.slice(0, 8) });
 
   const copy = () => {
-    void navigator.clipboard?.writeText(permalink).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
+    navigator.clipboard
+      ?.writeText(permalink)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      })
+      .catch(() => {
+        /* clipboard unavailable or permission denied — no-op */
+      });
   };
 
   return (
