@@ -16,10 +16,27 @@ test("renders nothing for a non-member", () => {
   expect(container).toBeEmptyDOMElement();
 });
 
-test("shows Generate when there is no invite yet", async () => {
+test("shows Generate when there is no invite yet, and clicking it calls generateInvite", async () => {
   vi.spyOn(api, "getInvite").mockRejectedValue(new ApiError(404, "no_invite", "HTTP 404"));
+  const gen = vi.spyOn(api, "generateInvite").mockResolvedValue({ token: "New", expiresAt: null });
   renderWithProviders(<InvitePanel league={league("creator")} />, { auth: authed });
-  expect(await screen.findByRole("button", { name: /generate invite link/i })).toBeInTheDocument();
+  fireEvent.click(await screen.findByRole("button", { name: /generate invite link/i }));
+  await waitFor(() => expect(gen).toHaveBeenCalledWith("L1"));
+});
+
+test("shows an inline error when the invite query fails (non-404)", async () => {
+  vi.spyOn(api, "getInvite").mockRejectedValue(new ApiError(500, null, "HTTP 500"));
+  renderWithProviders(<InvitePanel league={league("creator")} />, { auth: authed });
+  expect(await screen.findByText(/couldn't load the invite link/i)).toBeInTheDocument();
+});
+
+test("copy writes the invite URL to the clipboard", async () => {
+  const writeText = vi.fn(() => Promise.resolve());
+  Object.assign(navigator, { clipboard: { writeText } });
+  vi.spyOn(api, "getInvite").mockResolvedValue({ token: "Xy", expiresAt: null });
+  renderWithProviders(<InvitePanel league={league("creator")} />, { auth: authed });
+  fireEvent.click(await screen.findByRole("button", { name: /copy link/i }));
+  await waitFor(() => expect(writeText).toHaveBeenCalledWith(expect.stringContaining("/invite/Xy")));
 });
 
 test("shows the invite URL with copy + regenerate when an invite exists", async () => {
@@ -37,5 +54,5 @@ test("regenerate confirms then calls generateInvite", async () => {
   fireEvent.click(await screen.findByRole("button", { name: /regenerate/i }));
   const dialog = screen.getByRole("dialog");
   fireEvent.click(within(dialog).getByRole("button", { name: /regenerate/i }));
-  await waitFor(() => expect(gen).toHaveBeenCalled());
+  await waitFor(() => expect(gen).toHaveBeenCalledWith("L1"));
 });

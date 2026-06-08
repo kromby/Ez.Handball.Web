@@ -44,7 +44,7 @@ export function InvitePanel({ league }: { league: MiniLeague }) {
         <>
           <div className="share-row">
             <code className="share-link">{url}</code>
-            <button type="button" className="btn btn--ghost" onClick={copy} aria-label={t("invite.copyLink")}>
+            <button type="button" className="btn btn--ghost" onClick={copy} aria-label={t("invite.copyLink")} aria-live="polite">
               {copied ? t("invite.copied") : t("invite.copyLink")}
             </button>
           </div>
