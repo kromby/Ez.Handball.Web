@@ -261,5 +261,25 @@
     "shareNote": "Hver sem er með hlekkinn (og aðgang) getur skoðað deildina. Hægt verður að ganga í deildina með einum smelli þegar boðsflæðið kemur.",
     "copyLink": "Afrita hlekk",
     "copied": "Afritað"
+  },
+  "invite": {
+    "panelTitle": "Boðshlekkur",
+    "generateBlurb": "Bjóddu vinum í þessa deild.",
+    "generate": "Búa til boðshlekk",
+    "copyLink": "Afrita hlekk",
+    "copied": "Afritað",
+    "regenerate": "Endurnýja",
+    "neverExpires": "Rennur aldrei út.",
+    "confirmTitle": "Endurnýja boðshlekk?",
+    "confirmBody": "Núverandi hlekkur hættir að virka — þau sem þú hefur þegar deilt honum með þurfa nýjan hlekk.",
+    "confirm": "Endurnýja",
+    "cancel": "Hætta við",
+    "loadError": "Tókst ekki að sækja boðshlekkinn.",
+    "invitedToJoin": "Þér er boðið að ganga í",
+    "join": "Ganga í deild",
+    "joining": "Geng í…",
+    "invalid": "Þessi boðshlekkur er ógildur.",
+    "expired": "Þessi boðshlekkur er útrunninn.",
+    "joinError": "Tókst ekki að ganga í — reyndu aftur."
   }
 }
