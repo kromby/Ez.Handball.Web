@@ -197,3 +197,18 @@ export function useSellPlayer(flavor = "fantasy") {
     onSettled: () => qc.invalidateQueries({ queryKey: SQUAD_KEY(flavor) }),
   });
 }
+
+export function useMiniLeague(id: string) {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["mini-league", id],
+    queryFn: () => api.getMiniLeague(id),
+    enabled: status === "authenticated" && id.length > 0,
+  });
+}
+
+export function useCreateMiniLeague() {
+  return useMutation({
+    mutationFn: (name: string) => api.createMiniLeague(name),
+  });
+}
