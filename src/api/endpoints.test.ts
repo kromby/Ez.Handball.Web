@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -140,4 +140,16 @@ test("sellPlayer DELETEs the encoded player id with flavor", async () => {
   const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
   await sellPlayer("a/b");
   expect(spy).toHaveBeenCalledWith("/api/users/me/squad/players/a%2Fb?flavor=fantasy", "DELETE");
+});
+
+test("createMiniLeague POSTs to /api/mini-leagues with name body", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await createMiniLeague("Office Olís");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues", "POST", { name: "Office Olís" });
+});
+
+test("getMiniLeague calls the authed get for /api/mini-leagues/:id", async () => {
+  const spy = spyAuthedGet();
+  await getMiniLeague("abc123");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc123");
 });

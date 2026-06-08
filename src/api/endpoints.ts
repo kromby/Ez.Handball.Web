@@ -5,6 +5,7 @@ import type {
   Leaderboard,
   LeaderboardMetric,
   MatchDetail,
+  MiniLeague,
   Player,
   PlayerHistoryResponse,
   PlayerPool,
@@ -118,4 +119,12 @@ export function sellPlayer(playerId: string, flavor = "fantasy"): Promise<Squad>
     `/api/users/me/squad/players/${encodeURIComponent(playerId)}?flavor=${encodeURIComponent(flavor)}`,
     "DELETE",
   );
+}
+
+export function createMiniLeague(name: string): Promise<MiniLeague> {
+  return authedSend<MiniLeague>("/api/mini-leagues", "POST", { name });
+}
+
+export function getMiniLeague(id: string): Promise<MiniLeague> {
+  return authedGet<MiniLeague>(`/api/mini-leagues/${encodeURIComponent(id)}`);
 }
