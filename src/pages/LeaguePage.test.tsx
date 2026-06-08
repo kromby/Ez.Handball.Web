@@ -23,13 +23,15 @@ test("renders the league with the current user marked '(you)'", async () => {
     id: "abc", name: "Office Olís", season: "2025-26", creatorUserId: "u1", memberCount: 2, role: "creator", createdAt: "2026-06-08T00:00:00Z",
     members: [
       { userId: "u1", role: "creator", joinedAt: "2026-06-08T00:00:00Z" },
-      { userId: "u2longid", role: "member", joinedAt: "2026-06-08T00:00:00Z" },
+      { userId: "u2abcdefghij", role: "member", joinedAt: "2026-06-08T00:00:00Z" },
     ],
   });
   render();
   expect(await screen.findByText("Office Olís")).toBeInTheDocument();
   expect(screen.getByText("Jon (you)")).toBeInTheDocument();
-  expect(screen.getByText(/Member u2longid/)).toBeInTheDocument();
+  // other members render a shortened (first-8) id, not the full one
+  expect(screen.getByText("Member u2abcdef")).toBeInTheDocument();
+  expect(screen.queryByText(/u2abcdefghij/)).not.toBeInTheDocument();
   expect(screen.getByText("You · creator")).toBeInTheDocument();
 });
 
