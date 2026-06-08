@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as api from "../api/endpoints";
 import type { LeaderboardMetric, PoolSort, ShortlistItem, ShortlistResponse, Squad } from "../api/types";
+import { ApiError } from "../api/client";
 import { useAuth } from "../auth/useAuth";
 
 export function useLeaderboard(
@@ -210,5 +211,43 @@ export function useMiniLeague(id: string) {
 export function useCreateMiniLeague() {
   return useMutation({
     mutationFn: (name: string) => api.createMiniLeague(name),
+  });
+}
+
+export function useInvite(id: string, options: { enabled?: boolean } = {}) {
+  return useQuery({
+    queryKey: ["invite", id],
+    queryFn: async (): Promise<import("../api/types").Invite | null> => {
+      try {
+        return await api.getInvite(id);
+      } catch (err) {
+        if (err instanceof ApiError && err.code === "no_invite") return null;
+        throw err;
+      }
+    },
+    enabled: options.enabled ?? true,
+    staleTime: Infinity,
+  });
+}
+
+export function useGenerateInvite(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.generateInvite(id),
+    onSuccess: (invite) => qc.setQueryData(["invite", id], invite),
+  });
+}
+
+export function useInvitePreview(token: string) {
+  return useQuery({
+    queryKey: ["invite-preview", token],
+    queryFn: () => api.previewInvite(token),
+    enabled: token.length > 0,
+  });
+}
+
+export function useJoinMiniLeague() {
+  return useMutation({
+    mutationFn: (token: string) => api.joinMiniLeague(token),
   });
 }
