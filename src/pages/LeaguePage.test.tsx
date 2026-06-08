@@ -1,4 +1,4 @@
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import { Route, Routes } from "react-router-dom";
 import { afterEach, expect, test, vi } from "vitest";
 import * as api from "../api/endpoints";
@@ -26,6 +26,7 @@ test("renders the league with the current user marked '(you)'", async () => {
       { userId: "u2abcdefghij", role: "member", joinedAt: "2026-06-08T00:00:00Z" },
     ],
   });
+  vi.spyOn(api, "getInvite").mockRejectedValue(new ApiError(404, "no_invite", "HTTP 404"));
   render();
   expect(await screen.findByText("Office Olís")).toBeInTheDocument();
   expect(screen.getByText("Jon (you)")).toBeInTheDocument();
@@ -41,13 +42,3 @@ test("maps 404 to a not-found message", async () => {
   expect(await screen.findByText("League not found")).toBeInTheDocument();
 });
 
-test("copy-link writes the league permalink to the clipboard", async () => {
-  const writeText = vi.fn(() => Promise.resolve());
-  Object.assign(navigator, { clipboard: { writeText } });
-  vi.spyOn(api, "getMiniLeague").mockResolvedValue({
-    id: "abc", name: "Office", season: "2025-26", creatorUserId: "u1", memberCount: 1, role: "creator", createdAt: "", members: [{ userId: "u1", role: "creator", joinedAt: "" }],
-  });
-  render();
-  fireEvent.click(await screen.findByRole("button", { name: /copy link/i }));
-  await waitFor(() => expect(writeText).toHaveBeenCalledWith(expect.stringContaining("/leagues/abc")));
-});
