@@ -56,6 +56,7 @@ export interface Player {
   gender: string;
   position?: string | null;  // ADD — optional
   price?: Money | null;      // ADD — optional
+  rating?: number | null; // current-season fantasy rating (Backend#78); 0 = no games, null = uncomputable
 }
 
 export interface PlayerHistoryEntry {
