@@ -158,6 +158,7 @@ export interface AuthUser {
   displayName: string;
   language: Language;
   favoriteClubId: string;
+  teamName?: string;     // public team identity (from GET /api/users/me)
   emailVerified: boolean;
   createdAt: string;
   lastLoginAt: string | null;
@@ -228,6 +229,7 @@ export interface SquadPlayer {
   gender: string | null;
   price: Money | null;   // current market value
   pricePaid: Money;      // locked at purchase
+  rating: number;        // current-season fantasy rating (#52); 0 = below min-games guard
 }
 
 export interface Squad {
