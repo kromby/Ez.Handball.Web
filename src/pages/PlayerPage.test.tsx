@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import { Route, Routes } from "react-router-dom";
 import { afterEach, expect, test, vi } from "vitest";
 import * as api from "../api/endpoints";
@@ -147,4 +147,33 @@ test("shows a Sell button when the player is owned", async () => {
   mockPlayerPageQueries(true);
   renderPlayer();
   expect(await screen.findByRole("button", { name: /sell/i })).toBeInTheDocument();
+});
+
+test("shows the fantasy rating and salary when present", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "t", clubId: "c1", clubName: "Aalvik", gender: "karlar", position: "LB", price: { amount: 12_000_000, currency: "ISK" }, rating: 128 } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
+  expect(await screen.findByText("Fantasy · this season")).toBeInTheDocument();
+  expect(screen.getByText("128")).toBeInTheDocument();
+  expect(screen.getByText(/12M ISK/)).toBeInTheDocument();
+});
+
+test("renders rating 0 as '0' and a null price as '—'", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "t", clubId: "c1", clubName: "Aalvik", gender: "karlar", position: "LB", price: null, rating: 0 } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
+  const strip = (await screen.findByText("Fantasy · this season")).closest("div")!;
+  expect(within(strip).getByText("0")).toBeInTheDocument();
+  expect(within(strip).getByText("—")).toBeInTheDocument();
+});
+
+test("omits the fantasy strip when both rating and price are absent", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "t", clubId: "c1", clubName: "Aalvik", gender: "karlar" } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
+  await screen.findByText("Vik");
+  expect(screen.queryByText("Fantasy · this season")).not.toBeInTheDocument();
 });

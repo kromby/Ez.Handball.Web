@@ -68,7 +68,10 @@
     "view": "View",
     "noHistory": "No history",
     "age": "Age {{age}}",
-    "goalsCount": "{{count}} goals"
+    "goalsCount": "{{count}} goals",
+    "fantasyHeading": "Fantasy · this season",
+    "rating": "Rating",
+    "salary": "Salary"
   },
   "shortlist": {
     "title": "Your shortlist",

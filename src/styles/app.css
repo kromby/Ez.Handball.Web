@@ -1212,3 +1212,8 @@ button {
 .share-link { background: var(--paper-3); border-radius: 8px; padding: 4px 10px; font-size: 13px; word-break: break-all; }
 .invite-panel { margin-top: 14px; }
 .invite-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+
+.fantasy-strip { margin-top: 8px; }
+.fantasy-strip-stats { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 0; }
+.fantasy-strip-stats dt { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; }
+.fantasy-strip-stats dd { margin: 2px 0 0; font-weight: 800; font-size: 18px; }
