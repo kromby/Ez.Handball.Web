@@ -219,7 +219,9 @@
     "paid": "greitt {{price}}",
     "now": "nú {{price}}",
     "empty": "Liðið þitt er tómt.",
-    "goToMarket": "Fara á markaðinn"
+    "goToMarket": "Fara á markaðinn",
+    "shapeLabel": "sóknarhluti",
+    "others": "Aðrar stöður"
   },
   "positions": {
     "GK": "Markvörður",
