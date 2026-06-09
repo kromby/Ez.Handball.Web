@@ -69,7 +69,7 @@ export default function LoginPage() {
           <Link to="/forgot-password">{t("auth.forgotPassword")}</Link>
         </p>
         <p className="form-note">
-          {t("auth.noAccount")} <Link to="/register">{t("auth.register")}</Link>
+          {t("auth.noAccount")} <Link to="/register" state={location.state}>{t("auth.register")}</Link>
         </p>
       </form>
     </AuthCard>

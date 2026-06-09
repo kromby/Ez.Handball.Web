@@ -1,9 +1,9 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import type { MiniLeagueMember } from "../api/types";
 import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
+import { InvitePanel } from "../components/InvitePanel";
 import { useAuth } from "../auth/useAuth";
 import { useMiniLeague } from "../query/hooks";
 
@@ -18,30 +18,16 @@ export default function LeaguePage() {
   const { id = "" } = useParams();
   const { user } = useAuth();
   const league = useMiniLeague(id);
-  const [copied, setCopied] = useState(false);
 
   if (league.isPending) return <Loading />;
   if (league.isError) return <ErrorView error={league.error} notFoundLabel={t("leagues.notFound")} />;
 
   const data = league.data;
-  const permalink = `${window.location.origin}/leagues/${encodeURIComponent(data.id)}`;
 
   const memberLabel = (m: MiniLeagueMember) =>
     m.userId === user?.id
       ? t("leagues.you", { name: user?.displayName ?? "" })
       : t("leagues.memberShort", { id: m.userId.slice(0, 8) });
-
-  const copy = () => {
-    navigator.clipboard
-      ?.writeText(permalink)
-      .then(() => {
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(() => {
-        /* clipboard unavailable or permission denied — no-op */
-      });
-  };
 
   return (
     <section className="stack">
@@ -66,14 +52,7 @@ export default function LeaguePage() {
         </ul>
         {data.members.length <= 1 && <p className="status">{t("leagues.membersOnlyYou")}</p>}
 
-        <h2 className="label" style={{ marginTop: 14 }}>{t("leagues.share")}</h2>
-        <div className="share-row">
-          <code className="share-link">{permalink}</code>
-          <button type="button" className="btn btn--ghost" onClick={copy} aria-label={t("leagues.copyLink")}>
-            {copied ? t("leagues.copied") : t("leagues.copyLink")}
-          </button>
-        </div>
-        <p className="status" aria-live="polite">{t("leagues.shareNote")}</p>
+        <InvitePanel league={data} />
       </Panel>
     </section>
   );

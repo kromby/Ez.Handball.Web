@@ -288,3 +288,15 @@ export interface MiniLeague {
   createdAt: string;
   members: MiniLeagueMember[];
 }
+
+export interface Invite {
+  token: string;
+  expiresAt: string | null;
+}
+
+export interface InvitePreview {
+  leagueId: string;
+  name: string;
+  season: string;
+  memberCount: number;
+}

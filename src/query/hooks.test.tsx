@@ -3,10 +3,11 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { afterEach, expect, test, vi } from "vitest";
 import type { ReactNode } from "react";
 import * as api from "../api/endpoints";
+import { ApiError } from "../api/client";
 import { AuthContext } from "../auth/useAuth";
 import { buildAuth, queryWrapper } from "../test/renderWithQuery";
 import { createQueryClient } from "./queryClient";
-import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useCreateMiniLeague } from "./hooks";
+import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useCreateMiniLeague, useInvite, useJoinMiniLeague } from "./hooks";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -87,4 +88,30 @@ test("useCreateMiniLeague returns the created league", async () => {
   let created: unknown;
   await act(async () => { created = await result.current.mutateAsync("L"); });
   expect(created).toMatchObject({ id: "abc" });
+});
+
+test("useInvite maps 404 no_invite to null", async () => {
+  vi.spyOn(api, "getInvite").mockRejectedValue(new ApiError(404, "no_invite", "HTTP 404"));
+  const { result } = renderHook(() => useInvite("L1"), { wrapper: queryWrapper() });
+  await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  expect(result.current.data).toBe(null);
+});
+
+test("useInvite rethrows other errors", async () => {
+  vi.spyOn(api, "getInvite").mockRejectedValue(new ApiError(403, "not_member", "x"));
+  const { result } = renderHook(() => useInvite("L1"), { wrapper: queryWrapper() });
+  await waitFor(() => expect(result.current.isError).toBe(true));
+});
+
+test("useJoinMiniLeague returns the league", async () => {
+  const league = { id: "L1", name: "L", season: "2025-26", creatorUserId: "u1", memberCount: 2, role: "member", createdAt: "", members: [] };
+  vi.spyOn(api, "joinMiniLeague").mockResolvedValue(league as never);
+  const client = createQueryClient();
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>{children}</QueryClientProvider>
+  );
+  const { result } = renderHook(() => useJoinMiniLeague(), { wrapper });
+  let joined: unknown;
+  await act(async () => { joined = await result.current.mutateAsync("tok1"); });
+  expect(joined).toMatchObject({ id: "L1" });
 });

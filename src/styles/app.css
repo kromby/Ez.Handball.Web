@@ -1210,3 +1210,5 @@ button {
 .chip { border: 2px solid var(--ink); border-radius: 999px; padding: 4px 12px; font-weight: 700; white-space: nowrap; }
 .share-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 6px 0; }
 .share-link { background: var(--paper-3); border-radius: 8px; padding: 4px 10px; font-size: 13px; word-break: break-all; }
+.invite-panel { margin-top: 14px; }
+.invite-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; }

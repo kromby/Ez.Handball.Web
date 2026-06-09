@@ -261,5 +261,25 @@
     "shareNote": "Anyone with the link (and an account) can view this league. One-click join arrives with the invite flow.",
     "copyLink": "Copy link",
     "copied": "Copied"
+  },
+  "invite": {
+    "panelTitle": "Invite link",
+    "generateBlurb": "Invite friends to this league.",
+    "generate": "Generate invite link",
+    "copyLink": "Copy link",
+    "copied": "Copied",
+    "regenerate": "Regenerate",
+    "neverExpires": "Never expires.",
+    "confirmTitle": "Regenerate invite link?",
+    "confirmBody": "The current link will stop working — anyone you've already shared it with will need the new one.",
+    "confirm": "Regenerate",
+    "cancel": "Cancel",
+    "loadError": "Couldn't load the invite link.",
+    "invitedToJoin": "You're invited to join",
+    "join": "Join league",
+    "joining": "Joining…",
+    "invalid": "This invite link isn't valid.",
+    "expired": "This invite link has expired.",
+    "joinError": "Couldn't join — please try again."
   }
 }

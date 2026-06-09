@@ -13,6 +13,7 @@ import SquadPage from "./pages/SquadPage";
 import MarketPage from "./pages/MarketPage";
 import LeaguesPage from "./pages/LeaguesPage";
 import LeaguePage from "./pages/LeaguePage";
+import JoinPage from "./pages/JoinPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
@@ -39,6 +40,7 @@ export default function App() {
             <Route path="/market" element={<MarketPage />} />
             <Route path="/leagues" element={<LeaguesPage />} />
             <Route path="/leagues/:id" element={<LeaguePage />} />
+            <Route path="/invite/:token" element={<JoinPage />} />
           </Route>
         </Routes>
       </main>

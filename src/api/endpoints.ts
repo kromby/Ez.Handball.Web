@@ -2,6 +2,8 @@ import { apiGet, authedGet, authedSend } from "./client";
 import type {
   Club,
   Gender,
+  Invite,
+  InvitePreview,
   Leaderboard,
   LeaderboardMetric,
   MatchDetail,
@@ -127,4 +129,20 @@ export function createMiniLeague(name: string): Promise<MiniLeague> {
 
 export function getMiniLeague(id: string): Promise<MiniLeague> {
   return authedGet<MiniLeague>(`/api/mini-leagues/${encodeURIComponent(id)}`);
+}
+
+export function getInvite(id: string): Promise<Invite> {
+  return authedGet<Invite>(`/api/mini-leagues/${encodeURIComponent(id)}/invite`);
+}
+
+export function generateInvite(id: string): Promise<Invite> {
+  return authedSend<Invite>(`/api/mini-leagues/${encodeURIComponent(id)}/invite`, "POST", {});
+}
+
+export function previewInvite(token: string): Promise<InvitePreview> {
+  return authedGet<InvitePreview>(`/api/mini-leagues/invite/${encodeURIComponent(token)}`);
+}
+
+export function joinMiniLeague(token: string): Promise<MiniLeague> {
+  return authedSend<MiniLeague>("/api/mini-leagues/join", "POST", { token });
 }
