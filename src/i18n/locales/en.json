@@ -221,7 +221,14 @@
     "empty": "Your squad is empty.",
     "goToMarket": "Go to the Market",
     "shapeLabel": "attacking half",
-    "others": "Other positions"
+    "others": "Other positions",
+    "rating": "rating",
+    "price": "price",
+    "paidLabel": "paid",
+    "drift": "drift",
+    "frees": "frees {{price}}",
+    "viewProfile": "View full profile →",
+    "tapPrompt": "tap a player to see their card"
   },
   "positions": {
     "GK": "Goalkeeper",

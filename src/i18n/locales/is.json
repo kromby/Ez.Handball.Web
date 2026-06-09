@@ -221,7 +221,14 @@
     "empty": "Liðið þitt er tómt.",
     "goToMarket": "Fara á markaðinn",
     "shapeLabel": "sóknarhluti",
-    "others": "Aðrar stöður"
+    "others": "Aðrar stöður",
+    "rating": "einkunn",
+    "price": "verð",
+    "paidLabel": "greitt",
+    "drift": "breyting",
+    "frees": "losar {{price}}",
+    "viewProfile": "Skoða leikmann →",
+    "tapPrompt": "smelltu á leikmann til að sjá spjaldið"
   },
   "positions": {
     "GK": "Markvörður",
