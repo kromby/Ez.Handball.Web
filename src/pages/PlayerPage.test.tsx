@@ -149,7 +149,7 @@ test("shows a Sell button when the player is owned", async () => {
   expect(await screen.findByRole("button", { name: /sell/i })).toBeInTheDocument();
 });
 
-test("shows the fantasy rating and salary when present", async () => {
+test("shows the fantasy rating and price when present", async () => {
   vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "t", clubId: "c1", clubName: "Aalvik", gender: "karlar", position: "LB", price: { amount: 12_000_000, currency: "ISK" }, rating: 128 } as never);
   vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
   vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });

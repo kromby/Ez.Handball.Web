@@ -70,7 +70,7 @@ export default function PlayerPage() {
                 <dd>{p.rating != null ? p.rating.toFixed(0) : "—"}</dd>
               </div>
               <div>
-                <dt>{t("player.salary")}</dt>
+                <dt>{t("player.price")}</dt>
                 <dd>{formatMoney(p.price ?? null)}</dd>
               </div>
             </dl>
