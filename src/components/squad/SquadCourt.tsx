@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import type { SquadPlayer } from "../../api/types";
 import { SketchBox } from "../SketchBox";
@@ -11,7 +12,7 @@ const COURT_POS: Record<string, { x: number; y: number }> = {
   LB: { x: 25, y: 60 }, RB: { x: 75, y: 60 },
   CB: { x: 50, y: 75 },
 };
-export const COURT_ORDER = ["GK", "LW", "RW", "LP", "LB", "RB", "CB"] as const;
+export const COURT_ORDER = Object.keys(COURT_POS) as (keyof typeof COURT_POS)[];
 
 export interface SquadCourtProps {
   players: SquadPlayer[];
@@ -21,17 +22,21 @@ export interface SquadCourtProps {
 
 export function SquadCourt({ players, selectedId, onSelect }: SquadCourtProps) {
   const { t } = useTranslation();
-  const byPos = new Map<string, SquadPlayer[]>();
-  for (const p of players) {
-    const code = p.position ?? "";
-    byPos.set(code, [...(byPos.get(code) ?? []), p]);
-  }
-  const others = players.filter((p) => !p.position || !(p.position in COURT_POS));
+  const { byPos, others } = useMemo(() => {
+    const byPos = new Map<string, SquadPlayer[]>();
+    for (const p of players) {
+      const code = p.position ?? "";
+      byPos.set(code, [...(byPos.get(code) ?? []), p]);
+    }
+    const others = players.filter((p) => !p.position || !(p.position in COURT_POS));
+    return { byPos, others };
+  }, [players]);
 
   return (
     <SketchBox tone="paper" radius={18} pad={14}>
       <div className="scribble court-eyebrow">{t("squad.shapeLabel")}</div>
       <div className="court">
+        {/* markings match the 440×340 design artboard — edit with the spec open */}
         <svg className="court-mk" viewBox="0 0 440 340" preserveAspectRatio="none" aria-hidden="true">
           <rect x="8" y="8" width="424" height="324" rx="10" fill="none" stroke="#c9bb98" strokeWidth="1.8" />
           <path d="M36 8 C 36 244 404 244 404 8" fill="none" stroke="#a9986f" strokeWidth="1.8" strokeDasharray="3 9" />

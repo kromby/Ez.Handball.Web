@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { I18nextProvider } from "react-i18next";
 import { describe, expect, it } from "vitest";
-import { SquadCourt } from "./SquadCourt";
+import { SquadCourt, COURT_ORDER } from "./SquadCourt";
 import { i18n } from "../../i18n";
 import type { SquadPlayer } from "../../api/types";
 
@@ -11,9 +11,8 @@ const mk = (id: string, name: string, position: string): SquadPlayer => ({
   price: { amount: 10_000_000, currency: "ISK" }, pricePaid: { amount: 10_000_000, currency: "ISK" }, rating: 70,
 });
 
-const ORDER = ["GK", "LW", "RW", "LP", "LB", "RB", "CB"];
 const NAMES = ["Siggi", "Bjössi", "Gunna", "Dalli", "Helga", "Arni", "Kata"];
-const full = ORDER.map((code, i) => mk(`p-${i}`, NAMES[i], code));
+const full = COURT_ORDER.map((code, i) => mk(`p-${i}`, NAMES[i], code));
 
 const renderCourt = (ui: React.ReactElement) =>
   render(<I18nextProvider i18n={i18n}><MemoryRouter>{ui}</MemoryRouter></I18nextProvider>);
@@ -21,7 +20,7 @@ const renderCourt = (ui: React.ReactElement) =>
 describe("SquadCourt", () => {
   it("places a token for each of the seven positions", () => {
     renderCourt(<SquadCourt players={full} selectedId={null} onSelect={() => {}} />);
-    for (const code of ORDER) expect(screen.getByText(code)).toBeInTheDocument();
+    for (const code of COURT_ORDER) expect(screen.getByText(code)).toBeInTheDocument();
     expect(screen.getAllByRole("button")).toHaveLength(7);
   });
 
