@@ -9,9 +9,9 @@ import SquadPage from "./SquadPage";
 afterEach(() => vi.restoreAllMocks());
 
 const constraints = {
+  ruleSetVersion: 1,
   startingCap: { amount: 100_000_000, currency: "ISK" },
   maxSquadSize: 7,
-  currency: "ISK",
   posLimits: { GK: 1, LW: 1, RW: 1, LP: 1, LB: 1, RB: 1, CB: 1 },
 } as SquadConstraints;
 
