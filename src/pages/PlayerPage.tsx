@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { TFunction } from "i18next";
 import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
+import { formatMoney } from "../api/money";
 import { BuyButton } from "../components/BuyButton";
 import { MatchList, type MatchSummary } from "../components/MatchList";
 import { Panel } from "../components/Panel";
@@ -60,6 +61,21 @@ export default function PlayerPage() {
           )}
         </div>
         <p className="subtitle">{headerBits.join(" · ")}</p>
+        {(p.rating != null || p.price != null) && (
+          <div className="fantasy-strip">
+            <span className="label">{t("player.fantasyHeading")}</span>
+            <dl className="fantasy-strip-stats">
+              <div>
+                <dt>{t("player.rating")}</dt>
+                <dd>{p.rating != null ? p.rating.toFixed(0) : "—"}</dd>
+              </div>
+              <div>
+                <dt>{t("player.salary")}</dt>
+                <dd>{formatMoney(p.price ?? null)}</dd>
+              </div>
+            </dl>
+          </div>
+        )}
       </div>
 
       <Panel>
