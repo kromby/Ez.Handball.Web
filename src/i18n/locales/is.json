@@ -68,7 +68,10 @@
     "view": "Skoða",
     "noHistory": "Engin saga",
     "age": "Aldur {{age}}",
-    "goalsCount": "{{count}} mörk"
+    "goalsCount": "{{count}} mörk",
+    "fantasyHeading": "Fantasía · þetta tímabil",
+    "rating": "Einkunn",
+    "salary": "Laun"
   },
   "shortlist": {
     "title": "Æfingahópurinn þinn",
