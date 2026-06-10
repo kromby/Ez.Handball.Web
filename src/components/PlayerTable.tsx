@@ -5,7 +5,7 @@ import { StarToggle } from "./StarToggle";
 
 export interface PlayerColumn<T> {
   key: string;
-  header: string;
+  header: ReactNode;
   align?: "right";
   render: (row: T) => ReactNode;
 }
