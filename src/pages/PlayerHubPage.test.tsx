@@ -1,0 +1,54 @@
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { afterEach, expect, test, vi } from "vitest";
+import * as api from "../api/endpoints";
+import type { AuthUser, PoolEntry } from "../api/types";
+import PlayerHubPage from "./PlayerHubPage";
+import { ToastProvider } from "../components/Toast";
+import { renderWithProviders } from "../test/renderWithQuery";
+
+afterEach(() => vi.restoreAllMocks());
+
+const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null };
+
+const entry: PoolEntry = {
+  rank: 1, playerId: "p1", name: "Bergström", clubId: "1", clubName: "Catalunya",
+  gender: "karlar", position: "CB", games: 8, goals: 20, yellowCards: 3,
+  twoMinuteSuspensions: 2, redCards: 1, avgGoals: 2.5,
+  price: { amount: 11_000_000, currency: "ISK" }, rating: 49, pickPercentage: null,
+};
+
+function mock() {
+  vi.spyOn(api, "getSeasons").mockResolvedValue([{ label: "2025-26", isCurrent: true }]);
+  vi.spyOn(api, "getTournaments").mockResolvedValue([]);
+  vi.spyOn(api, "getGenders").mockResolvedValue([{ value: "karlar", label: "Karlar" }, { value: "kvenna", label: "Kvenna" }]);
+  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 7, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { GK: 1, CB: 1 } });
+  vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [], count: 0, max: 20 });
+  vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 100_000_000, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
+  return vi.spyOn(api, "getPlayers").mockResolvedValue({ sort: "Goals", total: 1, offset: 0, limit: 50, entries: [entry] });
+}
+
+test("renders public for an anonymous visitor without a buy column or budget chip", async () => {
+  mock();
+  renderWithProviders(<ToastProvider><PlayerHubPage /></ToastProvider>, { initialEntries: ["/players"] });
+  expect(await screen.findByText("Bergström")).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument();
+  expect(screen.queryByText(/Budget left/i)).not.toBeInTheDocument();
+});
+
+test("authenticated visitor sees the buy column and budget chip", async () => {
+  mock();
+  renderWithProviders(<ToastProvider><PlayerHubPage /></ToastProvider>, {
+    auth: { status: "authenticated", user }, initialEntries: ["/players"],
+  });
+  expect(await screen.findByRole("button", { name: /buy/i })).toBeInTheDocument();
+  expect(screen.getByText(/Budget left/i)).toBeInTheDocument();
+});
+
+test("choosing a sort re-queries getPlayers with that sort", async () => {
+  const spy = mock();
+  renderWithProviders(<ToastProvider><PlayerHubPage /></ToastProvider>, { initialEntries: ["/players"] });
+  await screen.findByText("Bergström");
+  await userEvent.selectOptions(screen.getByRole("combobox", { name: /Sort by/i }), "Price");
+  expect(spy.mock.calls.some(([p]) => p.sort === "Price")).toBe(true);
+});
