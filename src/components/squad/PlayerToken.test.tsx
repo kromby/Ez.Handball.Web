@@ -35,9 +35,9 @@ describe("PlayerToken", () => {
     expect(onSelect).toHaveBeenCalledWith("p-1");
   });
 
-  it("renders an empty ghost slot linking to the market when no player", () => {
+  it("renders an empty ghost slot linking to the player hub when no player", () => {
     renderTok(<PlayerToken code="LP" x={50} y={40} onSelect={vi.fn()} />);
     expect(screen.getByText("LP")).toBeInTheDocument();
-    expect(screen.getByRole("link")).toHaveAttribute("href", "/market");
+    expect(screen.getByRole("link")).toHaveAttribute("href", "/players");
   });
 });

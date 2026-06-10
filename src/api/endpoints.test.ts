@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -109,25 +109,6 @@ test("getSquadConstraints calls the public constraints endpoint", async () => {
   const spy = spyGet();
   await getSquadConstraints();
   expect(spy).toHaveBeenCalledWith("/api/squad/constraints?flavor=fantasy");
-});
-
-test("getPlayerPool builds the query string from params", async () => {
-  const spy = spyGet();
-  await getPlayerPool({ season: "2025-26", position: "GK", sort: "Price", offset: 0, limit: 50 });
-  const url = spy.mock.calls[0][0] as string;
-  expect(url).toContain("/api/players/pool?");
-  expect(url).toContain("season=2025-26");
-  expect(url).toContain("position=GK");
-  expect(url).toContain("sort=Price");
-  // offset=0 must survive (the `!= null` guard, not a truthy check)
-  expect(url).toContain("offset=0");
-  expect(url).toContain("limit=50");
-});
-
-test("getPlayerPool omits empty params", async () => {
-  const spy = spyGet();
-  await getPlayerPool({});
-  expect(spy).toHaveBeenCalledWith("/api/players/pool");
 });
 
 test("getPlayers calls /api/players with sort + filters", async () => {

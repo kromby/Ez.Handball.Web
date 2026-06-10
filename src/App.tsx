@@ -10,7 +10,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AccountPage from "./pages/AccountPage";
 import ShortlistPage from "./pages/ShortlistPage";
 import SquadPage from "./pages/SquadPage";
-import MarketPage from "./pages/MarketPage";
+import PlayerHubPage from "./pages/PlayerHubPage";
 import LeaguesPage from "./pages/LeaguesPage";
 import LeaguePage from "./pages/LeaguePage";
 import JoinPage from "./pages/JoinPage";
@@ -26,6 +26,7 @@ export default function App() {
       <main className="page">
         <Routes>
           <Route path="/" element={<HomeOrLegacyRedirect />} />
+          <Route path="/players" element={<PlayerHubPage />} />
           <Route path="/players/:playerId" element={<PlayerPage />} />
           <Route path="/matches/:matchId" element={<MatchPage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -37,7 +38,6 @@ export default function App() {
             <Route path="/account" element={<AccountPage />} />
             <Route path="/shortlist" element={<ShortlistPage />} />
             <Route path="/squad" element={<SquadPage />} />
-            <Route path="/market" element={<MarketPage />} />
             <Route path="/leagues" element={<LeaguesPage />} />
             <Route path="/leagues/:id" element={<LeaguePage />} />
             <Route path="/invite/:token" element={<JoinPage />} />

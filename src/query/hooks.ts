@@ -173,23 +173,6 @@ export function useBuyPlayer(flavor = "fantasy") {
   });
 }
 
-export function usePlayerPool(params: {
-  season?: string;
-  tournamentId?: string;
-  gender?: string;
-  position?: string;
-  sort?: PoolSort;
-  offset?: number;
-  limit?: number;
-}, options: { enabled?: boolean } = {}) {
-  const { season, tournamentId, gender, position, sort, offset, limit } = params;
-  return useQuery({
-    queryKey: ["player-pool", season ?? null, tournamentId ?? null, gender ?? null, position ?? null, sort ?? "Rating", offset ?? 0, limit ?? 50],
-    queryFn: () => api.getPlayerPool(params),
-    enabled: options.enabled ?? true,
-  });
-}
-
 export function usePlayers(params: {
   season?: string;
   tournamentId?: string;

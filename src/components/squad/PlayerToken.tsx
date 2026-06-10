@@ -30,7 +30,7 @@ export function PlayerToken({ code, x, y, player, selected, onSelect }: PlayerTo
   if (!player) {
     return (
       <Link
-        to="/market"
+        to="/players"
         className="player-token player-token--ghost"
         style={style}
         aria-label={t("squad.addSlot", { code })}
