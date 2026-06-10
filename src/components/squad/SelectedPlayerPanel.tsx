@@ -5,10 +5,7 @@ import type { SquadPlayer } from "../../api/types";
 import { BallAvatar } from "../BallAvatar";
 import { SketchBox } from "../SketchBox";
 import { SellButton } from "../SellButton";
-
-function ratingLabel(rating: number | null | undefined): string {
-  return rating && rating > 0 ? String(Math.round(rating)) : "–";
-}
+import { ratingLabel } from "./ratingLabel";
 
 export function SelectedPlayerPanel({ player }: { player: SquadPlayer | null }) {
   const { t } = useTranslation();

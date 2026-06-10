@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from "@testing-library/react";
+import { I18nextProvider } from "react-i18next";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
+import { i18n } from "../../i18n";
 import { PlayerToken } from "./PlayerToken";
 import type { SquadPlayer } from "../../api/types";
 
@@ -10,7 +12,8 @@ const player: SquadPlayer = {
   pricePaid: { amount: 9_500_000, currency: "ISK" }, rating: 84,
 };
 
-const renderTok = (ui: React.ReactElement) => render(<MemoryRouter>{ui}</MemoryRouter>);
+const renderTok = (ui: React.ReactElement) =>
+  render(<I18nextProvider i18n={i18n}><MemoryRouter>{ui}</MemoryRouter></I18nextProvider>);
 
 describe("PlayerToken", () => {
   it("shows last name, position badge and rating for a filled slot", () => {

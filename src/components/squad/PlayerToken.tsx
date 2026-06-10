@@ -1,11 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { SquadPlayer } from "../../api/types";
 import { BallAvatar } from "../BallAvatar";
-
-/** "–" for an unusable rating (0 = below min-games guard, or null/undefined). */
-function ratingLabel(rating: number | null | undefined): string {
-  return rating && rating > 0 ? String(Math.round(rating)) : "–";
-}
+import { ratingLabel } from "./ratingLabel";
 
 function lastName(name: string | null): string {
   if (!name) return "—";
@@ -23,11 +20,17 @@ export interface PlayerTokenProps {
 }
 
 export function PlayerToken({ code, x, y, player, selected, onSelect }: PlayerTokenProps) {
+  const { t } = useTranslation();
   const style = { left: `${x}%`, top: `${y}%` } as const;
 
   if (!player) {
     return (
-      <Link to="/market" className="player-token player-token--ghost" style={style}>
+      <Link
+        to="/market"
+        className="player-token player-token--ghost"
+        style={style}
+        aria-label={t("squad.addSlot", { code })}
+      >
         <span className="token-ball token-ball--ghost" aria-hidden="true">+</span>
         <span className="token-badge">{code}</span>
       </Link>

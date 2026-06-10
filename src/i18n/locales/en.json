@@ -228,7 +228,8 @@
     "drift": "drift",
     "frees": "frees {{price}}",
     "viewProfile": "View full profile →",
-    "tapPrompt": "tap a player to see their card"
+    "tapPrompt": "tap a player to see their card",
+    "addSlot": "Add a {{code}} — go to the market"
   },
   "positions": {
     "GK": "Goalkeeper",
