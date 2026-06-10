@@ -17,14 +17,14 @@ const renderTok = (ui: React.ReactElement) =>
 
 describe("PlayerToken", () => {
   it("shows last name, position badge and rating for a filled slot", () => {
-    renderTok(<PlayerToken code="CB" x={50} y={75} player={player} onSelect={() => {}} />);
+    renderTok(<PlayerToken code="CB" x={50} y={75} player={player} onSelect={vi.fn()} />);
     expect(screen.getByText("Dahl")).toBeInTheDocument();
     expect(screen.getByText("CB")).toBeInTheDocument();
     expect(screen.getByText("84")).toBeInTheDocument();
   });
 
   it("shows '–' when rating is 0", () => {
-    renderTok(<PlayerToken code="CB" x={50} y={75} player={{ ...player, rating: 0 }} onSelect={() => {}} />);
+    renderTok(<PlayerToken code="CB" x={50} y={75} player={{ ...player, rating: 0 }} onSelect={vi.fn()} />);
     expect(screen.getByText("–")).toBeInTheDocument();
   });
 
@@ -36,7 +36,7 @@ describe("PlayerToken", () => {
   });
 
   it("renders an empty ghost slot linking to the market when no player", () => {
-    renderTok(<PlayerToken code="LP" x={50} y={40} onSelect={() => {}} />);
+    renderTok(<PlayerToken code="LP" x={50} y={40} onSelect={vi.fn()} />);
     expect(screen.getByText("LP")).toBeInTheDocument();
     expect(screen.getByRole("link")).toHaveAttribute("href", "/market");
   });

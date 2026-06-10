@@ -13,8 +13,8 @@ import { useSquad, useSquadConstraints } from "../query/hooks";
 /** First owned player in court order — the default selection on load. */
 function firstByCourtOrder(players: { playerId: string; position: string | null }[]): string | null {
   for (const code of COURT_ORDER) {
-    const p = players.find((x) => x.position === code);
-    if (p) return p.playerId;
+    const owned = players.find((candidate) => candidate.position === code);
+    if (owned) return owned.playerId;
   }
   return players[0]?.playerId ?? null;
 }
