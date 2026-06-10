@@ -193,22 +193,6 @@
     "cancel": "Cancel",
     "errorNotInSquad": "That player isn't in your squad."
   },
-  "market": {
-    "eyebrow": "build your squad",
-    "title": "Transfer Market",
-    "budgetLeft": "Budget left · {{amount}}",
-    "shortlisted": "Shortlisted · {{count}}",
-    "filterPosition": "Position",
-    "allPositions": "All",
-    "sortBy": "Sort by",
-    "sortRating": "Rating",
-    "sortPrice": "Price",
-    "position": "Pos",
-    "rating": "Rating",
-    "price": "Price",
-    "notFound": "Market not found",
-    "empty": "No players match these filters."
-  },
   "playerHub": {
     "title": "Players",
     "notFound": "Players not found",

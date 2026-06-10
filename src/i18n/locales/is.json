@@ -193,22 +193,6 @@
     "cancel": "Hætta við",
     "errorNotInSquad": "Sá leikmaður er ekki í liðinu þínu."
   },
-  "market": {
-    "eyebrow": "byggðu liðið þitt",
-    "title": "Félagaskipti",
-    "budgetLeft": "Eftir af fjárhag · {{amount}}",
-    "shortlisted": "Á lista · {{count}}",
-    "filterPosition": "Staða",
-    "allPositions": "Allar",
-    "sortBy": "Raða eftir",
-    "sortRating": "Einkunn",
-    "sortPrice": "Verði",
-    "position": "Staða",
-    "rating": "Einkunn",
-    "price": "Verð",
-    "notFound": "Markaður fannst ekki",
-    "empty": "Engir leikmenn passa við þessar síur."
-  },
   "playerHub": {
     "title": "Leikmenn",
     "notFound": "Leikmenn fundust ekki",
