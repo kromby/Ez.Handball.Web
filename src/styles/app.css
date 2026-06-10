@@ -1230,7 +1230,6 @@ button {
 .squad-rail { display: flex; flex-direction: column; gap: 16px; }
 @media (max-width: 820px) { .squad-grid { grid-template-columns: 1fr; } }
 
-.court-eyebrow { font-size: 18px; color: var(--ink-3); margin: 0 2px 8px; }
 .court { position: relative; border-radius: 12px; overflow: hidden; width: 100%; aspect-ratio: 440 / 340;
   /* ruled-paper court stripes — warm paper tones (near --paper-3 / --paper-2), tweaked for the ruled-notebook feel */
   background: repeating-linear-gradient(0deg, #f3ead2, #f3ead2 26px, #efe4c9 26px, #efe4c9 27px); }

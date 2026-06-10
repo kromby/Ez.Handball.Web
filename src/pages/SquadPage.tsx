@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import { formatMoney } from "../api/money";
 import { useAuth } from "../auth/useAuth";
 import { BallDefs } from "../components/BallAvatar";
-import { BudgetMeter } from "../components/BudgetMeter";
 import { SketchBox } from "../components/SketchBox";
 import { COURT_ORDER, SquadCourt } from "../components/squad/SquadCourt";
 import { SelectedPlayerPanel } from "../components/squad/SelectedPlayerPanel";
@@ -39,7 +38,7 @@ export default function SquadPage() {
   if (squad.isError) return <ErrorView error={squad.error} notFoundLabel={t("squad.notFound")} />;
   if (constraints.isError) return <ErrorView error={constraints.error} notFoundLabel={t("squad.notFound")} />;
 
-  const { players, remainingBudget, budgetUsed, squadValue } = squad.data;
+  const { players, remainingBudget, squadValue } = squad.data;
   const { maxSquadSize } = constraints.data;
 
   // If the selected player was sold (no longer in the squad), fall back to the natural first pick.
@@ -68,15 +67,6 @@ export default function SquadPage() {
 
         <div className="squad-rail">
           <SelectedPlayerPanel player={selected} />
-          <SketchBox tone="paper" radius={14} pad="16px 18px">
-            <BudgetMeter
-              remaining={remainingBudget}
-              used={budgetUsed}
-              value={squadValue}
-              size={players.length}
-              maxSize={maxSquadSize}
-            />
-          </SketchBox>
         </div>
       </div>
     </section>

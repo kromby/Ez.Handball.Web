@@ -4,10 +4,14 @@ import type { SquadPlayer } from "../../api/types";
 import { BallAvatar } from "../BallAvatar";
 import { ratingLabel } from "./ratingLabel";
 
-function lastName(name: string | null): string {
+/**
+ * Short name shown on a court token. Uses the FIRST name — the common form of
+ * address in Iceland (the trailing word is usually a patronymic, not a surname).
+ * Making first-vs-last configurable is tracked as a follow-up.
+ */
+function shortName(name: string | null): string {
   if (!name) return "—";
-  const parts = name.trim().split(/\s+/);
-  return parts[parts.length - 1];
+  return name.trim().split(/\s+/)[0];
 }
 
 export interface PlayerTokenProps {
@@ -49,7 +53,7 @@ export function PlayerToken({ code, x, y, player, selected, onSelect }: PlayerTo
         <span className="token-badge">{code}</span>
       </span>
       <span className="token-label">
-        <span className="token-name">{lastName(player.name)}</span>
+        <span className="token-name">{shortName(player.name)}</span>
         <span className="token-rating">{ratingLabel(player.rating)}</span>
       </span>
     </button>
