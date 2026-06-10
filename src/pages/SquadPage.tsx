@@ -42,7 +42,8 @@ export default function SquadPage() {
   const { players, remainingBudget, budgetUsed, squadValue } = squad.data;
   const { maxSquadSize } = constraints.data;
 
-  const activeId = selectedId ?? firstByCourtOrder(players);
+  // If the selected player was sold (no longer in the squad), fall back to the natural first pick.
+  const activeId = players.some((p) => p.playerId === selectedId) ? selectedId : firstByCourtOrder(players);
   const selected = players.find((p) => p.playerId === activeId) ?? null;
   const teamName = user?.teamName ?? t("squad.title");
 
