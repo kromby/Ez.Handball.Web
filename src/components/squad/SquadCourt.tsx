@@ -34,7 +34,6 @@ export function SquadCourt({ players, selectedId, onSelect }: SquadCourtProps) {
 
   return (
     <SketchBox tone="paper" radius={18} pad={14}>
-      <div className="scribble court-eyebrow">{t("squad.shapeLabel")}</div>
       <div className="court">
         {/* markings match the 440×340 design artboard — edit with the spec open */}
         <svg className="court-mk" viewBox="0 0 440 340" preserveAspectRatio="none" aria-hidden="true">
