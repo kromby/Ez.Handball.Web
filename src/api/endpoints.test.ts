@@ -132,11 +132,20 @@ test("getPlayerPool omits empty params", async () => {
 
 test("getPlayers calls /api/players with sort + filters", async () => {
   const spy = spyGet();
-  await getPlayers({ season: "2025-26", position: "CB", sort: "Goals" });
+  await getPlayers({ season: "2025-26", position: "CB", sort: "Goals", offset: 0, limit: 50 });
   const url = spy.mock.calls[0][0] as string;
   expect(url).toContain("/api/players?");
   expect(url).toContain("sort=Goals");
   expect(url).toContain("position=CB");
+  // offset=0 must survive (the `!= null` guard, not a truthy check)
+  expect(url).toContain("offset=0");
+  expect(url).toContain("limit=50");
+});
+
+test("getPlayers omits empty params", async () => {
+  const spy = spyGet();
+  await getPlayers({});
+  expect(spy).toHaveBeenCalledWith("/api/players");
 });
 
 test("buyPlayer POSTs the playerId + flavor body", async () => {
