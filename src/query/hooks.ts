@@ -190,6 +190,23 @@ export function usePlayerPool(params: {
   });
 }
 
+export function usePlayers(params: {
+  season?: string;
+  tournamentId?: string;
+  gender?: string;
+  position?: string;
+  sort?: PoolSort;
+  offset?: number;
+  limit?: number;
+}, options: { enabled?: boolean } = {}) {
+  const { season, tournamentId, gender, position, sort, offset, limit } = params;
+  return useQuery({
+    queryKey: ["players", season ?? null, tournamentId ?? null, gender ?? null, position ?? null, sort ?? "Goals", offset ?? 0, limit ?? 50],
+    queryFn: () => api.getPlayers(params),
+    enabled: options.enabled ?? true,
+  });
+}
+
 export function useSellPlayer(flavor = "fantasy") {
   const qc = useQueryClient();
   return useMutation({

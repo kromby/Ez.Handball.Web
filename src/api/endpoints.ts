@@ -112,6 +112,27 @@ export function getPlayerPool(params: {
   return apiGet<PlayerPool>(`/api/players/pool${qs ? `?${qs}` : ""}`);
 }
 
+export function getPlayers(params: {
+  season?: string;
+  tournamentId?: string;
+  gender?: string;
+  position?: string;
+  sort?: PoolSort;
+  offset?: number;
+  limit?: number;
+}): Promise<PlayerPool> {
+  const sp = new URLSearchParams();
+  if (params.season) sp.set("season", params.season);
+  if (params.tournamentId) sp.set("tournamentId", params.tournamentId);
+  if (params.gender) sp.set("gender", params.gender);
+  if (params.position) sp.set("position", params.position);
+  if (params.sort) sp.set("sort", params.sort);
+  if (params.offset != null) sp.set("offset", String(params.offset));
+  if (params.limit != null) sp.set("limit", String(params.limit));
+  const qs = sp.toString();
+  return apiGet<PlayerPool>(`/api/players${qs ? `?${qs}` : ""}`);
+}
+
 export function buyPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
   return authedSend<Squad>("/api/users/me/squad/players", "POST", { playerId, flavor });
 }

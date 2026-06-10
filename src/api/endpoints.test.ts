@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -128,6 +128,15 @@ test("getPlayerPool omits empty params", async () => {
   const spy = spyGet();
   await getPlayerPool({});
   expect(spy).toHaveBeenCalledWith("/api/players/pool");
+});
+
+test("getPlayers calls /api/players with sort + filters", async () => {
+  const spy = spyGet();
+  await getPlayers({ season: "2025-26", position: "CB", sort: "Goals" });
+  const url = spy.mock.calls[0][0] as string;
+  expect(url).toContain("/api/players?");
+  expect(url).toContain("sort=Goals");
+  expect(url).toContain("position=CB");
 });
 
 test("buyPlayer POSTs the playerId + flavor body", async () => {
