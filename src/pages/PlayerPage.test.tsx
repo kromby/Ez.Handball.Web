@@ -121,7 +121,7 @@ function mockPlayerPageQueries(owned: boolean) {
   vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { LB: 3 } });
   vi.spyOn(api, "getSquad").mockResolvedValue({
     flavor: "fantasy",
-    players: owned ? [{ playerId: "7", name: "Vik", clubId: "c1", clubName: "Aalvik", position: "LB", gender: "karlar", price: { amount: 9_000_000, currency: "ISK" }, pricePaid: { amount: 9_000_000, currency: "ISK" } }] : [],
+    players: owned ? [{ playerId: "7", name: "Vik", clubId: "c1", clubName: "Aalvik", position: "LB", gender: "karlar", price: { amount: 9_000_000, currency: "ISK" }, rating: 70, pricePaid: { amount: 9_000_000, currency: "ISK" } }] : [],
     budgetUsed: { amount: owned ? 9_000_000 : 0, currency: "ISK" },
     remainingBudget: { amount: owned ? 91_000_000 : 100_000_000, currency: "ISK" },
     squadValue: { amount: owned ? 9_000_000 : 0, currency: "ISK" },

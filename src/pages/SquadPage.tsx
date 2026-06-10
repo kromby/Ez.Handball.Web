@@ -1,84 +1,84 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { formatMoney } from "../api/money";
-import type { SquadPlayer } from "../api/types";
+import { useAuth } from "../auth/useAuth";
+import { BallDefs } from "../components/BallAvatar";
 import { BudgetMeter } from "../components/BudgetMeter";
-import { Panel } from "../components/Panel";
-import { PositionGroup } from "../components/PositionGroup";
-import { SellButton } from "../components/SellButton";
+import { SketchBox } from "../components/SketchBox";
+import { COURT_ORDER, SquadCourt } from "../components/squad/SquadCourt";
+import { SelectedPlayerPanel } from "../components/squad/SelectedPlayerPanel";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useSquad, useSquadConstraints } from "../query/hooks";
 
-/** Position label with a graceful fallback to the raw code. */
-function usePositionLabel() {
-  const { t } = useTranslation();
-  return (code: string) => t(`positions.${code}`, { defaultValue: code });
+/** First owned player in court order — the default selection on load. */
+function firstByCourtOrder(players: { playerId: string; position: string | null }[]): string | null {
+  for (const code of COURT_ORDER) {
+    const owned = players.find((candidate) => candidate.position === code);
+    if (owned) return owned.playerId;
+  }
+  return players[0]?.playerId ?? null;
+}
+
+function Pill({ label, value, amber }: { label: string; value: string; amber?: boolean }) {
+  return (
+    <SketchBox tone={amber ? "amber" : "paper"} radius={12} pad="8px 15px" className="squad-pill">
+      <div className="poslabel">{label}</div>
+      <div className={`squad-pill-v${amber ? " amber" : ""}`}>{value}</div>
+    </SketchBox>
+  );
 }
 
 export default function SquadPage() {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const squad = useSquad();
   const constraints = useSquadConstraints();
-  const posLabel = usePositionLabel();
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   if (squad.isPending || constraints.isPending) return <Loading />;
   if (squad.isError) return <ErrorView error={squad.error} notFoundLabel={t("squad.notFound")} />;
   if (constraints.isError) return <ErrorView error={constraints.error} notFoundLabel={t("squad.notFound")} />;
 
   const { players, remainingBudget, budgetUsed, squadValue } = squad.data;
-  const { maxSquadSize, posLimits } = constraints.data;
+  const { maxSquadSize } = constraints.data;
 
-  // Group by position code, ordered by the constraints' declared positions, then any extras.
-  const codes = Object.keys(posLimits);
-  const extra = [...new Set(players.map((p) => p.position).filter((c): c is string => !!c && !codes.includes(c)))];
-  const ordered = [...codes, ...extra];
-  const byCode = new Map<string, SquadPlayer[]>();
-  for (const p of players) {
-    const code = p.position ?? "—";
-    byCode.set(code, [...(byCode.get(code) ?? []), p]);
-  }
+  // If the selected player was sold (no longer in the squad), fall back to the natural first pick.
+  const activeId = players.some((p) => p.playerId === selectedId) ? selectedId : firstByCourtOrder(players);
+  const selected = players.find((p) => p.playerId === activeId) ?? null;
+  const teamName = user?.teamName ?? t("squad.title");
 
   return (
-    <section className="stack">
-      <div className="page-head">
-        <h1 className="title">{t("squad.title")}</h1>
-      </div>
-      <Panel>
-        <BudgetMeter remaining={remainingBudget} used={budgetUsed} value={squadValue} size={players.length} maxSize={maxSquadSize} />
-      </Panel>
+    <section className="stack squad-page">
+      <BallDefs />
 
-      {players.length === 0 ? (
-        <Panel>
-          <p className="status">
-            {t("squad.empty")} <Link to="/market">{t("squad.goToMarket")}</Link>
-          </p>
-        </Panel>
-      ) : (
-        <Panel>
-          {ordered
-            .filter((code) => (byCode.get(code) ?? []).length > 0 || posLimits[code] != null)
-            .map((code) => {
-              const members = byCode.get(code) ?? [];
-              if (members.length === 0) return null;
-              return (
-                <PositionGroup key={code} label={posLabel(code)} owned={members.length} limit={posLimits[code] ?? members.length}>
-                  {members.map((p) => (
-                    <li key={p.playerId} className="squad-row">
-                      <Link to={`/players/${encodeURIComponent(p.playerId)}`}>{p.name ?? t("match.unknownPlayer")}</Link>
-                      <span className="squad-row-price">
-                        {t("squad.paid", { price: formatMoney(p.pricePaid) })}
-                        {p.price && p.price.amount !== p.pricePaid.amount && (
-                          <span className="squad-row-now"> ({t("squad.now", { price: formatMoney(p.price) })})</span>
-                        )}
-                      </span>
-                      <SellButton player={{ playerId: p.playerId, name: p.name }} />
-                    </li>
-                  ))}
-                </PositionGroup>
-              );
-            })}
-        </Panel>
-      )}
+      <div className="squad-head">
+        <div>
+          {user?.displayName && <div className="scribble squad-eyebrow">{user.displayName}</div>}
+          <h1 className="title">{teamName}</h1>
+        </div>
+        <div className="squad-pills">
+          <Pill label={t("squad.squadValue")} value={formatMoney(squadValue)} />
+          <Pill label={t("squad.remaining")} value={formatMoney(remainingBudget)} amber />
+          <Pill label={t("squad.size")} value={`${players.length} / ${maxSquadSize}`} />
+        </div>
+      </div>
+
+      <div className="squad-grid">
+        <SquadCourt players={players} selectedId={activeId} onSelect={setSelectedId} />
+
+        <div className="squad-rail">
+          <SelectedPlayerPanel player={selected} />
+          <SketchBox tone="paper" radius={14} pad="16px 18px">
+            <BudgetMeter
+              remaining={remainingBudget}
+              used={budgetUsed}
+              value={squadValue}
+              size={players.length}
+              maxSize={maxSquadSize}
+            />
+          </SketchBox>
+        </div>
+      </div>
     </section>
   );
 }

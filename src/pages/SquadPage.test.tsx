@@ -1,35 +1,59 @@
-import { screen } from "@testing-library/react";
-import { afterEach, expect, test, vi } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { Route, Routes } from "react-router-dom";
 import * as api from "../api/endpoints";
-import type { AuthUser } from "../api/types";
-import SquadPage from "./SquadPage";
-import { ToastProvider } from "../components/Toast";
 import { renderWithProviders } from "../test/renderWithQuery";
+import type { AuthUser, Squad, SquadConstraints } from "../api/types";
+import SquadPage from "./SquadPage";
 
 afterEach(() => vi.restoreAllMocks());
-const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null };
-const authed = { status: "authenticated" as const, user };
 
-test("groups owned players by position and shows the budget meter", async () => {
-  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { GK: 2, CB: 3 } });
-  vi.spyOn(api, "getSquad").mockResolvedValue({
-    flavor: "fantasy",
-    players: [
-      { playerId: "g1", name: "Keeper", clubId: "1", clubName: "Aalvik", position: "GK", gender: "karlar", price: { amount: 12_000_000, currency: "ISK" }, pricePaid: { amount: 11_000_000, currency: "ISK" } },
-    ],
-    budgetUsed: { amount: 11_000_000, currency: "ISK" },
-    remainingBudget: { amount: 89_000_000, currency: "ISK" },
-    squadValue: { amount: 12_000_000, currency: "ISK" },
+const constraints = {
+  ruleSetVersion: 1,
+  startingCap: { amount: 100_000_000, currency: "ISK" },
+  maxSquadSize: 7,
+  posLimits: { GK: 1, LW: 1, RW: 1, LP: 1, LB: 1, RB: 1, CB: 1 },
+} as SquadConstraints;
+
+const squad = {
+  flavor: "fantasy",
+  players: [
+    { playerId: "p-1", name: "Lúkas Dahl", clubId: "c", clubName: "Catalunya BM", position: "CB",
+      gender: "karlar", price: { amount: 10_500_000, currency: "ISK" }, pricePaid: { amount: 9_500_000, currency: "ISK" }, rating: 84 },
+  ],
+  budgetUsed: { amount: 9_500_000, currency: "ISK" },
+  remainingBudget: { amount: 90_500_000, currency: "ISK" },
+  squadValue: { amount: 10_500_000, currency: "ISK" },
+} as Squad;
+
+const user = { id: "u-1", email: "a@b.is", displayName: "Aron", language: "is",
+  favoriteClubId: "385", teamName: "Aron's Aces", emailVerified: true } as AuthUser;
+
+const renderPage = (squadData: Squad) => {
+  vi.spyOn(api, "getSquad").mockResolvedValue(squadData);
+  vi.spyOn(api, "getSquadConstraints").mockResolvedValue(constraints);
+  return renderWithProviders(<Routes><Route path="/squad" element={<SquadPage />} /></Routes>, {
+    initialEntries: ["/squad"],
+    auth: { status: "authenticated", user },
   });
-  renderWithProviders(<ToastProvider><SquadPage /></ToastProvider>, { auth: authed });
-  expect(await screen.findByText("Keeper")).toBeInTheDocument();
-  expect(screen.getByText(/89M ISK/)).toBeInTheDocument();
-  expect(screen.getByRole("button", { name: /sell/i })).toBeInTheDocument();
-});
+};
 
-test("shows an empty prompt when the squad is empty", async () => {
-  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { GK: 2 } });
-  vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 100_000_000, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
-  renderWithProviders(<ToastProvider><SquadPage /></ToastProvider>, { auth: authed });
-  expect(await screen.findByRole("link", { name: /market/i })).toBeInTheDocument();
+describe("SquadPage", () => {
+  it("renders the team name title and manager-name scribble from the auth user", async () => {
+    renderPage(squad);
+    expect(await screen.findByText("Aron's Aces")).toBeInTheDocument();
+    expect(screen.getByText("Aron")).toBeInTheDocument();
+  });
+
+  it("auto-selects the first owned player into the panel (full name shown)", async () => {
+    renderPage(squad);
+    expect(await screen.findByText("Lúkas Dahl")).toBeInTheDocument();
+  });
+
+  it("renders ghost slots linking to the market when the squad is empty", async () => {
+    renderPage({ ...squad, players: [] });
+    await waitFor(() => expect(screen.getAllByRole("link").length).toBeGreaterThan(0));
+    const links = screen.getAllByRole("link");
+    expect(links.some((l) => l.getAttribute("href") === "/market")).toBe(true);
+  });
 });

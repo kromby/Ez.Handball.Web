@@ -12,21 +12,21 @@ const emptySquad: Squad = {
 };
 
 test("owned takes priority", () => {
-  const squad: Squad = { ...emptySquad, players: [{ playerId: "p1", name: null, clubId: null, clubName: null, position: "CB", gender: null, price: null, pricePaid: { amount: 10, currency: "ISK" } }] };
+  const squad: Squad = { ...emptySquad, players: [{ playerId: "p1", name: null, clubId: null, clubName: null, position: "CB", gender: null, price: null, rating: 0, pricePaid: { amount: 10, currency: "ISK" } }] };
   expect(evaluateBuy({ playerId: "p1", position: "CB", price: { amount: 10, currency: "ISK" } }, squad, constraints).state).toBe("owned");
 });
 
 test("squad full", () => {
   const full: Squad = { ...emptySquad, players: [
-    { playerId: "a", name: null, clubId: null, clubName: null, position: "CB", gender: null, price: null, pricePaid: { amount: 1, currency: "ISK" } },
-    { playerId: "b", name: null, clubId: null, clubName: null, position: "CB", gender: null, price: null, pricePaid: { amount: 1, currency: "ISK" } },
+    { playerId: "a", name: null, clubId: null, clubName: null, position: "CB", gender: null, price: null, rating: 0, pricePaid: { amount: 1, currency: "ISK" } },
+    { playerId: "b", name: null, clubId: null, clubName: null, position: "CB", gender: null, price: null, rating: 0, pricePaid: { amount: 1, currency: "ISK" } },
   ] };
   expect(evaluateBuy({ playerId: "p2", position: "GK", price: { amount: 1, currency: "ISK" } }, full, constraints).reason).toBe("squad_full");
 });
 
 test("position limit", () => {
   const squad: Squad = { ...emptySquad, players: [
-    { playerId: "a", name: null, clubId: null, clubName: null, position: "GK", gender: null, price: null, pricePaid: { amount: 1, currency: "ISK" } },
+    { playerId: "a", name: null, clubId: null, clubName: null, position: "GK", gender: null, price: null, rating: 0, pricePaid: { amount: 1, currency: "ISK" } },
   ] };
   expect(evaluateBuy({ playerId: "p2", position: "GK", price: { amount: 1, currency: "ISK" } }, squad, constraints).reason).toBe("position_limit");
 });

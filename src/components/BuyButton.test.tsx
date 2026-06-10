@@ -16,7 +16,7 @@ function mockBackend(over: { players?: { playerId: string; position: string }[];
   vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { GK: 2, CB: 3 } });
   vi.spyOn(api, "getSquad").mockResolvedValue({
     flavor: "fantasy",
-    players: (over.players ?? []).map((p) => ({ playerId: p.playerId, name: null, clubId: null, clubName: null, position: p.position, gender: null, price: null, pricePaid: { amount: 1, currency: "ISK" } })),
+    players: (over.players ?? []).map((p) => ({ playerId: p.playerId, name: null, clubId: null, clubName: null, position: p.position, gender: null, price: null, rating: 0, pricePaid: { amount: 1, currency: "ISK" } })),
     budgetUsed: { amount: 0, currency: "ISK" },
     remainingBudget: { amount: over.remaining ?? 100_000_000, currency: "ISK" },
     squadValue: { amount: 0, currency: "ISK" },

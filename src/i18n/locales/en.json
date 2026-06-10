@@ -219,7 +219,17 @@
     "paid": "paid {{price}}",
     "now": "now {{price}}",
     "empty": "Your squad is empty.",
-    "goToMarket": "Go to the Market"
+    "goToMarket": "Go to the Market",
+    "shapeLabel": "attacking half",
+    "others": "Other positions",
+    "rating": "rating",
+    "price": "price",
+    "paidLabel": "paid",
+    "drift": "drift",
+    "frees": "frees {{price}}",
+    "viewProfile": "View full profile →",
+    "tapPrompt": "tap a player to see their card",
+    "addSlot": "Add a {{code}} — go to the market"
   },
   "positions": {
     "GK": "Goalkeeper",

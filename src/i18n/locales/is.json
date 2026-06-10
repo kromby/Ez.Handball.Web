@@ -219,7 +219,17 @@
     "paid": "greitt {{price}}",
     "now": "nú {{price}}",
     "empty": "Liðið þitt er tómt.",
-    "goToMarket": "Fara á markaðinn"
+    "goToMarket": "Fara á markaðinn",
+    "shapeLabel": "sóknarhluti",
+    "others": "Aðrar stöður",
+    "rating": "einkunn",
+    "price": "verð",
+    "paidLabel": "greitt",
+    "drift": "breyting",
+    "frees": "losar {{price}}",
+    "viewProfile": "Skoða leikmann →",
+    "tapPrompt": "smelltu á leikmann til að sjá spjaldið",
+    "addSlot": "Bæta við {{code}} — fara á markaðinn"
   },
   "positions": {
     "GK": "Markvörður",
