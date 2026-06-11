@@ -204,7 +204,10 @@ test("suppresses the Buy button for an unowned retired player", async () => {
   vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 100_000_000, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
   renderPlayer();
   await screen.findByText("Vik");
-  expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument();
+  // Wait for squad + constraints to settle (BuyButton returns null while loading,
+  // so a synchronous assertion here would pass even if the gate were absent).
+  await waitFor(() => expect(api.getSquad).toHaveBeenCalled());
+  await waitFor(() => expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument());
 });
 
 test("still shows the Sell button for an owned retired player", async () => {
