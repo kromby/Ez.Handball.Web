@@ -10,7 +10,7 @@ test("fires onSearch once after the user stops typing", async () => {
   render(<SearchInput initialValue="" placeholder="Search" clearLabel="Clear" onSearch={onSearch} />);
   await userEvent.type(screen.getByPlaceholderText("Search"), "berg");
   await waitFor(() => expect(onSearch).toHaveBeenCalledWith("berg"));
-  expect(onSearch).toHaveBeenLastCalledWith("berg");
+  expect(onSearch).toHaveBeenCalledTimes(1);
 });
 
 test("clear button empties the input and fires onSearch with empty string", async () => {
@@ -24,10 +24,12 @@ test("clear button empties the input and fires onSearch with empty string", asyn
 });
 
 test("seeds the input from initialValue and re-syncs when it changes", () => {
+  const onSearch = vi.fn();
   const { rerender } = render(
-    <SearchInput initialValue="abc" placeholder="Search" clearLabel="Clear" onSearch={vi.fn()} />,
+    <SearchInput initialValue="abc" placeholder="Search" clearLabel="Clear" onSearch={onSearch} />,
   );
   expect((screen.getByPlaceholderText("Search") as HTMLInputElement).value).toBe("abc");
-  rerender(<SearchInput initialValue="xyz" placeholder="Search" clearLabel="Clear" onSearch={vi.fn()} />);
+  rerender(<SearchInput initialValue="xyz" placeholder="Search" clearLabel="Clear" onSearch={onSearch} />);
   expect((screen.getByPlaceholderText("Search") as HTMLInputElement).value).toBe("xyz");
+  expect(onSearch).not.toHaveBeenCalled();
 });

@@ -24,7 +24,10 @@ export function SearchInput({
 
   // Debounce the outgoing search whenever the typed value changes.
   useEffect(() => {
-    if (value === initialValue) return; // no-op on the seed pass
+    // The re-seed effect (which fires first, since effects run in declaration order)
+    // already set `value` to the new `initialValue`, so skipping here suppresses a
+    // spurious `onSearch` on re-seed / back-nav while still firing for genuine typing.
+    if (value === initialValue) return;
     const id = setTimeout(() => onSearchRef.current(value), DEBOUNCE_MS);
     return () => clearTimeout(id);
   }, [value, initialValue]);
