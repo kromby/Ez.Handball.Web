@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayerPool, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -111,23 +111,23 @@ test("getSquadConstraints calls the public constraints endpoint", async () => {
   expect(spy).toHaveBeenCalledWith("/api/squad/constraints?flavor=fantasy");
 });
 
-test("getPlayerPool builds the query string from params", async () => {
+test("getPlayers calls /api/players with sort + filters", async () => {
   const spy = spyGet();
-  await getPlayerPool({ season: "2025-26", position: "GK", sort: "Price", offset: 0, limit: 50 });
+  await getPlayers({ season: "2025-26", position: "CB", sort: "Goals", offset: 0, limit: 50 });
   const url = spy.mock.calls[0][0] as string;
-  expect(url).toContain("/api/players/pool?");
+  expect(url).toContain("/api/players?");
   expect(url).toContain("season=2025-26");
-  expect(url).toContain("position=GK");
-  expect(url).toContain("sort=Price");
+  expect(url).toContain("sort=Goals");
+  expect(url).toContain("position=CB");
   // offset=0 must survive (the `!= null` guard, not a truthy check)
   expect(url).toContain("offset=0");
   expect(url).toContain("limit=50");
 });
 
-test("getPlayerPool omits empty params", async () => {
+test("getPlayers omits empty params", async () => {
   const spy = spyGet();
-  await getPlayerPool({});
-  expect(spy).toHaveBeenCalledWith("/api/players/pool");
+  await getPlayers({});
+  expect(spy).toHaveBeenCalledWith("/api/players");
 });
 
 test("buyPlayer POSTs the playerId + flavor body", async () => {

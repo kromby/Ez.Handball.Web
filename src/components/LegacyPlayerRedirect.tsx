@@ -1,5 +1,5 @@
 import { Navigate, useSearchParams } from "react-router-dom";
-import LeaderboardPage from "../pages/LeaderboardPage";
+import PlayerHubPage from "../pages/PlayerHubPage";
 
 export function HomeOrLegacyRedirect() {
   const [params] = useSearchParams();
@@ -7,5 +7,5 @@ export function HomeOrLegacyRedirect() {
   if (legacyPlayerId) {
     return <Navigate to={`/players/${encodeURIComponent(legacyPlayerId)}`} replace />;
   }
-  return <LeaderboardPage />;
+  return <PlayerHubPage />;
 }

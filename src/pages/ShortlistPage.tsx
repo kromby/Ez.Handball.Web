@@ -6,13 +6,13 @@ import { Panel } from "../components/Panel";
 import { PlayerTable, type PlayerColumn } from "../components/PlayerTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useAuth } from "../auth/useAuth";
-import { usePlayerPool, useShortlist } from "../query/hooks";
+import { usePlayers, useShortlist } from "../query/hooks";
 
 export default function ShortlistPage() {
   const { t } = useTranslation();
   const { status } = useAuth();
   const { data, isPending, isError, error } = useShortlist();
-  const pool = usePlayerPool({ limit: 200 }, { enabled: status === "authenticated" });
+  const pool = usePlayers({ limit: 200 }, { enabled: status === "authenticated" });
 
   const priceById = useMemo(() => {
     const map = new Map<string, { position: string; price: Money }>();

@@ -253,7 +253,14 @@ export interface BuyViolation {
   message: string;
 }
 
-export type PoolSort = "Rating" | "Price"; // "PickPercentage" exists server-side but hidden until ownership data ships
+export type PoolSort =
+  | "Rating"
+  | "Price"
+  | "Goals"
+  | "Games"
+  | "YellowCards"
+  | "TwoMinuteSuspensions"
+  | "RedCards";
 
 export interface PoolEntry {
   rank: number;
@@ -263,6 +270,12 @@ export interface PoolEntry {
   clubName: string | null;
   gender: string;
   position: string;
+  games: number;
+  goals: number;
+  yellowCards: number;
+  twoMinuteSuspensions: number;
+  redCards: number;
+  avgGoals: number;
   price: Money;
   rating: number;
   pickPercentage: number | null; // always null for now

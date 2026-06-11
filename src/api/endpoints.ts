@@ -91,7 +91,7 @@ export function getSquadConstraints(flavor = "fantasy"): Promise<SquadConstraint
   return apiGet<SquadConstraints>(`/api/squad/constraints?flavor=${encodeURIComponent(flavor)}`);
 }
 
-export function getPlayerPool(params: {
+export function getPlayers(params: {
   season?: string;
   tournamentId?: string;
   gender?: string;
@@ -109,7 +109,7 @@ export function getPlayerPool(params: {
   if (params.offset != null) sp.set("offset", String(params.offset));
   if (params.limit != null) sp.set("limit", String(params.limit));
   const qs = sp.toString();
-  return apiGet<PlayerPool>(`/api/players/pool${qs ? `?${qs}` : ""}`);
+  return apiGet<PlayerPool>(`/api/players${qs ? `?${qs}` : ""}`);
 }
 
 export function buyPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
