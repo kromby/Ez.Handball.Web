@@ -116,6 +116,7 @@ test("getPlayers calls /api/players with sort + filters", async () => {
   await getPlayers({ season: "2025-26", position: "CB", sort: "Goals", offset: 0, limit: 50 });
   const url = spy.mock.calls[0][0] as string;
   expect(url).toContain("/api/players?");
+  expect(url).toContain("season=2025-26");
   expect(url).toContain("sort=Goals");
   expect(url).toContain("position=CB");
   // offset=0 must survive (the `!= null` guard, not a truthy check)
