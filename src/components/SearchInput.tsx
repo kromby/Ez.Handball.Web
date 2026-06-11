@@ -27,7 +27,7 @@ export function SearchInput({
     // The re-seed effect (which fires first, since effects run in declaration order)
     // already set `value` to the new `initialValue`, so skipping here suppresses a
     // spurious `onSearch` on re-seed / back-nav while still firing for genuine typing.
-    if (value === initialValue) return;
+    if (value === initialValue) return undefined;
     const id = setTimeout(() => onSearchRef.current(value), DEBOUNCE_MS);
     return () => clearTimeout(id);
   }, [value, initialValue]);
