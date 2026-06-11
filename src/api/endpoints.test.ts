@@ -130,6 +130,23 @@ test("getPlayers omits empty params", async () => {
   expect(spy).toHaveBeenCalledWith("/api/players");
 });
 
+test("getPlayers includes name and clubId filters", async () => {
+  const spy = spyGet();
+  await getPlayers({ name: "berg ström", clubId: "385", sort: "Goals" });
+  const url = spy.mock.calls[0][0] as string;
+  expect(url).toContain("/api/players?");
+  expect(url).toContain("name=berg+str%C3%B6m");
+  expect(url).toContain("clubId=385");
+});
+
+test("getPlayers omits name and clubId when absent", async () => {
+  const spy = spyGet();
+  await getPlayers({ sort: "Goals" });
+  const url = spy.mock.calls[0][0] as string;
+  expect(url).not.toContain("name=");
+  expect(url).not.toContain("clubId=");
+});
+
 test("buyPlayer POSTs the playerId + flavor body", async () => {
   const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
   await buyPlayer("123");
