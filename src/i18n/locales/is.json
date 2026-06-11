@@ -218,6 +218,10 @@
     "allGenders": "Allt",
     "allPositions": "Allar",
     "allTournaments": "Öll mót",
+    "searchName": "Leita að leikmönnum",
+    "filterTeam": "Lið",
+    "allTeams": "Öll lið",
+    "clearSearch": "Hreinsa leit",
     "budgetLeft": "Eftir af fjárhag · {{amount}}",
     "shortlisted": "Á listanum · {{count}}"
   },
