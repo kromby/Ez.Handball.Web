@@ -71,7 +71,8 @@
     "goalsCount": "{{count}} mörk",
     "fantasyHeading": "Fantasía · þetta tímabil",
     "rating": "Einkunn",
-    "price": "Verð"
+    "price": "Verð",
+    "retired": "Hætt(ur)"
   },
   "shortlist": {
     "title": "Æfingahópurinn þinn",
