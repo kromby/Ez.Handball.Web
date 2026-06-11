@@ -54,6 +54,6 @@ describe("SquadPage", () => {
     renderPage({ ...squad, players: [] });
     await waitFor(() => expect(screen.getAllByRole("link").length).toBeGreaterThan(0));
     const links = screen.getAllByRole("link");
-    expect(links.some((l) => l.getAttribute("href") === "/market")).toBe(true);
+    expect(links.some((l) => l.getAttribute("href") === "/players")).toBe(true);
   });
 });

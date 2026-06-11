@@ -10,12 +10,12 @@ function LocationProbe() {
   return <div data-testid="pathname">{location.pathname}</div>;
 }
 
-test("renders the nav banner and leaderboard at /", () => {
+test("renders the nav banner and player hub at /", () => {
   // Persist English preference so useLanguageSync resolves to English.
   localStorage.setItem(LANG_STORAGE_KEY, "en");
   renderWithProviders(<App />, { initialEntries: ["/"] });
   expect(screen.getByRole("banner")).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: "Leaderboard" })).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: "Players" })).toBeInTheDocument();
 });
 
 test("legacy ?playerId redirects to the player route", () => {

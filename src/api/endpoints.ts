@@ -91,7 +91,7 @@ export function getSquadConstraints(flavor = "fantasy"): Promise<SquadConstraint
   return apiGet<SquadConstraints>(`/api/squad/constraints?flavor=${encodeURIComponent(flavor)}`);
 }
 
-export function getPlayerPool(params: {
+export function getPlayers(params: {
   season?: string;
   tournamentId?: string;
   gender?: string;
