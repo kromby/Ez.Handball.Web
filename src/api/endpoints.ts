@@ -109,7 +109,7 @@ export function getPlayerPool(params: {
   if (params.offset != null) sp.set("offset", String(params.offset));
   if (params.limit != null) sp.set("limit", String(params.limit));
   const qs = sp.toString();
-  return apiGet<PlayerPool>(`/api/players/pool${qs ? `?${qs}` : ""}`);
+  return apiGet<PlayerPool>(`/api/players${qs ? `?${qs}` : ""}`);
 }
 
 export function buyPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
