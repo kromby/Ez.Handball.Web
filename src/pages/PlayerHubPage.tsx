@@ -3,13 +3,14 @@ import { useTranslation } from "react-i18next";
 import { formatMoney } from "../api/money";
 import type { PoolSort } from "../api/types";
 import { FilterSelect } from "../components/FilterSelect";
+import { SearchInput } from "../components/SearchInput";
 import { PlayerHubTable } from "../components/PlayerHubTable";
 import { Pagination } from "../components/Pagination";
 import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useAuth } from "../auth/useAuth";
 import {
-  useGenders, usePlayers, useSeasons, useShortlist, useSquad, useSquadConstraints, useTournaments,
+  useClubs, useGenders, usePlayers, useSeasons, useShortlist, useSquad, useSquadConstraints, useTournaments,
 } from "../query/hooks";
 
 const LIMIT = 50;
@@ -31,6 +32,8 @@ export default function PlayerHubPage() {
   const gender = params.get("gender") ?? undefined;
   const position = params.get("position") ?? undefined;
   const tournamentId = params.get("tournamentId") ?? undefined;
+  const name = params.get("name") ?? undefined;
+  const clubId = params.get("clubId") ?? undefined;
   const sort = parseSort(params.get("sort"));
 
   const seasons = useSeasons();
@@ -39,13 +42,14 @@ export default function PlayerHubPage() {
   const ready = urlSeason != null || !seasons.isPending;
 
   const tournaments = useTournaments(season);
+  const clubs = useClubs();
   const genders = useGenders();
   const constraints = useSquadConstraints();
   const shortlist = useShortlist();
   const squad = useSquad();
 
   const players = usePlayers(
-    { season, tournamentId, gender, position, sort, offset, limit: LIMIT },
+    { season, tournamentId, gender, position, name, clubId, sort, offset, limit: LIMIT },
     { enabled: ready },
   );
 
@@ -87,6 +91,12 @@ export default function PlayerHubPage() {
       </div>
 
       <div className="market-filters">
+        <SearchInput
+          initialValue={name ?? ""}
+          placeholder={t("playerHub.searchName")}
+          clearLabel={t("playerHub.clearSearch")}
+          onSearch={(v) => update({ name: v, offset: undefined })}
+        />
         <FilterSelect
           label={t("playerHub.filterSeason")}
           value={season ?? ""}
@@ -110,6 +120,17 @@ export default function PlayerHubPage() {
           value={tournamentId ?? ""}
           options={[{ value: "", label: t("playerHub.allTournaments") }, ...(tournaments.data ?? []).map((tn) => ({ value: tn.tournamentId, label: tn.name }))]}
           onChange={(v) => update({ tournamentId: v, offset: undefined })}
+        />
+        <FilterSelect
+          label={t("playerHub.filterTeam")}
+          value={clubId ?? ""}
+          options={[
+            { value: "", label: t("playerHub.allTeams") },
+            ...[...(clubs.data ?? [])]
+              .sort((a, b) => a.name.localeCompare(b.name))
+              .map((c) => ({ value: c.clubId, label: c.name })),
+          ]}
+          onChange={(v) => update({ clubId: v, offset: undefined })}
         />
         <FilterSelect
           label={t("playerHub.sortBy")}
