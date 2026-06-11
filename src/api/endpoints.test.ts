@@ -115,7 +115,7 @@ test("getPlayerPool builds the query string from params", async () => {
   const spy = spyGet();
   await getPlayerPool({ season: "2025-26", position: "GK", sort: "Price", offset: 0, limit: 50 });
   const url = spy.mock.calls[0][0] as string;
-  expect(url).toContain("/api/players/pool?");
+  expect(url).toContain("/api/players?");
   expect(url).toContain("season=2025-26");
   expect(url).toContain("position=GK");
   expect(url).toContain("sort=Price");
@@ -127,7 +127,7 @@ test("getPlayerPool builds the query string from params", async () => {
 test("getPlayerPool omits empty params", async () => {
   const spy = spyGet();
   await getPlayerPool({});
-  expect(spy).toHaveBeenCalledWith("/api/players/pool");
+  expect(spy).toHaveBeenCalledWith("/api/players");
 });
 
 test("buyPlayer POSTs the playerId + flavor body", async () => {
