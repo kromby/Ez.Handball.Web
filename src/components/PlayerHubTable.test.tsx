@@ -28,7 +28,7 @@ test("shows stats + rating + price; clicking a header sorts", async () => {
 
 test("hides the Buy column when not authed", () => {
   renderWithProviders(
-    <ToastProvider><PlayerHubTable entries={[entry]} sort="Goals" onSort={() => {}} authed={false} /></ToastProvider>,
+    <ToastProvider><PlayerHubTable entries={[entry]} sort="Goals" onSort={vi.fn()} authed={false} /></ToastProvider>,
   );
   expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument();
 });
