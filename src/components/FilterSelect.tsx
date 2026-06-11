@@ -26,6 +26,7 @@ export function FilterSelect({
           <option key={o.value} value={o.value}>{o.label}</option>
         ))}
       </select>
+      <span className="filter-select-caret" aria-hidden="true">▾</span>
     </label>
   );
 }

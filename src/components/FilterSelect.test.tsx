@@ -18,3 +18,15 @@ test("renders options and reports the chosen value", async () => {
   await userEvent.selectOptions(select, "2024-25");
   expect(onChange).toHaveBeenCalledWith("2024-25");
 });
+
+test("renders a decorative caret alongside the select", () => {
+  const { container } = render(
+    <FilterSelect
+      label="Season"
+      value="2025-26"
+      options={[{ value: "2025-26", label: "2025-26" }]}
+      onChange={() => {}}
+    />,
+  );
+  expect(container.querySelector(".filter-select-caret")).not.toBeNull();
+});

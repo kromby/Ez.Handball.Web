@@ -45,10 +45,17 @@ test("authenticated visitor sees the buy column and budget chip", async () => {
   expect(screen.getByText(/Budget left/i)).toBeInTheDocument();
 });
 
-test("choosing a sort re-queries getPlayers with that sort", async () => {
+test("clicking a column header re-queries getPlayers with that sort", async () => {
   const spy = mock();
   renderWithProviders(<ToastProvider><PlayerHubPage /></ToastProvider>, { initialEntries: ["/players"] });
   await screen.findByText("Bergström");
-  await userEvent.selectOptions(screen.getByRole("combobox", { name: /Sort by/i }), "Price");
+  await userEvent.click(screen.getByRole("button", { name: /Price/i }));
   expect(spy.mock.calls.some(([p]) => p.sort === "Price")).toBe(true);
+});
+
+test("no standalone 'Sort by' dropdown is rendered", async () => {
+  mock();
+  renderWithProviders(<ToastProvider><PlayerHubPage /></ToastProvider>, { initialEntries: ["/players"] });
+  await screen.findByText("Bergström");
+  expect(screen.queryByRole("combobox", { name: /Sort by/i })).not.toBeInTheDocument();
 });

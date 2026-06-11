@@ -62,16 +62,6 @@ export default function PlayerHubPage() {
   const positionCodes = constraints.data ? Object.keys(constraints.data.posLimits) : [];
   const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
 
-  const sortLabel: Record<PoolSort, string> = {
-    Goals: t("playerHub.sortGoals"),
-    Games: t("playerHub.sortGames"),
-    YellowCards: t("playerHub.sortYellowCards"),
-    TwoMinuteSuspensions: t("playerHub.sortTwoMinuteSuspensions"),
-    RedCards: t("playerHub.sortRedCards"),
-    Rating: t("playerHub.sortRating"),
-    Price: t("playerHub.sortPrice"),
-  };
-
   return (
     <section className="stack">
       <div className="page-head market-head">
@@ -110,12 +100,6 @@ export default function PlayerHubPage() {
           value={tournamentId ?? ""}
           options={[{ value: "", label: t("playerHub.allTournaments") }, ...(tournaments.data ?? []).map((tn) => ({ value: tn.tournamentId, label: tn.name }))]}
           onChange={(v) => update({ tournamentId: v, offset: undefined })}
-        />
-        <FilterSelect
-          label={t("playerHub.sortBy")}
-          value={sort}
-          options={SORTS.map((s) => ({ value: s, label: sortLabel[s] }))}
-          onChange={(v) => update({ sort: v, offset: undefined })}
         />
       </div>
 

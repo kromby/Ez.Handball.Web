@@ -19,7 +19,8 @@ export function SortHeader({
       aria-pressed={on}
       onClick={() => onSort(sortKey)}
     >
-      {label}{on ? " ▾" : ""}
+      {label}
+      {on && <span className="sort-caret" aria-hidden="true">▾</span>}
     </button>
   );
 }
