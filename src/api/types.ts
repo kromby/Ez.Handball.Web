@@ -57,6 +57,7 @@ export interface Player {
   position?: string | null;  // ADD — optional
   price?: Money | null;      // ADD — optional
   rating?: number | null; // current-season fantasy rating (Backend#78); 0 = no games, null = uncomputable
+  retired?: boolean; // true = player has retired (Backend bootstrap/manual flag); absent/false = active
 }
 
 export interface PlayerHistoryEntry {

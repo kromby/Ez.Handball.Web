@@ -71,7 +71,8 @@
     "goalsCount": "{{count}} goals",
     "fantasyHeading": "Fantasy · this season",
     "rating": "Rating",
-    "price": "Price"
+    "price": "Price",
+    "retired": "Retired"
   },
   "shortlist": {
     "title": "Your shortlist",

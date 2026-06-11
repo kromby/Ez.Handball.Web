@@ -52,11 +52,12 @@ export default function PlayerPage() {
           <h1 className="title">
             {p.jerseyNumber && <span className="jersey">#{p.jerseyNumber}</span>}
             {p.name}
+            {p.retired && <span className="retired-badge">{t("player.retired")}</span>}
           </h1>
           <StarToggle playerId={playerId} name={p.name} />
           {owned ? (
             <SellButton player={{ playerId: p.playerId, name: p.name }} />
-          ) : (
+          ) : p.retired ? null : (
             <BuyButton player={{ playerId: p.playerId, name: p.name, position: p.position ?? null, price: p.price ?? null }} />
           )}
         </div>

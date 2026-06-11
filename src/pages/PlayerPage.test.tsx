@@ -177,3 +177,46 @@ test("omits the fantasy strip when both rating and price are absent", async () =
   await screen.findByText("Vik");
   expect(screen.queryByText("Fantasy · this season")).not.toBeInTheDocument();
 });
+
+test("shows the Retired badge when the player is retired", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "tm", clubId: "c1", clubName: "Aalvik", gender: "karlar", retired: true } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
+  expect(await screen.findByText("Retired")).toBeInTheDocument();
+});
+
+test("does not show the Retired badge for an active player", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "tm", clubId: "c1", clubName: "Aalvik", gender: "karlar" } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
+  await screen.findByText("Vik");
+  expect(screen.queryByText("Retired")).not.toBeInTheDocument();
+});
+
+test("suppresses the Buy button for an unowned retired player", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "tm", clubId: "c1", clubName: "Aalvik", gender: "karlar", position: "LB", price: { amount: 9_000_000, currency: "ISK" }, retired: true } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [], count: 0, max: 20 });
+  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { LB: 3 } });
+  vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 100_000_000, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
+  renderPlayer();
+  await screen.findByText("Vik");
+  // Wait for squad + constraints to settle (BuyButton returns null while loading,
+  // so a synchronous assertion here would pass even if the gate were absent).
+  await waitFor(() => expect(api.getSquad).toHaveBeenCalled());
+  await waitFor(() => expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument());
+});
+
+test("still shows the Sell button for an owned retired player", async () => {
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "tm", clubId: "c1", clubName: "Aalvik", gender: "karlar", position: "LB", price: { amount: 9_000_000, currency: "ISK" }, retired: true } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  vi.spyOn(api, "getShortlist").mockResolvedValue({ items: [], count: 0, max: 20 });
+  vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { LB: 3 } });
+  vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [{ playerId: "7", name: "Vik", clubId: "c1", clubName: "Aalvik", position: "LB", gender: "karlar", price: { amount: 9_000_000, currency: "ISK" }, rating: 70, pricePaid: { amount: 9_000_000, currency: "ISK" } }], budgetUsed: { amount: 9_000_000, currency: "ISK" }, remainingBudget: { amount: 91_000_000, currency: "ISK" }, squadValue: { amount: 9_000_000, currency: "ISK" } });
+  renderPlayer();
+  expect(await screen.findByRole("button", { name: /sell/i })).toBeInTheDocument();
+});
