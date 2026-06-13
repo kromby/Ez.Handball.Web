@@ -317,3 +317,58 @@ export interface InvitePreview {
   season: string;
   memberCount: number;
 }
+
+export type GameweekStatus = "Open" | "DeadlineLocked" | "InPlay" | "Settled";
+
+export interface GameweekMatch {
+  matchId: string;
+  date: string; // ISO timestamp
+  isFinal: boolean;
+  homeTeamId: string;
+  awayTeamId: string;
+}
+
+export interface Gameweek {
+  number: number;
+  roundLabel: string;
+  tournamentId: string;
+  deadline: string; // ISO timestamp
+  status: GameweekStatus;
+  matches: GameweekMatch[];
+}
+
+export interface CurrentGameweek {
+  current: Gameweek | null;
+  lastSettled: Gameweek | null;
+}
+
+export interface RoundTeam {
+  teamId: string;
+  clubId: string;
+  name: string | null;
+  logoSrc: string | null;
+  score: number | null;
+}
+
+export interface RoundMatch {
+  matchId: string;
+  played: boolean;
+  date: string; // ISO timestamp
+  venue: string | null;
+  home: RoundTeam;
+  away: RoundTeam;
+}
+
+export interface RoundGroup {
+  round: string;
+  startDate: string; // "YYYY-MM-DD"
+  endDate: string;
+  matches: RoundMatch[];
+}
+
+export interface RoundListing {
+  tournamentId: string;
+  tournamentName: string | null;
+  season: string;
+  rounds: RoundGroup[];
+}
