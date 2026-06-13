@@ -4,6 +4,7 @@ import { formatMoney } from "../api/money";
 import { useAuth } from "../auth/useAuth";
 import { BallDefs } from "../components/BallAvatar";
 import { SketchBox } from "../components/SketchBox";
+import { CurrentGameweekStrip } from "../components/gameweek/CurrentGameweekStrip";
 import { COURT_ORDER, SquadCourt } from "../components/squad/SquadCourt";
 import { SelectedPlayerPanel } from "../components/squad/SelectedPlayerPanel";
 import { ErrorView, Loading } from "../components/StateViews";
@@ -49,6 +50,8 @@ export default function SquadPage() {
   return (
     <section className="stack squad-page">
       <BallDefs />
+
+      <CurrentGameweekStrip />
 
       <div className="squad-head">
         <div>

@@ -1,9 +1,9 @@
 import { screen, waitFor } from "@testing-library/react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Route, Routes } from "react-router-dom";
 import * as api from "../api/endpoints";
 import { renderWithProviders } from "../test/renderWithQuery";
-import type { AuthUser, Squad, SquadConstraints } from "../api/types";
+import type { AuthUser, CurrentGameweek, Squad, SquadConstraints } from "../api/types";
 import SquadPage from "./SquadPage";
 
 afterEach(() => vi.restoreAllMocks());
@@ -39,6 +39,10 @@ const renderPage = (squadData: Squad) => {
 };
 
 describe("SquadPage", () => {
+  beforeEach(() => {
+    vi.spyOn(api, "getCurrentGameweek").mockResolvedValue({ current: null, lastSettled: null });
+  });
+
   it("renders the team name title and manager-name scribble from the auth user", async () => {
     renderPage(squad);
     expect(await screen.findByText("Aron's Aces")).toBeInTheDocument();
@@ -55,5 +59,18 @@ describe("SquadPage", () => {
     await waitFor(() => expect(screen.getAllByRole("link").length).toBeGreaterThan(0));
     const links = screen.getAllByRole("link");
     expect(links.some((l) => l.getAttribute("href") === "/players")).toBe(true);
+  });
+
+  it("shows the current-gameweek strip", async () => {
+    vi.spyOn(api, "getCurrentGameweek").mockResolvedValue({
+      current: {
+        number: 18, roundLabel: "18", tournamentId: "8444",
+        deadline: "2099-06-20T18:00:00Z", status: "Open",
+        matches: [{ matchId: "a", date: "2099-06-20T18:00:00Z", isFinal: false, homeTeamId: "1-karlar", awayTeamId: "2-karlar" }],
+      },
+      lastSettled: null,
+    } satisfies CurrentGameweek);
+    renderPage(squad);
+    expect(await screen.findByText("Umferð 18")).toBeInTheDocument();
   });
 });
