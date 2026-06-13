@@ -362,7 +362,7 @@ export interface RoundMatch {
 export interface RoundGroup {
   round: string;
   startDate: string; // "YYYY-MM-DD"
-  endDate: string;
+  endDate: string; // "YYYY-MM-DD"
   matches: RoundMatch[];
 }
 

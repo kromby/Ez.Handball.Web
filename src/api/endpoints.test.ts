@@ -196,6 +196,12 @@ test("getCurrentGameweek hits the current path", async () => {
   expect(spy).toHaveBeenCalledWith("/api/gameweeks/current");
 });
 
+test("getCurrentGameweek appends version when given", async () => {
+  const spy = spyGet();
+  await getCurrentGameweek(3);
+  expect(spy).toHaveBeenCalledWith("/api/gameweeks/current?version=3");
+});
+
 test("getRounds encodes the tournament id", async () => {
   const spy = spyGet();
   await getRounds("84/44");
