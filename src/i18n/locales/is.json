@@ -234,6 +234,38 @@
     "tapPrompt": "smelltu á leikmann til að sjá spjaldið",
     "addSlot": "Bæta við {{code}} — fara á markaðinn"
   },
+  "gameweek": {
+    "navLink": "Umferðir",
+    "pageEyebrow": "tímabilið, umferð fyrir umferð",
+    "pageTitle": "Umferðir",
+    "seasonChip": "Tímabil {{season}}",
+    "roundOf": "Umferð {{current}} af {{total}}",
+    "heroTitle": "Umferð {{number}}",
+    "roundLabel": "Umferð {{label}}",
+    "locksInEyebrow": "læsist eftir",
+    "locksIn": "Læsist eftir {{countdown}}",
+    "locked": "Læst",
+    "deadlineAt": "lokafrestur {{time}}",
+    "matchWeekend": "Leikhelgi",
+    "matchCount_one": "{{count}} leikur · fyrsti útkast {{time}}",
+    "matchCount_other": "{{count}} leikir · fyrsti útkast {{time}}",
+    "editSquadCta": "Breyta liðinu",
+    "setYourSeven": "veldu sjömenningana áður en það læsist",
+    "comingUp": "Framundan",
+    "results": "Úrslit",
+    "noFixtures": "Leikir staðfestast síðar",
+    "notConfigured": "Umferðir eru ekki tilbúnar enn",
+    "notConfiguredBody": "Umferðadagatalið birtist hér þegar tímabilið hefur verið stillt.",
+    "empty": "Engar umferðir enn.",
+    "versus": "—",
+    "status": {
+      "open": "Opin",
+      "upcoming": "Framundan",
+      "locked": "Læst",
+      "live": "Í gangi",
+      "final": "Lokið"
+    }
+  },
   "positions": {
     "GK": "Markvörður",
     "LW": "Vinstri horn",
