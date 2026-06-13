@@ -84,6 +84,13 @@ export function useGenders() {
   });
 }
 
+export function useCurrentGameweek() {
+  return useQuery({
+    queryKey: ["gameweek-current"],
+    queryFn: () => api.getCurrentGameweek(),
+  });
+}
+
 const SHORTLIST_KEY = ["shortlist"] as const;
 
 export function useShortlist() {
