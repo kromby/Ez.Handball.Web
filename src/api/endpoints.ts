@@ -1,6 +1,8 @@
 import { apiGet, authedGet, authedSend } from "./client";
 import type {
   Club,
+  CurrentGameweek,
+  Gameweek,
   Gender,
   Invite,
   InvitePreview,
@@ -13,6 +15,7 @@ import type {
   PlayerPool,
   PlayerStatsResponse,
   PoolSort,
+  RoundListing,
   Season,
   ShortlistResponse,
   Squad,
@@ -149,4 +152,18 @@ export function previewInvite(token: string): Promise<InvitePreview> {
 
 export function joinMiniLeague(token: string): Promise<MiniLeague> {
   return authedSend<MiniLeague>("/api/mini-leagues/join", "POST", { token });
+}
+
+export function getGameweeks(version?: number): Promise<Gameweek[]> {
+  const qs = version != null ? `?version=${version}` : "";
+  return apiGet<Gameweek[]>(`/api/gameweeks${qs}`);
+}
+
+export function getCurrentGameweek(version?: number): Promise<CurrentGameweek> {
+  const qs = version != null ? `?version=${version}` : "";
+  return apiGet<CurrentGameweek>(`/api/gameweeks/current${qs}`);
+}
+
+export function getRounds(tournamentId: string): Promise<RoundListing> {
+  return apiGet<RoundListing>(`/api/tournaments/${encodeURIComponent(tournamentId)}/rounds`);
 }

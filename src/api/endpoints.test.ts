@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -193,4 +193,34 @@ test("joinMiniLeague POSTs to /api/mini-leagues/join with token body", async () 
   const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
   await joinMiniLeague("tok1");
   expect(spy).toHaveBeenCalledWith("/api/mini-leagues/join", "POST", { token: "tok1" });
+});
+
+test("getGameweeks hits the gameweeks path", async () => {
+  const spy = spyGet();
+  await getGameweeks();
+  expect(spy).toHaveBeenCalledWith("/api/gameweeks");
+});
+
+test("getGameweeks appends version when given", async () => {
+  const spy = spyGet();
+  await getGameweeks(2);
+  expect(spy).toHaveBeenCalledWith("/api/gameweeks?version=2");
+});
+
+test("getCurrentGameweek hits the current path", async () => {
+  const spy = spyGet();
+  await getCurrentGameweek();
+  expect(spy).toHaveBeenCalledWith("/api/gameweeks/current");
+});
+
+test("getCurrentGameweek appends version when given", async () => {
+  const spy = spyGet();
+  await getCurrentGameweek(3);
+  expect(spy).toHaveBeenCalledWith("/api/gameweeks/current?version=3");
+});
+
+test("getRounds encodes the tournament id", async () => {
+  const spy = spyGet();
+  await getRounds("84/44");
+  expect(spy).toHaveBeenCalledWith("/api/tournaments/84%2F44/rounds");
 });

@@ -238,6 +238,38 @@
     "tapPrompt": "tap a player to see their card",
     "addSlot": "Add a {{code}} — go to the market"
   },
+  "gameweek": {
+    "navLink": "Gameweeks",
+    "pageEyebrow": "the season, week by week",
+    "pageTitle": "Gameweeks",
+    "seasonChip": "Season {{season}}",
+    "roundOf": "Round {{current}} of {{total}}",
+    "heroTitle": "Gameweek {{number}}",
+    "roundLabel": "Umferð {{label}}",
+    "locksInEyebrow": "locks in",
+    "locksIn": "Locks in {{countdown}}",
+    "locked": "Locked",
+    "deadlineAt": "deadline {{time}}",
+    "matchWeekend": "Match weekend",
+    "matchCount_one": "{{count}} match · first throw {{time}}",
+    "matchCount_other": "{{count}} matches · first throw {{time}}",
+    "editSquadCta": "Edit your squad",
+    "setYourSeven": "set your seven before it locks",
+    "comingUp": "Coming up",
+    "results": "Results",
+    "noFixtures": "Fixtures to be confirmed",
+    "notConfigured": "Gameweeks aren't set up yet",
+    "notConfiguredBody": "The gameweek calendar will appear here once the season is configured.",
+    "empty": "No gameweeks yet.",
+    "versus": "vs",
+    "status": {
+      "open": "Open",
+      "upcoming": "Upcoming",
+      "locked": "Locked",
+      "live": "Live",
+      "final": "Final"
+    }
+  },
   "positions": {
     "GK": "Goalkeeper",
     "LW": "Left wing",
