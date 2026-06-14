@@ -128,7 +128,7 @@ const twoGameweeks: MyGameweeks = {
 
 test("shows running total, settled count and newest gameweek first", async () => {
   vi.spyOn(api, "getMyGameweeks").mockResolvedValue(twoGameweeks);
-  renderWithProviders(<GameweekScores squad={squadFixture} />);
+  renderWithProviders(<GameweekScores squad={squadFixture} />, { auth: { status: "authenticated" } });
   expect(await screen.findByText("105")).toBeInTheDocument();
   expect(screen.getByText("2 gameweeks settled")).toBeInTheDocument();
   // Newest first: GW2 (15. umferð) renders before GW1 (14. umferð).
@@ -145,20 +145,20 @@ test("resolves a player missing from the squad to the fallback label", async () 
       ] },
     ],
   });
-  renderWithProviders(<GameweekScores squad={squadFixture} />);
+  renderWithProviders(<GameweekScores squad={squadFixture} />, { auth: { status: "authenticated" } });
   expect(await screen.findByText("Unknown player")).toBeInTheDocument();
 });
 
 test("renders the empty note and no running total when nothing is settled", async () => {
   vi.spyOn(api, "getMyGameweeks").mockResolvedValue({ runningTotal: 0, gameweeks: [] });
-  renderWithProviders(<GameweekScores squad={squadFixture} />);
+  renderWithProviders(<GameweekScores squad={squadFixture} />, { auth: { status: "authenticated" } });
   expect(await screen.findByText("No gameweeks scored yet")).toBeInTheDocument();
   expect(screen.queryByText("Running total")).not.toBeInTheDocument();
 });
 
 test("renders nothing on error (section is supplementary)", async () => {
   vi.spyOn(api, "getMyGameweeks").mockRejectedValue(new Error("boom"));
-  const { container } = renderWithProviders(<GameweekScores squad={squadFixture} />);
+  const { container } = renderWithProviders(<GameweekScores squad={squadFixture} />, { auth: { status: "authenticated" } });
   await waitFor(() => expect(api.getMyGameweeks).toHaveBeenCalled());
   expect(container.querySelector(".gwsc")).toBeNull();
 });

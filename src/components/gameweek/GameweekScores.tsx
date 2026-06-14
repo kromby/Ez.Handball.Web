@@ -1,17 +1,12 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import * as api from "../../api/endpoints";
 import type { Squad } from "../../api/types";
+import { useMyGameweeks } from "../../query/hooks";
 import { GameweekScoreRow, type ResolvedPlayer } from "./GameweekScoreRow";
 
 export function GameweekScores({ squad }: { squad: Squad | undefined }) {
   const { t } = useTranslation();
-  // Component lives behind a ProtectedRoute — auth is guaranteed; no need to gate here.
-  const { data, isError } = useQuery({
-    queryKey: ["my-gameweeks"],
-    queryFn: () => api.getMyGameweeks(),
-  });
+  const { data, isError } = useMyGameweeks();
 
   const nameOf = useMemo(() => {
     const byId = new Map((squad?.players ?? []).map((p) => [p.playerId, p]));
