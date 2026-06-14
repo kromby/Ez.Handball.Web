@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ApiError } from "../api/client";
 import { useSellPlayer } from "../query/hooks";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { useGameweekApplyNotice } from "./gameweek/useGameweekApplyNotice";
 import { useToast } from "./Toast";
 
 function errorKey(err: unknown) {
@@ -17,12 +18,13 @@ export function SellButton({ player }: { player: { playerId: string; name: strin
   const { t } = useTranslation();
   const toast = useToast();
   const sell = useSellPlayer();
+  const notify = useGameweekApplyNotice();
   const [open, setOpen] = useState(false);
   const name = player.name ?? t("match.unknownPlayer");
 
   const onConfirm = () => {
     sell.mutate(player.playerId, {
-      onSuccess: () => setOpen(false),
+      onSuccess: (result) => { setOpen(false); notify(result.gameweek); },
       onError: (err) => { setOpen(false); toast.show(t(errorKey(err))); },
     });
   };

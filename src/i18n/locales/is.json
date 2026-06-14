@@ -262,6 +262,8 @@
     "notConfiguredBody": "Umferðadagatalið birtist hér þegar tímabilið hefur verið stillt.",
     "empty": "Engar umferðir enn.",
     "versus": "—",
+    "applyDeferred": "Umferð {{locked}} er læst — breytingin gildir fyrir umferð {{applied}}.",
+    "applyLocked": "Umferðin er læst — breytingin er vistuð fyrir næstu umferð.",
     "status": {
       "open": "Opin",
       "upcoming": "Framundan",

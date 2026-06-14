@@ -54,7 +54,7 @@ test("disables with a budget reason when unaffordable", async () => {
 
 test("is enabled and labelled with the price when buyable", async () => {
   mockBackend();
-  vi.spyOn(api, "buyPlayer").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 0, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
+  vi.spyOn(api, "buyPlayer").mockResolvedValue({ squad: { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 0, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } }, gameweek: { appliedToGameweek: 3, currentGameweekLocked: false } });
   renderBtn({ playerId: "p2", position: "GK", price: { amount: 12_000_000, currency: "ISK" } });
   const btn = await screen.findByRole("button");
   expect(btn).toBeEnabled();
@@ -77,4 +77,14 @@ test("toasts a set-up-your-team message on a 409 no_team", async () => {
   const btn = await screen.findByRole("button");
   fireEvent.click(btn);
   expect(await screen.findByRole("status")).toHaveTextContent(/team/i);
+});
+
+test("toasts a deferral notice when the gameweek locked between load and buy", async () => {
+  mockBackend({ remaining: 100_000_000 });
+  vi.spyOn(api, "buyPlayer").mockResolvedValue({ squad: { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 0, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } }, gameweek: { appliedToGameweek: 4, currentGameweekLocked: false } });
+  vi.spyOn(api, "getCurrentGameweek").mockResolvedValue({ current: { number: 3, roundLabel: "3", tournamentId: "t", deadline: "2026-06-14T18:00:00Z", status: "Open", matches: [] }, lastSettled: null });
+  renderBtn({ playerId: "p9", position: "GK", price: { amount: 12_000_000, currency: "ISK" } });
+  const btn = await screen.findByRole("button");
+  fireEvent.click(btn);
+  expect(await screen.findByRole("status")).toHaveTextContent(/Gameweek 3/);
 });

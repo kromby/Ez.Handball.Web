@@ -6,6 +6,7 @@ import type { Money } from "../api/types";
 import { useAuth } from "../auth/useAuth";
 import { useBuyPlayer, useSquad, useSquadConstraints } from "../query/hooks";
 import { evaluateBuy, type BuyReason } from "./buy/buyState";
+import { useGameweekApplyNotice } from "./gameweek/useGameweekApplyNotice";
 import { useToast } from "./Toast";
 
 const REASON_KEY = {
@@ -43,6 +44,7 @@ export function BuyButton({ player }: { player: BuyButtonPlayer }) {
   const squad = useSquad();
   const constraints = useSquadConstraints("fantasy", { enabled: status === "authenticated" });
   const buy = useBuyPlayer();
+  const notify = useGameweekApplyNotice();
 
   // Hooks above run unconditionally; bail after they're called. Gating the
   // constraints query on auth keeps anonymous pages from firing a stray fetch.
@@ -84,7 +86,10 @@ export function BuyButton({ player }: { player: BuyButtonPlayer }) {
   const onClick = (e: MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    buy.mutate(player.playerId, { onError: (err) => toast.show(t(errorKey(err))) });
+    buy.mutate(player.playerId, {
+      onSuccess: (result) => notify(result.gameweek),
+      onError: (err) => toast.show(t(errorKey(err))),
+    });
   };
 
   return (

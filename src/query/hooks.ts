@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as api from "../api/endpoints";
-import type { LeaderboardMetric, PoolSort, ShortlistItem, ShortlistResponse, Squad } from "../api/types";
+import type { LeaderboardMetric, PoolSort, ShortlistItem, ShortlistResponse } from "../api/types";
 import { ApiError } from "../api/client";
 import { useAuth } from "../auth/useAuth";
 
@@ -200,7 +200,10 @@ export function useBuyPlayer(flavor = "fantasy") {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (playerId: string) => api.buyPlayer(playerId, flavor),
-    onSuccess: (squad: Squad) => qc.setQueryData(SQUAD_KEY(flavor), squad),
+    onSuccess: (result) => {
+      qc.setQueryData(SQUAD_KEY(flavor), result.squad);
+      qc.invalidateQueries({ queryKey: ["gameweek-current"] });
+    },
     onSettled: () => qc.invalidateQueries({ queryKey: SQUAD_KEY(flavor) }),
   });
 }
@@ -228,7 +231,10 @@ export function useSellPlayer(flavor = "fantasy") {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (playerId: string) => api.sellPlayer(playerId, flavor),
-    onSuccess: (squad: Squad) => qc.setQueryData(SQUAD_KEY(flavor), squad),
+    onSuccess: (result) => {
+      qc.setQueryData(SQUAD_KEY(flavor), result.squad);
+      qc.invalidateQueries({ queryKey: ["gameweek-current"] });
+    },
     onSettled: () => qc.invalidateQueries({ queryKey: SQUAD_KEY(flavor) }),
   });
 }

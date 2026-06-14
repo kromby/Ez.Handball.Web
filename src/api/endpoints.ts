@@ -21,6 +21,7 @@ import type {
   ShortlistResponse,
   Squad,
   SquadConstraints,
+  SquadMutationResult,
   Tournament,
 } from "./types";
 
@@ -120,12 +121,12 @@ export function getPlayers(params: {
   return apiGet<PlayerPool>(`/api/players${qs ? `?${qs}` : ""}`);
 }
 
-export function buyPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
-  return authedSend<Squad>("/api/users/me/squad/players", "POST", { playerId, flavor });
+export function buyPlayer(playerId: string, flavor = "fantasy"): Promise<SquadMutationResult> {
+  return authedSend<SquadMutationResult>("/api/users/me/squad/players", "POST", { playerId, flavor });
 }
 
-export function sellPlayer(playerId: string, flavor = "fantasy"): Promise<Squad> {
-  return authedSend<Squad>(
+export function sellPlayer(playerId: string, flavor = "fantasy"): Promise<SquadMutationResult> {
+  return authedSend<SquadMutationResult>(
     `/api/users/me/squad/players/${encodeURIComponent(playerId)}?flavor=${encodeURIComponent(flavor)}`,
     "DELETE",
   );

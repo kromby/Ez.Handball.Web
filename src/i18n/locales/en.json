@@ -262,6 +262,8 @@
     "notConfiguredBody": "The gameweek calendar will appear here once the season is configured.",
     "empty": "No gameweeks yet.",
     "versus": "vs",
+    "applyDeferred": "Gameweek {{locked}} has locked — your change applies to Gameweek {{applied}}.",
+    "applyLocked": "The gameweek has locked — your change is saved for the next one.",
     "status": {
       "open": "Open",
       "upcoming": "Upcoming",
