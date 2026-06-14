@@ -99,6 +99,8 @@ export function getPlayers(params: {
   tournamentId?: string;
   gender?: string;
   position?: string;
+  name?: string;
+  clubId?: string;
   sort?: PoolSort;
   offset?: number;
   limit?: number;
@@ -108,6 +110,8 @@ export function getPlayers(params: {
   if (params.tournamentId) sp.set("tournamentId", params.tournamentId);
   if (params.gender) sp.set("gender", params.gender);
   if (params.position) sp.set("position", params.position);
+  if (params.name) sp.set("name", params.name);
+  if (params.clubId) sp.set("clubId", params.clubId);
   if (params.sort) sp.set("sort", params.sort);
   if (params.offset != null) sp.set("offset", String(params.offset));
   if (params.limit != null) sp.set("limit", String(params.limit));

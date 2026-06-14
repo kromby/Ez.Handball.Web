@@ -211,6 +211,10 @@
     "allGenders": "All",
     "allPositions": "All",
     "allTournaments": "All tournaments",
+    "filterTeam": "Team",
+    "allTeams": "All teams",
+    "searchName": "Search players",
+    "clearSearch": "Clear search",
     "budgetLeft": "Budget left · {{amount}}",
     "shortlisted": "Shortlisted · {{count}}"
   },

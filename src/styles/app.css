@@ -1447,3 +1447,52 @@ button {
 }
 .gw-season-round { font-family: "Spectral", Georgia, serif; font-weight: 700; }
 .gw-empty { text-align: center; padding: 40px 0; }
+
+/* Search box — same inked-pill language as .filter-select */
+.search-input {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: var(--paper-2);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding-right: 8px;
+  transition: border-color 0.15s;
+}
+.search-input:hover { border-color: var(--amber-deep); }
+.search-input:focus-within {
+  border-color: var(--amber-deep);
+  box-shadow: 0 0 0 3px var(--amber-wash);
+}
+.search-input::before {
+  content: "⌕";
+  padding-left: 12px;
+  color: var(--amber-deep);
+  font-size: 18px;
+  line-height: 1;
+  pointer-events: none; /* the glyph is decorative; clicks fall through to the input */
+}
+.search-input input[type="search"] {
+  appearance: none;
+  -webkit-appearance: none;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--ink);
+  padding: 7px 4px 7px 8px;
+  outline: none; /* focus ring is on the pill via :focus-within */
+}
+.search-input input[type="search"]::placeholder { color: var(--ink-3); font-weight: 600; }
+.search-input input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.search-input-clear {
+  border: none;
+  background: transparent;
+  color: var(--ink-3);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  padding: 4px;
+}
+.search-input-clear:hover { color: var(--amber-deep); }
