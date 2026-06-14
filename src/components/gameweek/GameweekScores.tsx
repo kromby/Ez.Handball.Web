@@ -38,6 +38,7 @@ export function GameweekScores({ squad }: { squad: Squad | undefined }) {
 
   return (
     <section className="gwsc">
+      <h2 className="gwsc-heading">{t("gameweekScores.heading")}</h2>
       <div className="gwsc-total">
         <span className="gwsc-total-label poslabel">{t("gameweekScores.runningTotal")}</span>
         <span className="gwsc-total-num">{data.runningTotal}</span>

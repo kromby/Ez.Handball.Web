@@ -276,7 +276,6 @@
     "settledCount_one": "{{count}} gameweek settled",
     "settledCount_other": "{{count}} gameweeks settled",
     "gw": "GW {{number}}",
-    "points": "pts",
     "raw": "{{points}} raw",
     "captainBadge": "C ×{{multiplier}}",
     "captainBadgeLabel": "Captain, {{multiplier}} times points",

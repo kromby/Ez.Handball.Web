@@ -130,6 +130,7 @@ test("shows running total, settled count and newest gameweek first", async () =>
   vi.spyOn(api, "getMyGameweeks").mockResolvedValue(twoGameweeks);
   renderWithProviders(<GameweekScores squad={squadFixture} />, { auth: { status: "authenticated" } });
   expect(await screen.findByText("105")).toBeInTheDocument();
+  expect(screen.getByText("My gameweek scores")).toBeInTheDocument();
   expect(screen.getByText("2 gameweeks settled")).toBeInTheDocument();
   // Newest first: GW2 (15. umferð) renders before GW1 (14. umferð).
   const heads = screen.getAllByText(/^GW \d+$/).map((n) => n.textContent);

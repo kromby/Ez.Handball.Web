@@ -276,7 +276,6 @@
     "settledCount_one": "{{count}} umferð uppgerð",
     "settledCount_other": "{{count}} umferðir uppgerðar",
     "gw": "Umferð {{number}}",
-    "points": "stig",
     "raw": "{{points}} grunnstig",
     "captainBadge": "F ×{{multiplier}}",
     "captainBadgeLabel": "Fyrirliði, {{multiplier}}-föld stig",
