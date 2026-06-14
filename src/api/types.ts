@@ -364,6 +364,16 @@ export interface MyGameweeks {
   gameweeks: MyGameweekScore[]; // ascending (oldest first), as returned by the API
 }
 
+export interface GameweekApplyEcho {
+  appliedToGameweek: number | null; // which gameweek the change landed on
+  currentGameweekLocked: boolean;   // backend: true only when no editable gameweek exists
+}
+
+export interface SquadMutationResult {
+  squad: Squad;
+  gameweek: GameweekApplyEcho;
+}
+
 export interface RoundTeam {
   teamId: string;
   clubId: string;

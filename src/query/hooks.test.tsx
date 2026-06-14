@@ -47,28 +47,34 @@ test("useSquad is disabled when not authenticated", () => {
   expect(spy).not.toHaveBeenCalled();
 });
 
-test("useBuyPlayer writes the returned squad into the cache on success", async () => {
+test("useBuyPlayer unwraps result.squad into the cache and invalidates gameweek-current", async () => {
   const squad = { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 91, currency: "ISK" }, squadValue: { amount: 9, currency: "ISK" } };
-  vi.spyOn(api, "buyPlayer").mockResolvedValue(squad as never);
+  vi.spyOn(api, "buyPlayer").mockResolvedValue({ squad, gameweek: { appliedToGameweek: 3, currentGameweekLocked: false } } as never);
   const client = createQueryClient();
+  client.setQueryData(["gameweek-current"], { current: { number: 3 }, lastSettled: null });
+  const invalidate = vi.spyOn(client, "invalidateQueries");
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   );
   const { result } = renderHook(() => useBuyPlayer(), { wrapper });
   await act(async () => { await result.current.mutateAsync("123"); });
   expect(client.getQueryData(["squad", "fantasy"])).toMatchObject({ remainingBudget: { amount: 91 } });
+  expect(invalidate).toHaveBeenCalledWith({ queryKey: ["gameweek-current"] });
 });
 
-test("useSellPlayer writes the returned squad into the cache on success", async () => {
+test("useSellPlayer unwraps result.squad into the cache and invalidates gameweek-current", async () => {
   const squad = { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 33, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } };
-  vi.spyOn(api, "sellPlayer").mockResolvedValue(squad as never);
+  vi.spyOn(api, "sellPlayer").mockResolvedValue({ squad, gameweek: { appliedToGameweek: 3, currentGameweekLocked: false } } as never);
   const client = createQueryClient();
+  client.setQueryData(["gameweek-current"], { current: { number: 3 }, lastSettled: null });
+  const invalidate = vi.spyOn(client, "invalidateQueries");
   const wrapper = ({ children }: { children: ReactNode }) => (
     <QueryClientProvider client={client}>{children}</QueryClientProvider>
   );
   const { result } = renderHook(() => useSellPlayer(), { wrapper });
   await act(async () => { await result.current.mutateAsync("p1"); });
   expect(client.getQueryData(["squad", "fantasy"])).toMatchObject({ remainingBudget: { amount: 33 } });
+  expect(invalidate).toHaveBeenCalledWith({ queryKey: ["gameweek-current"] });
 });
 
 test("useMiniLeague is disabled when not authenticated", () => {

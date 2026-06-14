@@ -54,7 +54,7 @@ test("disables with a budget reason when unaffordable", async () => {
 
 test("is enabled and labelled with the price when buyable", async () => {
   mockBackend();
-  vi.spyOn(api, "buyPlayer").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 0, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
+  vi.spyOn(api, "buyPlayer").mockResolvedValue({ squad: { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 0, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } }, gameweek: { appliedToGameweek: 3, currentGameweekLocked: false } });
   renderBtn({ playerId: "p2", position: "GK", price: { amount: 12_000_000, currency: "ISK" } });
   const btn = await screen.findByRole("button");
   expect(btn).toBeEnabled();

@@ -11,7 +11,7 @@ const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language
 const authed = { status: "authenticated" as const, user };
 
 test("opens a confirm dialog and sells on confirm", async () => {
-  const sell = vi.spyOn(api, "sellPlayer").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 10, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
+  const sell = vi.spyOn(api, "sellPlayer").mockResolvedValue({ squad: { flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 10, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } }, gameweek: { appliedToGameweek: 3, currentGameweekLocked: false } });
   renderWithProviders(
     <ToastProvider><SellButton player={{ playerId: "p1", name: "Vik" }} /></ToastProvider>,
     { auth: authed },
