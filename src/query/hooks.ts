@@ -91,6 +91,22 @@ export function useCurrentGameweek() {
   });
 }
 
+export function useGameweeks() {
+  return useQuery({
+    queryKey: ["gameweeks"],
+    queryFn: () => api.getGameweeks(),
+  });
+}
+
+export function useRounds(tournamentId: string | undefined) {
+  return useQuery({
+    queryKey: ["rounds", tournamentId ?? null],
+    queryFn: () => api.getRounds(tournamentId as string),
+    enabled: Boolean(tournamentId),
+    staleTime: Infinity,
+  });
+}
+
 const SHORTLIST_KEY = ["shortlist"] as const;
 
 export function useShortlist() {
