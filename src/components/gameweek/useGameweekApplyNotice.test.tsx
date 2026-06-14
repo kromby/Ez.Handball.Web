@@ -1,51 +1,61 @@
-import { renderHook } from "@testing-library/react";
+import { render, screen, act } from "@testing-library/react";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { I18nextProvider } from "react-i18next";
-import { afterEach, expect, test, vi } from "vitest";
-import type { ReactNode } from "react";
-import { createQueryClient } from "../../query/queryClient";
+import { expect, test } from "vitest";
+import type { GameweekApplyEcho } from "../../api/types";
 import { i18n } from "../../i18n";
-import * as ToastModule from "../Toast";
+import { createQueryClient } from "../../query/queryClient";
+import { ToastProvider } from "../Toast";
 import { useGameweekApplyNotice } from "./useGameweekApplyNotice";
 
-afterEach(() => vi.restoreAllMocks());
-
-function setup(currentNumber: number | null) {
-  const client = createQueryClient();
-  client.setQueryData(["gameweek-current"], { current: currentNumber == null ? null : { number: currentNumber }, lastSettled: null });
-  const show = vi.fn();
-  vi.spyOn(ToastModule, "useToast").mockReturnValue({ show });
-  const wrapper = ({ children }: { children: ReactNode }) => (
-    <I18nextProvider i18n={i18n}>
-      <QueryClientProvider client={client}>{children}</QueryClientProvider>
-    </I18nextProvider>
-  );
-  const { result } = renderHook(() => useGameweekApplyNotice(), { wrapper });
-  return { notify: result.current, show };
+// Mirrors the repo's toast-test convention (Toast.test.tsx / SellButton.test.tsx):
+// drive the real ToastProvider via a Trigger component and assert on the rendered
+// role="status" node, rather than stubbing useToast.
+function Trigger({ echo }: { echo: GameweekApplyEcho }) {
+  const notify = useGameweekApplyNotice();
+  return <button onClick={() => notify(echo)}>fire</button>;
 }
 
-test("toasts a deferral message when applied differs from the baseline", () => {
-  const { notify, show } = setup(3);
-  notify({ appliedToGameweek: 4, currentGameweekLocked: false });
-  expect(show).toHaveBeenCalledTimes(1);
-  expect(show.mock.calls[0][0]).toContain("3");
-  expect(show.mock.calls[0][0]).toContain("4");
+function renderNotice(baseline: number | null, echo: GameweekApplyEcho) {
+  const client = createQueryClient();
+  client.setQueryData(["gameweek-current"], {
+    current: baseline == null ? null : { number: baseline },
+    lastSettled: null,
+  });
+  render(
+    <I18nextProvider i18n={i18n}>
+      <QueryClientProvider client={client}>
+        <ToastProvider>
+          <Trigger echo={echo} />
+        </ToastProvider>
+      </QueryClientProvider>
+    </I18nextProvider>,
+  );
+}
+
+test("toasts the interpolated deferral message when applied differs from the baseline", () => {
+  renderNotice(3, { appliedToGameweek: 4, currentGameweekLocked: false });
+  act(() => screen.getByText("fire").click());
+  // Asserting the fully-resolved string is swap-proof: if the hook swapped
+  // locked/applied, the rendered text would read "Gameweek 4 ... Gameweek 3".
+  const expected = i18n.t("gameweek.applyDeferred", { locked: 3, applied: 4 });
+  expect(screen.getByRole("status")).toHaveTextContent(expected);
 });
 
 test("stays silent on the happy path (applied equals baseline)", () => {
-  const { notify, show } = setup(3);
-  notify({ appliedToGameweek: 3, currentGameweekLocked: false });
-  expect(show).not.toHaveBeenCalled();
+  renderNotice(3, { appliedToGameweek: 3, currentGameweekLocked: false });
+  act(() => screen.getByText("fire").click());
+  expect(screen.queryByRole("status")).not.toBeInTheDocument();
 });
 
 test("toasts the generic locked message when there is no editable gameweek", () => {
-  const { notify, show } = setup(3);
-  notify({ appliedToGameweek: null, currentGameweekLocked: true });
-  expect(show).toHaveBeenCalledTimes(1);
+  renderNotice(3, { appliedToGameweek: null, currentGameweekLocked: true });
+  act(() => screen.getByText("fire").click());
+  expect(screen.getByRole("status")).toHaveTextContent(i18n.t("gameweek.applyLocked"));
 });
 
 test("stays silent when there is no baseline gameweek", () => {
-  const { notify, show } = setup(null);
-  notify({ appliedToGameweek: 4, currentGameweekLocked: false });
-  expect(show).not.toHaveBeenCalled();
+  renderNotice(null, { appliedToGameweek: 4, currentGameweekLocked: false });
+  act(() => screen.getByText("fire").click());
+  expect(screen.queryByRole("status")).not.toBeInTheDocument();
 });
