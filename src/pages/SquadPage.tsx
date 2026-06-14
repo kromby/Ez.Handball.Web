@@ -5,6 +5,7 @@ import { useAuth } from "../auth/useAuth";
 import { BallDefs } from "../components/BallAvatar";
 import { SketchBox } from "../components/SketchBox";
 import { CurrentGameweekStrip } from "../components/gameweek/CurrentGameweekStrip";
+import { GameweekScores } from "../components/gameweek/GameweekScores";
 import { COURT_ORDER, SquadCourt } from "../components/squad/SquadCourt";
 import { SelectedPlayerPanel } from "../components/squad/SelectedPlayerPanel";
 import { ErrorView, Loading } from "../components/StateViews";
@@ -72,6 +73,8 @@ export default function SquadPage() {
           <SelectedPlayerPanel player={selected} />
         </div>
       </div>
+
+      <GameweekScores squad={squad.data} />
     </section>
   );
 }
