@@ -1496,3 +1496,53 @@ button {
   padding: 4px;
 }
 .search-input-clear:hover { color: var(--amber-deep); }
+
+/* Gameweek scores (Web#37) — settled results on /squad */
+.gwsc { margin-top: 28px; }
+.gwsc-heading { font-size: 18px; margin: 0 0 12px; }
+
+.gwsc-total {
+  display: flex; align-items: baseline; gap: 14px;
+  border: 2px solid var(--ink); border-radius: 14px;
+  background: #fffaf0; padding: 14px 18px; margin-bottom: 16px;
+  box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.12);
+}
+.gwsc-total-num { font-size: 38px; font-weight: 800; line-height: 1; }
+.gwsc-total-sub { margin-left: auto; font-size: 13px; opacity: 0.6; }
+
+.gwsc-rows { display: flex; flex-direction: column; gap: 10px; }
+
+.gwsc-row {
+  border: 2px solid var(--ink); border-radius: 12px;
+  background: #fff; overflow: hidden; box-shadow: 2px 3px 0 rgba(0, 0, 0, 0.1);
+}
+.gwsc-row-head {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 11px 16px; background: #fdf6e7; border: 0; cursor: pointer;
+  font: inherit; text-align: left;
+}
+.gwsc-gw { font-weight: 800; }
+.gwsc-round { font-size: 13px; opacity: 0.6; }
+.gwsc-total-pts { margin-left: auto; font-weight: 800; font-size: 20px; }
+.gwsc-chevron { opacity: 0.5; }
+
+.gwsc-row-body { padding: 6px 16px 12px; }
+
+.gwsc-line {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 2px; border-bottom: 1px dashed #ddd;
+}
+.gwsc-line:last-child { border-bottom: none; }
+.gwsc-line--dnp { opacity: 0.45; }
+.gwsc-line--dnp .gwsc-name { text-decoration: line-through; }
+.gwsc-pos { width: 34px; }
+.gwsc-name { flex: 1; display: flex; align-items: center; gap: 8px; }
+.gwsc-raw { font-size: 12px; opacity: 0.5; min-width: 60px; text-align: right; }
+.gwsc-final { font-weight: 800; min-width: 38px; text-align: right; }
+
+.gwsc-badge {
+  font-size: 10px; font-weight: 700; padding: 1px 6px;
+  border-radius: 20px; border: 1.5px solid;
+}
+.gwsc-badge--cap { color: #b8860b; border-color: #b8860b; background: #fff7e0; }
+.gwsc-badge--sub { color: #2e7d32; border-color: #2e7d32; background: #e9f6ea; }
