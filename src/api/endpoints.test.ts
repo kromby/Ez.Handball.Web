@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -223,4 +223,10 @@ test("getRounds encodes the tournament id", async () => {
   const spy = spyGet();
   await getRounds("84/44");
   expect(spy).toHaveBeenCalledWith("/api/tournaments/84%2F44/rounds");
+});
+
+test("getMyGameweeks calls the authed my-gameweeks endpoint", async () => {
+  const spy = spyAuthedGet();
+  await getMyGameweeks();
+  expect(spy).toHaveBeenCalledWith("/api/users/me/gameweeks");
 });

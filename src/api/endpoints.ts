@@ -10,6 +10,7 @@ import type {
   LeaderboardMetric,
   MatchDetail,
   MiniLeague,
+  MyGameweeks,
   Player,
   PlayerHistoryResponse,
   PlayerPool,
@@ -162,6 +163,10 @@ export function getGameweeks(version?: number): Promise<Gameweek[]> {
 export function getCurrentGameweek(version?: number): Promise<CurrentGameweek> {
   const qs = version != null ? `?version=${version}` : "";
   return apiGet<CurrentGameweek>(`/api/gameweeks/current${qs}`);
+}
+
+export function getMyGameweeks(): Promise<MyGameweeks> {
+  return authedGet<MyGameweeks>("/api/users/me/gameweeks");
 }
 
 export function getRounds(tournamentId: string): Promise<RoundListing> {

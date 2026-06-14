@@ -342,6 +342,28 @@ export interface CurrentGameweek {
   lastSettled: Gameweek | null;
 }
 
+export interface GameweekPlayerScore {
+  playerId: string;
+  rawPoints: number;
+  points: number; // rawPoints * multiplier; 0 for a non-playing unsubbed starter
+  played: boolean;
+  autoSubbedIn: boolean;
+  captainApplied: boolean;
+  multiplier: number;
+}
+
+export interface MyGameweekScore {
+  roundLabel: string;
+  points: number;
+  captainPlayerId: string | null;
+  breakdown: GameweekPlayerScore[];
+}
+
+export interface MyGameweeks {
+  runningTotal: number;
+  gameweeks: MyGameweekScore[]; // ascending (oldest first), as returned by the API
+}
+
 export interface RoundTeam {
   teamId: string;
   clubId: string;

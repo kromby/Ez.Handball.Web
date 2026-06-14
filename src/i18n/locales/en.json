@@ -270,6 +270,21 @@
       "final": "Final"
     }
   },
+  "gameweekScores": {
+    "heading": "My gameweek scores",
+    "runningTotal": "Running total",
+    "settledCount_one": "{{count}} gameweek settled",
+    "settledCount_other": "{{count}} gameweeks settled",
+    "gw": "GW {{number}}",
+    "raw": "{{points}} raw",
+    "captainBadge": "C ×{{multiplier}}",
+    "captainBadgeLabel": "Captain, {{multiplier}} times points",
+    "subBadge": "↑ sub",
+    "subBadgeLabel": "Auto-substituted in",
+    "dnp": "DNP",
+    "unknownPlayer": "Unknown player",
+    "empty": "No gameweeks scored yet"
+  },
   "positions": {
     "GK": "Goalkeeper",
     "LW": "Left wing",

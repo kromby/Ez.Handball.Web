@@ -178,6 +178,15 @@ export function useSquad(flavor = "fantasy") {
   });
 }
 
+export function useMyGameweeks() {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["my-gameweeks"],
+    queryFn: () => api.getMyGameweeks(),
+    enabled: status === "authenticated",
+  });
+}
+
 export function useSquadConstraints(flavor = "fantasy", options: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: ["squad-constraints", flavor],
