@@ -9,12 +9,12 @@ export function GameweekScores({ squad }: { squad: Squad | undefined }) {
   const { data, isError } = useMyGameweeks();
 
   const nameOf = useMemo(() => {
-    const byId = new Map((squad?.players ?? []).map((p) => [p.playerId, p]));
+    const byId = new Map((squad?.players ?? []).map((player) => [player.playerId, player]));
     return (playerId: string): ResolvedPlayer => {
-      const p = byId.get(playerId);
+      const player = byId.get(playerId);
       return {
-        name: p?.name ?? t("gameweekScores.unknownPlayer"),
-        position: p?.position ?? null,
+        name: player?.name ?? t("gameweekScores.unknownPlayer"),
+        position: player?.position ?? null,
       };
     };
   }, [squad, t]);
