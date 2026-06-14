@@ -270,6 +270,22 @@
       "final": "Lokið"
     }
   },
+  "gameweekScores": {
+    "heading": "Mín umferðastig",
+    "runningTotal": "Heildarstig",
+    "settledCount_one": "{{count}} umferð uppgerð",
+    "settledCount_other": "{{count}} umferðir uppgerðar",
+    "gw": "Umferð {{number}}",
+    "points": "stig",
+    "raw": "{{points}} grunnstig",
+    "captainBadge": "F ×{{multiplier}}",
+    "captainBadgeLabel": "Fyrirliði, {{multiplier}}-föld stig",
+    "subBadge": "↑ inn á",
+    "subBadgeLabel": "Sjálfvirk skipting inn á",
+    "dnp": "Lék ekki",
+    "unknownPlayer": "Óþekktur leikmaður",
+    "empty": "Engar umferðir uppgerðar enn"
+  },
   "positions": {
     "GK": "Markvörður",
     "LW": "Vinstri horn",
