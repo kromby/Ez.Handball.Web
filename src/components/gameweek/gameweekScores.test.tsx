@@ -1,9 +1,13 @@
-import { fireEvent, screen } from "@testing-library/react";
-import { expect, test } from "vitest";
-import type { MyGameweekScore } from "../../api/types";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { afterEach, expect, test, vi } from "vitest";
+import * as api from "../../api/endpoints";
+import type { MyGameweekScore, MyGameweeks, Squad } from "../../api/types";
 import { renderWithProviders } from "../../test/renderWithQuery";
 import { GameweekScoreRow } from "./GameweekScoreRow";
+import { GameweekScores } from "./GameweekScores";
 import { PlayerScoreLine } from "./PlayerScoreLine";
+
+afterEach(() => vi.restoreAllMocks());
 
 test("renders a captain line with multiplier badge and final points", () => {
   renderWithProviders(
@@ -97,4 +101,64 @@ test("row is collapsible", () => {
   expect(screen.queryByText("Aron")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button"));
   expect(screen.getByText("Aron")).toBeInTheDocument();
+});
+
+const squadFixture = {
+  flavor: "fantasy",
+  players: [
+    { playerId: "p1", name: "Aron", clubId: null, clubName: null, position: "GK", gender: null, price: null, pricePaid: 0, rating: 0 },
+    { playerId: "p2", name: "Ómar", clubId: null, clubName: null, position: "LW", gender: null, price: null, pricePaid: 0, rating: 0 },
+  ],
+  budgetUsed: 0,
+  remainingBudget: 0,
+  squadValue: 0,
+} as unknown as Squad;
+
+const twoGameweeks: MyGameweeks = {
+  runningTotal: 105,
+  gameweeks: [
+    { roundLabel: "14. umferð", points: 47, captainPlayerId: "p1", breakdown: [
+      { playerId: "p1", rawPoints: 5, points: 10, played: true, autoSubbedIn: false, captainApplied: true, multiplier: 2 },
+    ] },
+    { roundLabel: "15. umferð", points: 58, captainPlayerId: "p2", breakdown: [
+      { playerId: "p2", rawPoints: 11, points: 11, played: true, autoSubbedIn: false, captainApplied: false, multiplier: 1 },
+    ] },
+  ],
+};
+
+test("shows running total, settled count and newest gameweek first", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockResolvedValue(twoGameweeks);
+  renderWithProviders(<GameweekScores squad={squadFixture} />);
+  expect(await screen.findByText("105")).toBeInTheDocument();
+  expect(screen.getByText("2 gameweeks settled")).toBeInTheDocument();
+  // Newest first: GW2 (15. umferð) renders before GW1 (14. umferð).
+  const heads = screen.getAllByText(/^GW \d+$/).map((n) => n.textContent);
+  expect(heads).toEqual(["GW 2", "GW 1"]);
+});
+
+test("resolves a player missing from the squad to the fallback label", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockResolvedValue({
+    runningTotal: 10,
+    gameweeks: [
+      { roundLabel: "1. umferð", points: 10, captainPlayerId: null, breakdown: [
+        { playerId: "sold", rawPoints: 10, points: 10, played: true, autoSubbedIn: false, captainApplied: false, multiplier: 1 },
+      ] },
+    ],
+  });
+  renderWithProviders(<GameweekScores squad={squadFixture} />);
+  expect(await screen.findByText("Unknown player")).toBeInTheDocument();
+});
+
+test("renders the empty note and no running total when nothing is settled", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockResolvedValue({ runningTotal: 0, gameweeks: [] });
+  renderWithProviders(<GameweekScores squad={squadFixture} />);
+  expect(await screen.findByText("No gameweeks scored yet")).toBeInTheDocument();
+  expect(screen.queryByText("Running total")).not.toBeInTheDocument();
+});
+
+test("renders nothing on error (section is supplementary)", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockRejectedValue(new Error("boom"));
+  const { container } = renderWithProviders(<GameweekScores squad={squadFixture} />);
+  await waitFor(() => expect(api.getMyGameweeks).toHaveBeenCalled());
+  expect(container.querySelector(".gwsc")).toBeNull();
 });
