@@ -34,6 +34,7 @@ function AuthArea() {
       <nav className="nav-auth" aria-label={t("nav.account")}>
         <Link to="/players" className="nav-link">{t("nav.players")}</Link>
         <Link to="/squad" className="nav-link">{t("nav.mySquad")}</Link>
+        <Link to="/gameweeks" className="nav-link">{t("gameweek.navLink")}</Link>
         <Link to="/leagues" className="nav-link">{t("nav.leagues")}</Link>
         <Link to="/shortlist" className="nav-shortlist">
           {data ? t("nav.shortlistWithCount", { count: data.count }) : t("nav.shortlist")}
@@ -44,6 +45,7 @@ function AuthArea() {
   }
   return (
     <nav className="nav-auth" aria-label={t("nav.account")}>
+      <Link to="/gameweeks" className="nav-link">{t("gameweek.navLink")}</Link>
       <Link to="/login">{t("nav.login")}</Link>
       <Link to="/register">{t("nav.register")}</Link>
     </nav>
