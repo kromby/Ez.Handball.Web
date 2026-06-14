@@ -1,8 +1,8 @@
 /** Weekday + 24h time, e.g. "Sat 17:00". Falls back to the raw ISO if unparseable. */
 export function formatKickoff(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleString(undefined, {
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) return iso;
+  return parsed.toLocaleString(undefined, {
     weekday: "short",
     hour: "2-digit",
     minute: "2-digit",

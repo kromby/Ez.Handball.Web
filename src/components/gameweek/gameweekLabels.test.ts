@@ -31,30 +31,30 @@ test("non-open statuses map directly regardless of current", () => {
 
 test("sectionGameweeks splits around the current gameweek", () => {
   const all = [gw(5, "Settled"), gw(6, "InPlay"), gw(7, "Open"), gw(8, "Open")];
-  const s = sectionGameweeks(all, gw(7, "Open"), gw(5, "Settled"));
-  expect(s.hero?.number).toBe(7);
-  expect(s.comingUp.map((g) => g.number)).toEqual([8]);
-  expect(s.results.map((g) => g.number)).toEqual([6, 5]);
+  const sections = sectionGameweeks(all, gw(7, "Open"), gw(5, "Settled"));
+  expect(sections.hero?.number).toBe(7);
+  expect(sections.comingUp.map((g) => g.number)).toEqual([8]);
+  expect(sections.results.map((g) => g.number)).toEqual([6, 5]);
 });
 
 test("a past InPlay gameweek lands in results", () => {
   const all = [gw(6, "InPlay"), gw(7, "Open")];
-  const s = sectionGameweeks(all, gw(7, "Open"), null);
-  expect(s.results.map((g) => g.number)).toEqual([6]);
+  const sections = sectionGameweeks(all, gw(7, "Open"), null);
+  expect(sections.results.map((g) => g.number)).toEqual([6]);
 });
 
 test("falls back to lastSettled hero when current is null", () => {
   const all = [gw(5, "Settled"), gw(6, "Settled")];
-  const s = sectionGameweeks(all, null, gw(6, "Settled"));
-  expect(s.hero?.number).toBe(6);
-  expect(s.results.map((g) => g.number)).toEqual([5]);
+  const sections = sectionGameweeks(all, null, gw(6, "Settled"));
+  expect(sections.hero?.number).toBe(6);
+  expect(sections.results.map((g) => g.number)).toEqual([5]);
 });
 
 test("empty when no current and no lastSettled", () => {
-  const s = sectionGameweeks([gw(1, "Open")], null, null);
-  expect(s.hero).toBeNull();
-  expect(s.comingUp).toEqual([]);
-  expect(s.results).toEqual([]);
+  const sections = sectionGameweeks([gw(1, "Open")], null, null);
+  expect(sections.hero).toBeNull();
+  expect(sections.comingUp).toEqual([]);
+  expect(sections.results).toEqual([]);
 });
 
 test("isCurrent is true only for the current gameweek number", () => {

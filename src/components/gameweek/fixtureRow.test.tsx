@@ -42,5 +42,5 @@ test("played fixture shows both names and the score", () => {
 test("upcoming fixture shows the kickoff time, no score", () => {
   renderWithProviders(<FixtureRow match={upcoming} />);
   expect(screen.getByText("Haukar")).toBeInTheDocument();
-  expect(screen.queryByText(/–/)).not.toBeInTheDocument();
+  expect(screen.queryByText(/–/u)).not.toBeInTheDocument();
 });

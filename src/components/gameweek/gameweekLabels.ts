@@ -5,16 +5,10 @@ export type GameweekLabelKey = "open" | "upcoming" | "locked" | "live" | "final"
 /** Maps a backend status to the UI label key. A future (non-current) Open
  *  gameweek reads as "upcoming"; the current Open one reads as "open". */
 export function gameweekLabelKey(status: GameweekStatus, current: boolean): GameweekLabelKey {
-  switch (status) {
-    case "Open":
-      return current ? "open" : "upcoming";
-    case "DeadlineLocked":
-      return "locked";
-    case "InPlay":
-      return "live";
-    case "Settled":
-      return "final";
-  }
+  if (status === "Open") return current ? "open" : "upcoming";
+  if (status === "DeadlineLocked") return "locked";
+  if (status === "InPlay") return "live";
+  return "final"; // Settled
 }
 
 export function isCurrent(gameweek: Gameweek, current: Gameweek | null): boolean {
