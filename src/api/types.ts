@@ -220,6 +220,28 @@ export interface ClubRoster {
   players: ClubRosterPlayer[];
 }
 
+export interface ClubMatch {
+  matchId: string;
+  tournamentId: string;
+  tournamentName: string | null;
+  round: string;
+  date: string; // ISO timestamp
+  venue: string | null;
+  status: "played" | "upcoming";
+  isHome: boolean;
+  opponentClubId: string;
+  opponentName: string | null;
+  opponentLogoUrl: string | null;
+  clubScore: number | null;
+  opponentScore: number | null;
+}
+
+export interface ClubMatchListing {
+  clubId: string;
+  season: string | null;
+  matches: ClubMatch[];
+}
+
 export interface ShortlistItem {
   playerId: string;
   name: string | null;

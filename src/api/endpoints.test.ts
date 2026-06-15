@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -229,4 +229,22 @@ test("getMyGameweeks calls the authed my-gameweeks endpoint", async () => {
   const spy = spyAuthedGet();
   await getMyGameweeks();
   expect(spy).toHaveBeenCalledWith("/api/users/me/gameweeks");
+});
+
+test("getClubMatches hits the club matches path without status", async () => {
+  const spy = spyGet();
+  await getClubMatches("c1");
+  expect(spy).toHaveBeenCalledWith("/api/clubs/c1/matches");
+});
+
+test("getClubMatches appends the status query when given", async () => {
+  const spy = spyGet();
+  await getClubMatches("c1", "played");
+  expect(spy).toHaveBeenCalledWith("/api/clubs/c1/matches?status=played");
+});
+
+test("getClubMatches encodes the club id", async () => {
+  const spy = spyGet();
+  await getClubMatches("a/b", "upcoming");
+  expect(spy).toHaveBeenCalledWith("/api/clubs/a%2Fb/matches?status=upcoming");
 });

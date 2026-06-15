@@ -75,6 +75,14 @@ export function useClubRoster(id: string) {
   });
 }
 
+export function useClubMatches(id: string, status: "played" | "upcoming") {
+  return useQuery({
+    queryKey: ["club-matches", id, status],
+    queryFn: () => api.getClubMatches(id, status),
+    enabled: id.length > 0,
+  });
+}
+
 export function useSeasons() {
   return useQuery({
     queryKey: ["seasons"],
