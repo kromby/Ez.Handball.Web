@@ -74,6 +74,13 @@
     "price": "Price",
     "retired": "Retired"
   },
+  "club": {
+    "notFound": "Club not found",
+    "roster": "Roster",
+    "emptyRoster": "No players on the current roster.",
+    "colPosition": "Position",
+    "colAge": "Age"
+  },
   "shortlist": {
     "title": "Your shortlist",
     "notFound": "Shortlist not found",
