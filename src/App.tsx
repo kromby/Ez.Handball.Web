@@ -18,6 +18,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import GameweeksPage from "./pages/GameweeksPage";
+import ClubPage from "./pages/ClubPage";
 
 export default function App() {
   useLanguageSync();
@@ -29,6 +30,7 @@ export default function App() {
           <Route path="/" element={<HomeOrLegacyRedirect />} />
           <Route path="/players" element={<PlayerHubPage />} />
           <Route path="/players/:playerId" element={<PlayerPage />} />
+          <Route path="/clubs/:id" element={<ClubPage />} />
           <Route path="/matches/:matchId" element={<MatchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
