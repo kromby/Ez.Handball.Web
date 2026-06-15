@@ -38,6 +38,8 @@ test("renders club name and roster rows in server order with player links", asyn
   setup();
 
   expect(await screen.findByRole("heading", { name: "Valur" })).toBeInTheDocument();
+  // Decorative logo (alt="") is excluded from the a11y tree, so assert via the DOM.
+  expect(document.querySelector("img.club-logo")).toHaveAttribute("src", "https://example.test/valur.png");
 
   const rows = await screen.findAllByRole("row");
   const first = within(rows[1]);
@@ -86,8 +88,8 @@ test("renders no logo and no subtitle when logo, venue, and founded year are all
   setup();
 
   await screen.findByRole("heading", { name: "Valur" });
-  // No logo image when logoUrl is null.
-  expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  // No logo image when logoUrl is null (assert via DOM — the img is decorative).
+  expect(document.querySelector("img.club-logo")).toBeNull();
   // No subtitle is rendered when venue and foundedYear are both null.
   expect(screen.queryByText(/·/)).not.toBeInTheDocument();
 });
