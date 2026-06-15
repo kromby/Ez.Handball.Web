@@ -198,6 +198,28 @@ export interface Club {
   logoUrl: string | null;
 }
 
+export interface ClubDetail {
+  clubId: string;
+  name: string;
+  logoUrl: string | null;
+  venue: string | null;
+  foundedYear: number | null;
+}
+
+export interface ClubRosterPlayer {
+  playerId: string;
+  name: string;
+  jerseyNumber: string | null;
+  position: string;
+  age: number | null;
+}
+
+export interface ClubRoster {
+  clubId: string;
+  season: string | null;
+  players: ClubRosterPlayer[];
+}
+
 export interface ShortlistItem {
   playerId: string;
   name: string | null;

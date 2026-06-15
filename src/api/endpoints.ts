@@ -1,6 +1,8 @@
 import { apiGet, authedGet, authedSend } from "./client";
 import type {
   Club,
+  ClubDetail,
+  ClubRoster,
   CurrentGameweek,
   Gameweek,
   Gender,
@@ -74,6 +76,14 @@ export function getMatch(id: string): Promise<MatchDetail> {
 
 export function getClubs(): Promise<Club[]> {
   return apiGet<Club[]>("/api/clubs");
+}
+
+export function getClub(id: string): Promise<ClubDetail> {
+  return apiGet<ClubDetail>(`/api/clubs/${encodeURIComponent(id)}`);
+}
+
+export function getClubRoster(id: string): Promise<ClubRoster> {
+  return apiGet<ClubRoster>(`/api/clubs/${encodeURIComponent(id)}/roster`);
 }
 
 export function getShortlist(): Promise<ShortlistResponse> {

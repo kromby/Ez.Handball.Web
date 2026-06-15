@@ -59,6 +59,22 @@ export function useClubs() {
   });
 }
 
+export function useClub(id: string) {
+  return useQuery({
+    queryKey: ["club", id],
+    queryFn: () => api.getClub(id),
+    enabled: id.length > 0,
+  });
+}
+
+export function useClubRoster(id: string) {
+  return useQuery({
+    queryKey: ["club-roster", id],
+    queryFn: () => api.getClubRoster(id),
+    enabled: id.length > 0,
+  });
+}
+
 export function useSeasons() {
   return useQuery({
     queryKey: ["seasons"],
