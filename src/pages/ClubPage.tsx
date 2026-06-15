@@ -42,15 +42,15 @@ export default function ClubPage() {
   if (club.isPending) return <Loading />;
   if (club.isError) return <ErrorView error={club.error} notFoundLabel={t("club.notFound")} />;
 
-  const c = club.data;
-  const headerBits = [c.venue, c.foundedYear != null ? String(c.foundedYear) : null].filter(Boolean);
+  const detail = club.data;
+  const headerBits = [detail.venue, detail.foundedYear != null ? String(detail.foundedYear) : null].filter(Boolean);
 
   return (
     <section className="stack">
       <div className="page-head">
         <div className="title-row">
-          {c.logoUrl && <img className="club-logo" src={c.logoUrl} alt="" />}
-          <h1 className="title">{c.name}</h1>
+          {detail.logoUrl && <img className="club-logo" src={detail.logoUrl} alt="" />}
+          <h1 className="title">{detail.name}</h1>
         </div>
         {headerBits.length > 0 && <p className="subtitle">{headerBits.join(" · ")}</p>}
       </div>
