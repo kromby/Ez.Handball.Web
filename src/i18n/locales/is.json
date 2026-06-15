@@ -74,6 +74,13 @@
     "price": "Verð",
     "retired": "Hætt(ur)"
   },
+  "club": {
+    "notFound": "Félag fannst ekki",
+    "roster": "Leikmannahópur",
+    "emptyRoster": "Engir leikmenn í núverandi hópi.",
+    "colPosition": "Staða",
+    "colAge": "Aldur"
+  },
   "shortlist": {
     "title": "Æfingahópurinn þinn",
     "notFound": "Æfingahópur fannst ekki",
