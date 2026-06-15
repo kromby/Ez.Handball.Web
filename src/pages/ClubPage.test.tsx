@@ -75,7 +75,7 @@ test("renders a not-found state when the club is unknown (404)", async () => {
   expect(await screen.findByText("Club not found")).toBeInTheDocument();
 });
 
-test("does not render venue or founded year while they are null", async () => {
+test("renders no logo and no subtitle when logo, venue, and founded year are all null", async () => {
   vi.spyOn(api, "getClub").mockResolvedValue({
     clubId: "c1", name: "Valur", logoUrl: null, venue: null, foundedYear: null,
   });
@@ -86,5 +86,8 @@ test("does not render venue or founded year while they are null", async () => {
   setup();
 
   await screen.findByRole("heading", { name: "Valur" });
+  // No logo image when logoUrl is null.
   expect(screen.queryByRole("img")).not.toBeInTheDocument();
+  // No subtitle is rendered when venue and foundedYear are both null.
+  expect(screen.queryByText(/·/)).not.toBeInTheDocument();
 });
