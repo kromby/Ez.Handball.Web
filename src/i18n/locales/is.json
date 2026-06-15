@@ -79,7 +79,16 @@
     "roster": "Leikmannahópur",
     "emptyRoster": "Engir leikmenn í núverandi hópi.",
     "colPosition": "Staða",
-    "colAge": "Aldur"
+    "colAge": "Aldur",
+    "upcoming": "Framundan",
+    "results": "Úrslit",
+    "emptyUpcoming": "Engir leikir framundan.",
+    "emptyResults": "Engin úrslit enn.",
+    "matchesError": "Tókst ekki að sækja leiki.",
+    "home": "H",
+    "away": "Ú",
+    "roundLabel": "Umferð {{round}}",
+    "unknownOpponent": "Óþekkt"
   },
   "shortlist": {
     "title": "Æfingahópurinn þinn",
