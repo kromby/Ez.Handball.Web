@@ -6,14 +6,18 @@ import { formatMatchDate, matchOutcome } from "./clubMatch";
 
 export function ClubMatchRow({ match }: { match: ClubMatch }) {
   const { t } = useTranslation();
-  const played =
-    match.status === "played" && match.clubScore != null && match.opponentScore != null;
-  const outcome = played ? matchOutcome(match.clubScore!, match.opponentScore!) : null;
+  // A non-null `scores` means the match is played with a real result; it doubles as
+  // the played/upcoming switch and narrows the score types without non-null assertions.
+  const scores =
+    match.status === "played" && match.clubScore != null && match.opponentScore != null
+      ? { club: match.clubScore, opponent: match.opponentScore }
+      : null;
+  const outcome = scores ? matchOutcome(scores.club, scores.opponent) : null;
 
   const meta = [
     match.tournamentName,
     t("club.roundLabel", { round: match.round }),
-    played ? formatMatchDate(match.date) : null,
+    scores ? formatMatchDate(match.date) : null,
   ]
     .filter(Boolean)
     .join(" · ");
@@ -30,9 +34,9 @@ export function ClubMatchRow({ match }: { match: ClubMatch }) {
           {match.opponentName ?? t("club.unknownOpponent")}
         </Link>
         <span className="club-match-ha">{match.isHome ? t("club.home") : t("club.away")}</span>
-        {played ? (
+        {scores ? (
           <span className={`club-match-score club-match-score--${outcome}`}>
-            {`${match.clubScore}–${match.opponentScore}`}
+            {`${scores.club}–${scores.opponent}`}
           </span>
         ) : (
           <span className="club-match-time">{formatKickoff(match.date)}</span>

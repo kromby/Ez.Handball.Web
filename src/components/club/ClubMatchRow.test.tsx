@@ -56,7 +56,7 @@ test("draw is accented as draw", () => {
 
 test("upcoming row hides the score and shows a kickoff time instead", () => {
   renderRow(base({ status: "upcoming", clubScore: null, opponentScore: null }));
-  expect(screen.queryByText(/–/)).not.toBeInTheDocument();
+  expect(screen.queryByText(/–/u)).not.toBeInTheDocument();
   expect(document.querySelector(".club-match-time")).not.toBeNull();
 });
 
