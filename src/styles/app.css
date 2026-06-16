@@ -1546,3 +1546,37 @@ button {
 }
 .gwsc-badge--cap { color: #b8860b; border-color: #b8860b; background: #fff7e0; }
 .gwsc-badge--sub { color: #2e7d32; border-color: #2e7d32; background: #e9f6ea; }
+
+/* ---------- Club page: fixtures & results rows ---------- */
+.club-match {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.club-match:last-child { border-bottom: none; }
+.club-match-main { display: flex; align-items: center; gap: 8px; }
+.club-match-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: contain; }
+.club-match-logo--blank { background: #e3d7b8; border: 1px solid var(--line-2); }
+.club-match-opp { font-weight: 600; color: var(--ink); text-decoration: none; }
+.club-match-opp:hover { text-decoration: underline; }
+.club-match-ha {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: var(--ink-3);
+  border: 1px solid var(--line-2);
+  border-radius: 6px;
+  padding: 1px 5px;
+}
+.club-match-score {
+  margin-left: auto;
+  font-family: "Spectral", Georgia, serif;
+  font-weight: 800;
+}
+.club-match-score--win { color: var(--good); }
+.club-match-score--loss { color: var(--bad); }
+.club-match-score--draw { color: var(--ink-2); }
+.club-match-time { margin-left: auto; color: var(--ink-3); font-size: 13px; }
+.club-match-meta { font-size: 12px; color: var(--ink-2); }

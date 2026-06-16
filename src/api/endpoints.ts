@@ -2,6 +2,7 @@ import { apiGet, authedGet, authedSend } from "./client";
 import type {
   Club,
   ClubDetail,
+  ClubMatchListing,
   ClubRoster,
   CurrentGameweek,
   Gameweek,
@@ -84,6 +85,11 @@ export function getClub(id: string): Promise<ClubDetail> {
 
 export function getClubRoster(id: string): Promise<ClubRoster> {
   return apiGet<ClubRoster>(`/api/clubs/${encodeURIComponent(id)}/roster`);
+}
+
+export function getClubMatches(id: string, status?: "played" | "upcoming"): Promise<ClubMatchListing> {
+  const qs = status ? `?status=${status}` : "";
+  return apiGet<ClubMatchListing>(`/api/clubs/${encodeURIComponent(id)}/matches${qs}`);
 }
 
 export function getShortlist(): Promise<ShortlistResponse> {

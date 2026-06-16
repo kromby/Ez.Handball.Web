@@ -79,7 +79,16 @@
     "roster": "Roster",
     "emptyRoster": "No players on the current roster.",
     "colPosition": "Position",
-    "colAge": "Age"
+    "colAge": "Age",
+    "upcoming": "Upcoming",
+    "results": "Results",
+    "emptyUpcoming": "No upcoming matches.",
+    "emptyResults": "No results yet.",
+    "matchesError": "Couldn't load matches.",
+    "home": "H",
+    "away": "A",
+    "roundLabel": "Round {{round}}",
+    "unknownOpponent": "TBD"
   },
   "shortlist": {
     "title": "Your shortlist",

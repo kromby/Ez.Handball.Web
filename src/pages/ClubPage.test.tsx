@@ -93,3 +93,80 @@ test("renders no logo and no subtitle when logo, venue, and founded year are all
   // No subtitle is rendered when venue and foundedYear are both null.
   expect(screen.queryByText(/·/)).not.toBeInTheDocument();
 });
+
+function mockClubAndRoster() {
+  vi.spyOn(api, "getClub").mockResolvedValue({
+    clubId: "c1", name: "Valur", logoUrl: null, venue: null, foundedYear: null,
+  });
+  vi.spyOn(api, "getClubRoster").mockResolvedValue({
+    clubId: "c1", season: "2025-2026", players: [],
+  });
+}
+
+const upcomingMatch = {
+  matchId: "m-up", tournamentId: "8444", tournamentName: "Olís deild karla", round: "13",
+  date: "2026-03-21T17:00:00Z", venue: "Höllin", status: "upcoming" as const, isHome: true,
+  opponentClubId: "c2", opponentName: "Haukar", opponentLogoUrl: null,
+  clubScore: null, opponentScore: null,
+};
+const playedMatch = {
+  matchId: "m-pl", tournamentId: "8444", tournamentName: "Olís deild karla", round: "12",
+  date: "2026-03-14T17:00:00Z", venue: "Höllin", status: "played" as const, isHome: false,
+  opponentClubId: "c3", opponentName: "KA", opponentLogoUrl: null,
+  clubScore: 30, opponentScore: 26,
+};
+
+test("renders Upcoming above Results above Roster", async () => {
+  mockClubAndRoster();
+  vi.spyOn(api, "getClubMatches").mockImplementation((_, status) =>
+    Promise.resolve({
+      clubId: "c1", season: "2025-2026",
+      matches: status === "upcoming" ? [upcomingMatch] : [playedMatch],
+    }),
+  );
+
+  setup();
+
+  const headings = await screen.findAllByRole("heading", { level: 2 });
+  const titles = headings.map((h) => h.textContent);
+  expect(titles).toEqual(["Upcoming", "Results", "Roster"]);
+});
+
+test("shows the played match score and links the opponent", async () => {
+  mockClubAndRoster();
+  vi.spyOn(api, "getClubMatches").mockImplementation((_, status) =>
+    Promise.resolve({
+      clubId: "c1", season: "2025-2026",
+      matches: status === "played" ? [playedMatch] : [],
+    }),
+  );
+
+  setup();
+
+  expect(await screen.findByText("30–26")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "KA" })).toHaveAttribute("href", "/clubs/c3");
+});
+
+test("shows per-section empty states independently", async () => {
+  mockClubAndRoster();
+  vi.spyOn(api, "getClubMatches").mockImplementation((_, status) =>
+    Promise.resolve({
+      clubId: "c1", season: "2025-2026",
+      matches: status === "upcoming" ? [upcomingMatch] : [],
+    }),
+  );
+
+  setup();
+
+  expect(await screen.findByRole("link", { name: "Haukar" })).toBeInTheDocument();
+  expect(screen.getByText("No results yet.")).toBeInTheDocument();
+});
+
+test("shows an error state for a failed matches section", async () => {
+  mockClubAndRoster();
+  vi.spyOn(api, "getClubMatches").mockRejectedValue(new ApiError(500, "boom", "server error"));
+
+  setup();
+
+  expect(await screen.findAllByText("Something went wrong. Please try again.")).not.toHaveLength(0);
+});

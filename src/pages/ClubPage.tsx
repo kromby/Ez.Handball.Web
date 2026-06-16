@@ -1,9 +1,37 @@
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import type { ClubRosterPlayer } from "../api/types";
+import { ClubMatchRow } from "../components/club/ClubMatchRow";
 import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
-import { useClub, useClubRoster } from "../query/hooks";
+import { useClub, useClubMatches, useClubRoster } from "../query/hooks";
+
+type ClubMatchesQuery = ReturnType<typeof useClubMatches>;
+
+function MatchSection({
+  title,
+  emptyLabel,
+  query,
+}: {
+  title: string;
+  emptyLabel: string;
+  query: ClubMatchesQuery;
+}) {
+  const { t } = useTranslation();
+  return (
+    <Panel>
+      <h2 className="section-title">{title}</h2>
+      {query.isPending && <Loading />}
+      {query.isError && <ErrorView error={query.error} notFoundLabel={t("club.matchesError")} />}
+      {query.data &&
+        (query.data.matches.length === 0 ? (
+          <p className="status">{emptyLabel}</p>
+        ) : (
+          query.data.matches.map((m) => <ClubMatchRow key={m.matchId} match={m} />)
+        ))}
+    </Panel>
+  );
+}
 
 function RosterTable({ players }: { players: ClubRosterPlayer[] }) {
   const { t } = useTranslation();
@@ -38,6 +66,8 @@ export default function ClubPage() {
   const { id = "" } = useParams();
   const club = useClub(id);
   const roster = useClubRoster(id);
+  const upcoming = useClubMatches(id, "upcoming");
+  const played = useClubMatches(id, "played");
 
   if (club.isPending) return <Loading />;
   if (club.isError) return <ErrorView error={club.error} notFoundLabel={t("club.notFound")} />;
@@ -54,6 +84,9 @@ export default function ClubPage() {
         </div>
         {headerBits.length > 0 && <p className="subtitle">{headerBits.join(" · ")}</p>}
       </div>
+
+      <MatchSection title={t("club.upcoming")} emptyLabel={t("club.emptyUpcoming")} query={upcoming} />
+      <MatchSection title={t("club.results")} emptyLabel={t("club.emptyResults")} query={played} />
 
       <Panel>
         <h2 className="section-title">{t("club.roster")}</h2>
