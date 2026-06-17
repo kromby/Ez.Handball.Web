@@ -11,6 +11,7 @@ export interface AuthContextValue {
   logout: (everywhere?: boolean) => Promise<void>;
   updateProfile: (input: UpdateProfileRequest) => Promise<void>;
   resendVerification: () => Promise<void>;
+  setTeamName: (name: string) => void;
 }
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
