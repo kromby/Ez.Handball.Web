@@ -4,6 +4,7 @@ import { Panel } from "../components/Panel";
 import { Loading } from "../components/StateViews";
 import { useAuth } from "../auth/useAuth";
 import { ProfileForm } from "../auth/ProfileForm";
+import { ManagerPanel } from "../auth/ManagerPanel";
 
 export default function AccountPage() {
   const { t } = useTranslation();
@@ -44,6 +45,10 @@ export default function AccountPage() {
 
       <Panel>
         <ProfileForm />
+      </Panel>
+
+      <Panel>
+        <ManagerPanel />
       </Panel>
 
       <Panel>
