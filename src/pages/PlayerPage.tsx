@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import type { PlayerStat } from "../api/types";
 import { formatMoney } from "../api/money";
 import { BuyButton } from "../components/BuyButton";
+import { ClubLink } from "../components/ClubLink";
 import { MatchList, type MatchSummary } from "../components/MatchList";
 import { Panel } from "../components/Panel";
 import { SellButton } from "../components/SellButton";
@@ -41,9 +42,10 @@ export default function PlayerPage() {
 
   const p = profile.data;
   const owned = squad.data?.players.some((sp) => sp.playerId === p.playerId) ?? false;
-  const headerBits = [p.clubName, p.age != null ? t("player.age", { age: p.age }) : null, formatBirthday(p.dateOfBirth)].filter(
+  const metaBits = [p.age != null ? t("player.age", { age: p.age }) : null, formatBirthday(p.dateOfBirth)].filter(
     Boolean,
   );
+  const metaText = metaBits.join(" · ");
 
   return (
     <section className="stack">
@@ -61,7 +63,11 @@ export default function PlayerPage() {
             <BuyButton player={{ playerId: p.playerId, name: p.name, position: p.position ?? null, price: p.price ?? null }} />
           )}
         </div>
-        <p className="subtitle">{headerBits.join(" · ")}</p>
+        <p className="subtitle">
+          {p.clubName ? <ClubLink clubId={p.clubId} name={p.clubName} /> : null}
+          {p.clubName && metaText ? " · " : null}
+          {metaText}
+        </p>
         {(p.rating != null || p.price != null) && (
           <div className="fantasy-strip">
             <span className="label">{t("player.fantasyHeading")}</span>

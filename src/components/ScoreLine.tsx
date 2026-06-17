@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { MatchTeam } from "../api/types";
+import { ClubLink } from "./ClubLink";
 
 /** The match result as a bold scoreboard: big amber final scores, with the
     half-time line shown small underneath only when it wasn't 0–0. */
@@ -9,8 +10,8 @@ export function ScoreLine({ home, away }: { home: MatchTeam; away: MatchTeam }) 
   return (
     <div className="scoreline">
       <div className="scoreline-clubs">
-        <span className="scoreline-club">{home.clubName ?? "—"}</span>
-        <span className="scoreline-club">{away.clubName ?? "—"}</span>
+        <span className="scoreline-club"><ClubLink clubId={home.clubId} name={home.clubName} /></span>
+        <span className="scoreline-club"><ClubLink clubId={away.clubId} name={away.clubName} /></span>
       </div>
       <div className="scoreline-scores">
         <span className="scoreline-score">{home.score.final}</span>
