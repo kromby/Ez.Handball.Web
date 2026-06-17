@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { ClubLink } from "../ClubLink";
 import type { ClubMatch } from "../../api/types";
 import { formatKickoff } from "../gameweek/datetime";
 import { formatMatchDate, matchOutcome } from "./clubMatch";
@@ -25,14 +25,14 @@ export function ClubMatchRow({ match }: { match: ClubMatch }) {
   return (
     <div className="club-match">
       <div className="club-match-main">
-        {match.opponentLogoUrl ? (
-          <img className="club-match-logo" src={match.opponentLogoUrl} alt="" />
-        ) : (
-          <span className="club-match-logo club-match-logo--blank" aria-hidden="true" />
-        )}
-        <Link className="club-match-opp" to={`/clubs/${encodeURIComponent(match.opponentClubId)}`}>
-          {match.opponentName ?? t("club.unknownOpponent")}
-        </Link>
+        <ClubLink clubId={match.opponentClubId} className="club-match-opp">
+          {match.opponentLogoUrl ? (
+            <img className="club-match-logo" src={match.opponentLogoUrl} alt="" />
+          ) : (
+            <span className="club-match-logo club-match-logo--blank" aria-hidden="true" />
+          )}
+          <span>{match.opponentName ?? t("club.unknownOpponent")}</span>
+        </ClubLink>
         <span className="club-match-ha">{match.isHome ? t("club.home") : t("club.away")}</span>
         {scores ? (
           <span className={`club-match-score club-match-score--${outcome}`}>
