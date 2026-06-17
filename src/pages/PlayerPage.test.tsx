@@ -71,7 +71,8 @@ test("renders profile, history, and the player's match list", async () => {
 
   setup();
   await waitFor(() => expect(screen.getByText("Ólafur Stefánsson")).toBeInTheDocument());
-  expect(screen.getAllByRole("link", { name: "Valur" })[0]).toHaveAttribute("href", "/clubs/c1");
+  const subtitle = document.querySelector(".subtitle") as HTMLElement;
+  expect(within(subtitle).getByRole("link", { name: "Valur" })).toHaveAttribute("href", "/clubs/c1");
   expect(screen.getAllByText("Olís deild karla").length).toBeGreaterThan(0);
   expect(screen.getByRole("link", { name: "View" })).toHaveAttribute("href", "/matches/m1");
 });
