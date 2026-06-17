@@ -3,20 +3,20 @@ import { expect, test } from "vitest";
 import { PlayerTable, type PlayerColumn } from "./PlayerTable";
 import { renderWithProviders } from "../test/renderWithQuery";
 
-interface Row { playerId: string; name: string | null; clubName: string | null; position: string | null; }
+interface Row { playerId: string; name: string | null; clubId: string | null; clubName: string | null; position: string | null; }
 
 const rows: Row[] = [
-  { playerId: "p1", name: "Aron", clubName: "Stjarnan", position: "VS" },
-  { playerId: "p2", name: null, clubName: null, position: null },
+  { playerId: "p1", name: "Aron", clubId: "c1", clubName: "Stjarnan", position: "VS" },
+  { playerId: "p2", name: null, clubId: null, clubName: null, position: null },
 ];
 const after: PlayerColumn<Row>[] = [
   { key: "pos", header: "Pos", render: (r) => r.position ?? "—" },
 ];
 
-test("renders a row per entry with player link, club, and after-columns", () => {
+test("renders a row per entry with player link, club link, and after-columns", () => {
   renderWithProviders(<PlayerTable<Row> rows={rows} after={after} />);
   expect(screen.getByRole("link", { name: "Aron" })).toHaveAttribute("href", "/players/p1");
-  expect(screen.getByText("Stjarnan")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Stjarnan" })).toHaveAttribute("href", "/clubs/c1");
   expect(screen.getByText("VS")).toBeInTheDocument();
 });
 

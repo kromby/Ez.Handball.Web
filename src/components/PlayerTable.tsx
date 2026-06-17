@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { StarToggle } from "./StarToggle";
+import { ClubLink } from "./ClubLink";
 
 export interface PlayerColumn<T> {
   key: string;
@@ -13,6 +14,7 @@ export interface PlayerColumn<T> {
 interface PlayerRow {
   playerId: string;
   name: string | null;
+  clubId?: string | null;
   clubName: string | null;
 }
 
@@ -56,7 +58,7 @@ export function PlayerTable<T extends PlayerRow>({
             <td>
               <Link to={`/players/${encodeURIComponent(row.playerId)}`}>{row.name ?? t("match.unknownPlayer")}</Link>
             </td>
-            <td>{row.clubName ?? "—"}</td>
+            <td><ClubLink clubId={row.clubId} name={row.clubName} /></td>
             {after.map((c) => (
               <td key={c.key} className={numClass(c.align)}>{c.render(row)}</td>
             ))}
