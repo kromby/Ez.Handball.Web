@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { PlayerHistoryEntry, PlayerHistoryTotals } from "../api/types";
+import { ClubLink } from "./ClubLink";
 
 export function StatTable({
   entries,
@@ -27,7 +28,7 @@ export function StatTable({
       <tbody>
         {entries.map((e) => (
           <tr key={`${e.season}-${e.tournamentId}-${e.clubId}`}>
-            <td>{e.clubName ?? "—"}</td>
+            <td><ClubLink clubId={e.clubId} name={e.clubName} /></td>
             <td>{e.tournamentName ?? "—"}</td>
             <td className="num">{e.season}</td>
             <td className="num">{e.games}</td>

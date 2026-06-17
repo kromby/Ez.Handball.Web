@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import { expect, test } from "vitest";
 import type { PlayerHistoryEntry, PlayerHistoryTotals } from "../api/types";
 import { StatTable } from "./StatTable";
@@ -33,8 +34,13 @@ const totals: PlayerHistoryTotals = {
 };
 
 test("renders one row per history entry plus a totals row", () => {
-  render(<StatTable entries={[entry]} totals={totals} />);
+  render(
+    <MemoryRouter>
+      <StatTable entries={[entry]} totals={totals} />
+    </MemoryRouter>,
+  );
   expect(screen.getByText("Olís deild karla")).toBeInTheDocument();
   expect(screen.getByText("Total")).toBeInTheDocument();
   expect(screen.getAllByText("6.17")[0]).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Valur" })).toHaveAttribute("href", "/clubs/c1");
 });
