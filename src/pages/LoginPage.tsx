@@ -4,6 +4,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { AuthCard } from "../auth/AuthCard";
 import { useAuth } from "../auth/useAuth";
+import { resolveLanding } from "../auth/resolveLanding";
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -22,7 +23,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       const from = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
-      navigate(from ?? "/");
+      navigate(await resolveLanding(from));
     } catch (err) {
       setError(
         err instanceof ApiError && err.status === 429

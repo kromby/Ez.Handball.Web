@@ -107,6 +107,19 @@
     "logOut": "Log out",
     "logOutEverywhere": "Log out everywhere"
   },
+  "manager": {
+    "panelTitle": "Your team",
+    "renameLabel": "Team name",
+    "renamePlaceholder": "e.g. Pivot Club",
+    "renameHelp": "1–60 characters.",
+    "save": "Save",
+    "saving": "Saving…",
+    "saved": "Team name updated.",
+    "progress": "{{owned}} / {{size}} players",
+    "errorTaken": "That team name is taken.",
+    "errorInvalid": "That name isn't allowed, or is too long.",
+    "errorGeneric": "Something went wrong. Please try again."
+  },
   "auth": {
     "loginTitle": "Welcome back",
     "email": "Email",

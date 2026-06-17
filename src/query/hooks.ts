@@ -202,6 +202,15 @@ export function useSquad(flavor = "fantasy") {
   });
 }
 
+export function useManager() {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["manager"],
+    queryFn: () => api.getManager(),
+    enabled: status === "authenticated",
+  });
+}
+
 export function useMyGameweeks() {
   const { status } = useAuth();
   return useQuery({

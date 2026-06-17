@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -247,4 +247,16 @@ test("getClubMatches encodes the club id", async () => {
   const spy = spyGet();
   await getClubMatches("a/b", "upcoming");
   expect(spy).toHaveBeenCalledWith("/api/clubs/a%2Fb/matches?status=upcoming");
+});
+
+test("getManager calls the authed manager endpoint", async () => {
+  const spy = spyAuthedGet();
+  await getManager();
+  expect(spy).toHaveBeenCalledWith("/api/users/me/manager");
+});
+
+test("renameTeam PATCHes the manager endpoint with the team name", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await renameTeam("FC Awesome");
+  expect(spy).toHaveBeenCalledWith("/api/users/me/manager", "PATCH", { teamName: "FC Awesome" });
 });

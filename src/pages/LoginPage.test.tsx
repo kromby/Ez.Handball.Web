@@ -5,6 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import LoginPage from "./LoginPage";
 import { renderWithProviders } from "../test/renderWithQuery";
 import { ApiError } from "../api/client";
+import * as api from "../api/endpoints";
+import type { Manager } from "../api/types";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -45,4 +47,26 @@ describe("LoginPage", () => {
     await userEvent.click(screen.getByRole("button", { name: "Log in" }));
     expect(await screen.findByText("account page")).toBeInTheDocument();
   });
+});
+
+const incomplete: Manager = {
+  flavor: "fantasy", teamName: "FC", favoriteClubId: "385", color: "#1E88E5",
+  onboarding: { squadComplete: false, playersOwned: 0, squadSize: 15 },
+};
+
+test("after login with an incomplete squad, lands on /players", async () => {
+  vi.spyOn(api, "getManager").mockResolvedValue(incomplete);
+  const login = vi.fn(() => Promise.resolve());
+  renderWithProviders(
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/players" element={<p>market page</p>} />
+    </Routes>,
+    { initialEntries: ["/login"], auth: { login } },
+  );
+  await userEvent.type(screen.getByLabelText(/email/i), "a@b.is");
+  await userEvent.type(screen.getByLabelText(/password/i), "pw");
+  await userEvent.click(screen.getByRole("button", { name: /log ?in/i }));
+  expect(await screen.findByText("market page")).toBeInTheDocument();
+  expect(api.getManager).toHaveBeenCalled();
 });

@@ -77,13 +77,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(await auth.patchMe(input));
   }
 
+  function setTeamName(name: string) {
+    setUser((u) => (u ? { ...u, teamName: name } : u));
+  }
+
   async function resendVerification() {
     await auth.resendVerification();
   }
 
   return (
     <AuthContext.Provider
-      value={{ status, user, login, register, logout, updateProfile, resendVerification }}
+      value={{ status, user, login, register, logout, updateProfile, resendVerification, setTeamName }}
     >
       {children}
     </AuthContext.Provider>

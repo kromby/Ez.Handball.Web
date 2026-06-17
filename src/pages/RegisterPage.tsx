@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import type { Language } from "../api/types";
+import { resolveLanding } from "../auth/resolveLanding";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useAuth } from "../auth/useAuth";
 import { useClubs } from "../query/hooks";
@@ -136,7 +137,7 @@ export default function RegisterPage() {
         <div className="reg-form">
           <div className="reg-form-inner">
             {done ? (
-              <Celebration displayName={displayName} club={selectedClub} onEnter={() => navigate(from ?? "/")} />
+              <Celebration displayName={displayName} club={selectedClub} onEnter={() => resolveLanding(from).then(navigate)} />
             ) : step === 0 ? (
               <div className="reg-page">
                 <h2>{t("auth.detailsTitle")}</h2>

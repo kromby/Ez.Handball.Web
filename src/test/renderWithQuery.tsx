@@ -18,6 +18,7 @@ export function buildAuth(overrides: Partial<AuthContextValue> = {}): AuthContex
     logout: async () => undefined,
     updateProfile: async () => undefined,
     resendVerification: async () => undefined,
+    setTeamName: () => undefined,
     ...overrides,
   };
 }

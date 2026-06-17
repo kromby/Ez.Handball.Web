@@ -7,7 +7,8 @@ import { ApiError } from "../api/client";
 import { AuthContext } from "../auth/useAuth";
 import { buildAuth, queryWrapper } from "../test/renderWithQuery";
 import { createQueryClient } from "./queryClient";
-import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useCreateMiniLeague, useInvite, useJoinMiniLeague } from "./hooks";
+import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useCreateMiniLeague, useInvite, useJoinMiniLeague, useManager } from "./hooks";
+import type { Manager } from "../api/types";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -120,4 +121,35 @@ test("useJoinMiniLeague returns the league", async () => {
   let joined: unknown;
   await act(async () => { joined = await result.current.mutateAsync("tok1"); });
   expect(joined).toMatchObject({ id: "L1" });
+});
+
+function authenticatedWrapper() {
+  const client = createQueryClient();
+  return ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>
+      <AuthContext.Provider value={buildAuth({ status: "authenticated" })}>
+        {children}
+      </AuthContext.Provider>
+    </QueryClientProvider>
+  );
+}
+
+test("useManager fetches the manager when authenticated", async () => {
+  const manager: Manager = {
+    flavor: "fantasy", teamName: "FC Awesome", favoriteClubId: "385", color: "#1E88E5",
+    onboarding: { squadComplete: false, playersOwned: 9, squadSize: 15 },
+  };
+  vi.spyOn(api, "getManager").mockResolvedValue(manager);
+  const { result } = renderHook(() => useManager(), { wrapper: authenticatedWrapper() });
+  await waitFor(() => expect(result.current.data).toEqual(manager));
+});
+
+test("useManager is disabled when anonymous", () => {
+  const manager: Manager = {
+    flavor: "fantasy", teamName: "FC Awesome", favoriteClubId: "385", color: "#1E88E5",
+    onboarding: { squadComplete: false, playersOwned: 9, squadSize: 15 },
+  };
+  const spy = vi.spyOn(api, "getManager").mockResolvedValue(manager);
+  renderHook(() => useManager(), { wrapper: anonymousWrapper() });
+  expect(spy).not.toHaveBeenCalled();
 });

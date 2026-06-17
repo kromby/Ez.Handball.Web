@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ const user: AuthUser = {
   id: "u1",
   email: "a@b.is",
   displayName: "Jon",
+  teamName: "Old FC",
   language: "is",
   favoriteClubId: "385",
   emailVerified: false,
@@ -99,5 +100,26 @@ describe("AuthProvider", () => {
     await userEvent.click(screen.getByRole("button", { name: "logout" }));
     await waitFor(() => expect(screen.getByText("status: anonymous")).toBeInTheDocument());
     expect(queryClient.getQueryData(["shortlist"])).toBeUndefined();
+  });
+
+  test("setTeamName updates the current user's team name", async () => {
+    localStorage.setItem("ezhb.refreshToken", "r0");
+    vi.spyOn(store, "refresh").mockResolvedValue(true);
+    vi.spyOn(auth, "getMe").mockResolvedValue(user);
+
+    function TeamProbe() {
+      const { user: u, setTeamName } = useAuth();
+      return (
+        <>
+          <span data-testid="tn">{u?.teamName ?? "-"}</span>
+          <button onClick={() => setTeamName("New FC")}>rename</button>
+        </>
+      );
+    }
+
+    render(<TeamProbe />, { wrapper });
+    expect(await screen.findByTestId("tn")).toHaveTextContent("Old FC");
+    fireEvent.click(screen.getByText("rename"));
+    expect(screen.getByTestId("tn")).toHaveTextContent("New FC");
   });
 });
