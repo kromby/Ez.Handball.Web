@@ -107,6 +107,19 @@
     "logOut": "Skrá út",
     "logOutEverywhere": "Skrá út alls staðar"
   },
+  "manager": {
+    "panelTitle": "Liðið þitt",
+    "renameLabel": "Nafn liðs",
+    "renamePlaceholder": "t.d. Pivot Club",
+    "renameHelp": "1–60 stafir.",
+    "save": "Vista",
+    "saving": "Vista…",
+    "saved": "Nafni liðs breytt.",
+    "progress": "{{owned}} / {{size}} leikmenn",
+    "errorTaken": "Þetta liðsnafn er frátekið.",
+    "errorInvalid": "Þetta nafn er ekki leyfilegt eða of langt.",
+    "errorGeneric": "Eitthvað fór úrskeiðis. Reyndu aftur."
+  },
   "auth": {
     "loginTitle": "Velkomin/n aftur",
     "email": "Netfang",
