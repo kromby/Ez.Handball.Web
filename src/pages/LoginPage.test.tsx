@@ -56,7 +56,7 @@ const incomplete: Manager = {
 
 test("after login with an incomplete squad, lands on /players", async () => {
   vi.spyOn(api, "getManager").mockResolvedValue(incomplete);
-  const login = vi.fn().mockResolvedValue(undefined);
+  const login = vi.fn(async () => {});
   renderWithProviders(
     <Routes>
       <Route path="/login" element={<LoginPage />} />
