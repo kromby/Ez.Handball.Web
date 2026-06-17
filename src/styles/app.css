@@ -1559,6 +1559,8 @@ button {
 .club-match-main { display: flex; align-items: center; gap: 8px; }
 .club-match-logo { width: 24px; height: 24px; border-radius: 50%; object-fit: contain; }
 .club-match-logo--blank { background: #e3d7b8; border: 1px solid var(--line-2); }
+.club-link { color: var(--ink); text-decoration: none; }
+.club-link:hover { text-decoration: underline; }
 .club-match-opp { font-weight: 600; color: var(--ink); text-decoration: none; }
 .club-match-opp:hover { text-decoration: underline; }
 .club-match-ha {
