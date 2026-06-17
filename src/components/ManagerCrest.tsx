@@ -8,11 +8,13 @@ export function crestInitials(teamName: string): string {
 
 /** Readable text color (black or white) for a #RRGGBB background, by luminance. */
 function readableText(hex: string): string {
-  const m = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
-  if (!m) return "#fff";
-  const n = parseInt(m[1], 16);
-  const r = (n >> 16) & 0xff, g = (n >> 8) & 0xff, b = n & 0xff;
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  const match = /^#?([0-9a-f]{6})$/i.exec(hex.trim());
+  if (!match) return "#fff";
+  const rgb = parseInt(match[1], 16);
+  const red = (rgb >> 16) & 0xff;
+  const green = (rgb >> 8) & 0xff;
+  const blue = rgb & 0xff;
+  const luminance = (0.299 * red + 0.587 * green + 0.114 * blue) / 255;
   return luminance > 0.6 ? "#1a1a1a" : "#fff";
 }
 

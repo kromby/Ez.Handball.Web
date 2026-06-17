@@ -20,15 +20,15 @@ test("honors an explicit 'from' without fetching the manager", async () => {
 
 test("routes to /players when the squad is incomplete", async () => {
   vi.spyOn(api, "getManager").mockResolvedValue(manager(false));
-  expect(await resolveLanding(undefined)).toBe("/players");
+  expect(await resolveLanding()).toBe("/players");
 });
 
 test("routes to / when the squad is complete", async () => {
   vi.spyOn(api, "getManager").mockResolvedValue(manager(true));
-  expect(await resolveLanding(undefined)).toBe("/");
+  expect(await resolveLanding()).toBe("/");
 });
 
 test("falls back to / when the manager fetch fails", async () => {
   vi.spyOn(api, "getManager").mockRejectedValue(new Error("boom"));
-  expect(await resolveLanding(undefined)).toBe("/");
+  expect(await resolveLanding()).toBe("/");
 });

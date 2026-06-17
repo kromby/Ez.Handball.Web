@@ -67,3 +67,13 @@ These three failed before, on real data: a stats table dragged the whole sheet p
 DeepSource gates this repo. Keep it green: descriptive names, self-closing empty tags, and consistent returns. Match the surrounding code's formatting rather than introducing your own.
 
 Fix DeepSource's **bug, security, and correctness** findings — those earn their keep. Treat its **style/antipattern** findings as advice, not law: apply them when they improve the code, skip them when they don't. In particular, **JSX max depth (JS-0415)** is **not** enforced here — don't extract components solely to drop a nesting level. It's ignored repo-wide via the DeepSource dashboard (Issue → Ignore → "For all files"); suppress a stray one inline with `// skipcq: JS-0415` if needed.
+
+### Settled antipattern findings — don't re-litigate these
+
+These flags recur on every PR. The decisions below are final; follow them instead of "fixing" the warning, and don't waste a review cycle debating them.
+
+- **Wildcard import of endpoints — keep it.** Import the endpoint module as a namespace: `import * as api from "../api/endpoints"` (then `api.getManager()`), in **both** production and test files. This is the repo-wide convention — see `src/query/hooks.ts`. It is required for tests, which spy with `vi.spyOn(api, "getManager")`; a named import (`import { getManager }`) cannot be spied that way. DeepSource's "explicitly import the specific method" / wildcard-import antipattern is **declined** here — ignore it repo-wide on the dashboard, don't switch to named imports to silence it. (Named imports remain correct for everything that is *not* the endpoint module — components, hooks, types.)
+
+- **Fire-and-forget promise in a sync callback — return it, don't `void` it.** When a synchronous callback (e.g. an `onEnter`/`onClick` prop) kicks off a promise it doesn't await, write `onEnter={() => doThing().then(next)}` — return the promise from the arrow. Do **not** use the `void` operator (`() => { void doThing(); }`); DeepSource flags the `void` operator as an antipattern. Only reach for this when the promise can't reject (or attach a `.catch`).
+
+- **Single/two-letter locals — already covered above.** "Name things for readers" governs; `red`/`green`/`blue`, not `r`/`g`/`b`. DeepSource allows only `i`, `j`, `n`, `x`, `y` — but prefer a full word even then unless it's a trivial loop index.

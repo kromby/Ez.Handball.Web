@@ -5,7 +5,7 @@ import * as api from "../api/endpoints";
  * An explicit deep-link target (`from`) always wins. Otherwise an incomplete
  * squad steers the user into the market (`/players`); a complete squad lands home.
  */
-export async function resolveLanding(from: string | undefined): Promise<string> {
+export async function resolveLanding(from?: string): Promise<string> {
   if (from) return from;
   try {
     const manager = await api.getManager();

@@ -137,7 +137,7 @@ export default function RegisterPage() {
         <div className="reg-form">
           <div className="reg-form-inner">
             {done ? (
-              <Celebration displayName={displayName} club={selectedClub} onEnter={() => { void resolveLanding(from).then(navigate); }} />
+              <Celebration displayName={displayName} club={selectedClub} onEnter={() => resolveLanding(from).then(navigate)} />
             ) : step === 0 ? (
               <div className="reg-page">
                 <h2>{t("auth.detailsTitle")}</h2>
