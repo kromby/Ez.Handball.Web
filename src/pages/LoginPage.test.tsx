@@ -1,4 +1,4 @@
-import { screen, fireEvent, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, test, vi } from "vitest";
 import { Route, Routes } from "react-router-dom";
@@ -57,13 +57,16 @@ const incomplete: Manager = {
 test("after login with an incomplete squad, lands on /players", async () => {
   vi.spyOn(api, "getManager").mockResolvedValue(incomplete);
   const login = vi.fn().mockResolvedValue(undefined);
-  renderWithProviders(<LoginPage />, {
-    auth: { login },
-    initialEntries: ["/login"],
-  });
-  fireEvent.change(screen.getByLabelText(/email/i), { target: { value: "a@b.is" } });
-  fireEvent.change(screen.getByLabelText(/password/i), { target: { value: "pw" } });
-  fireEvent.click(screen.getByRole("button", { name: /log ?in/i }));
-  await waitFor(() => expect(login).toHaveBeenCalled());
-  await waitFor(() => expect(api.getManager).toHaveBeenCalled());
+  renderWithProviders(
+    <Routes>
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/players" element={<p>market page</p>} />
+    </Routes>,
+    { initialEntries: ["/login"], auth: { login } },
+  );
+  await userEvent.type(screen.getByLabelText(/email/i), "a@b.is");
+  await userEvent.type(screen.getByLabelText(/password/i), "pw");
+  await userEvent.click(screen.getByRole("button", { name: /log ?in/i }));
+  expect(await screen.findByText("market page")).toBeInTheDocument();
+  expect(api.getManager).toHaveBeenCalled();
 });

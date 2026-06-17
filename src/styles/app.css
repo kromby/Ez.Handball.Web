@@ -602,6 +602,19 @@ button {
   cursor: pointer;
 }
 
+/* --- Manager panel --- */
+.manager-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.manager-name {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin: 0;
+}
+
 .btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
