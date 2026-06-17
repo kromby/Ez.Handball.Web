@@ -11,6 +11,7 @@ import type {
   InvitePreview,
   Leaderboard,
   LeaderboardMetric,
+  Manager,
   MatchDetail,
   MiniLeague,
   MyGameweeks,
@@ -110,6 +111,14 @@ export function getSquad(flavor = "fantasy"): Promise<Squad> {
 
 export function getSquadConstraints(flavor = "fantasy"): Promise<SquadConstraints> {
   return apiGet<SquadConstraints>(`/api/squad/constraints?flavor=${encodeURIComponent(flavor)}`);
+}
+
+export function getManager(): Promise<Manager> {
+  return authedGet<Manager>("/api/users/me/manager");
+}
+
+export function renameTeam(teamName: string): Promise<Manager> {
+  return authedSend<Manager>("/api/users/me/manager", "PATCH", { teamName });
 }
 
 export function getPlayers(params: {

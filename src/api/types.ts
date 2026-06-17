@@ -292,6 +292,20 @@ export interface SquadConstraints {
   posLimits: Record<string, number>;
 }
 
+export interface ManagerOnboarding {
+  squadComplete: boolean;
+  playersOwned: number;
+  squadSize: number;
+}
+
+export interface Manager {
+  flavor: string;
+  teamName: string;
+  favoriteClubId: string;
+  color: string;
+  onboarding: ManagerOnboarding;
+}
+
 export interface BuyViolation {
   code: string;
   message: string;
