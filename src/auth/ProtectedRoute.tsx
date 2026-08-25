@@ -10,3 +10,13 @@ export function ProtectedRoute() {
   if (status === "anonymous") return <Navigate to="/login" state={{ from: location }} replace />;
   return <Outlet />;
 }
+
+export function AdminRoute() {
+  const { status, user } = useAuth();
+  const location = useLocation();
+
+  if (status === "loading") return <Loading />;
+  if (status === "anonymous") return <Navigate to="/login" state={{ from: location }} replace />;
+  if (!user?.isAdmin) return <Navigate to="/" replace />;
+  return <Outlet />;
+}

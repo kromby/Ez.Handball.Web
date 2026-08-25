@@ -80,7 +80,7 @@ test("renders profile, history, and the player's match list", async () => {
 test("shows the shortlist star on the player header when authenticated", async () => {
   const user = {
     id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const,
-    favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
+    favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
   };
   vi.spyOn(api, "getPlayer").mockResolvedValue({
     playerId: "7", name: "Ólafur Stefánsson", jerseyNumber: "7", dateOfBirth: null,
@@ -112,7 +112,7 @@ test("renders not-found when the player 404s", async () => {
 
 const authed = {
   status: "authenticated" as const,
-  user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const, favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } as AuthUser,
+  user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const, favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } as AuthUser,
 };
 
 function mockPlayerPageQueries(owned: boolean) {

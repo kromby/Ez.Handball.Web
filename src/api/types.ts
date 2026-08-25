@@ -39,6 +39,55 @@ export interface Tournament {
   gender: string;
 }
 
+export interface TournamentStatus {
+  tournamentId: string;
+  name: string;
+  gender: string;
+  type: string;
+  competitionId: string;
+  competitionName: string;
+  season: string;
+  active: boolean;
+  ingest: boolean;
+  priority: number;
+}
+
+export interface AdminGameStatus {
+  matchId: string;
+  date: string;
+  venue: string | null;
+  homeTeamName: string;
+  awayTeamName: string;
+  status: "played" | "upcoming";
+  ingested: boolean;
+  hbStatzIngested: boolean;
+}
+
+export interface AdminRoundGames {
+  round: string;
+  games: AdminGameStatus[];
+}
+
+export interface AdminSyncResult {
+  synced: number;
+  failed: string[];
+}
+
+export interface AdminHbStatzSyncResult {
+  matchesChecked: number;
+  matchesSynced: number;
+  unmatched: string[];
+  failed: string[];
+}
+
+export interface AdminTournamentGames {
+  tournamentId: string;
+  name: string;
+  competitionName: string;
+  lastSyncedAt: string | null;
+  rounds: AdminRoundGames[];
+}
+
 export interface Gender {
   value: string;
   label: string;
@@ -161,6 +210,7 @@ export interface AuthUser {
   favoriteClubId: string;
   teamName?: string;     // public team identity (from GET /api/users/me)
   emailVerified: boolean;
+  isAdmin: boolean;
   createdAt: string;
   lastLoginAt: string | null;
 }

@@ -12,7 +12,7 @@ const MANAGER: Manager = {
   flavor: "fantasy", teamName: "FC Awesome", favoriteClubId: "385", color: "#1E88E5",
   onboarding: { squadComplete: false, playersOwned: 9, squadSize: 15 },
 };
-const authed = { status: "authenticated" as const, user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const, favoriteClubId: "385", teamName: "FC Awesome", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } };
+const authed = { status: "authenticated" as const, user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is" as const, favoriteClubId: "385", teamName: "FC Awesome", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } };
 
 test("renders the team name and a progress line while incomplete", async () => {
   vi.spyOn(api, "getManager").mockResolvedValue(MANAGER);

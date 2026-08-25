@@ -9,7 +9,7 @@ afterEach(() => vi.restoreAllMocks());
 
 const user: AuthUser = {
   id: "u1", email: "a@b.is", displayName: "Jon", language: "is",
-  favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
+  favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
 };
 
 describe("Nav", () => {
@@ -48,6 +48,16 @@ describe("Nav", () => {
   test("shows a Leagues link to /leagues when authenticated", () => {
     renderWithProviders(<Nav />, { auth: { status: "authenticated", user } });
     expect(screen.getByRole("link", { name: "Leagues" })).toHaveAttribute("href", "/leagues");
+  });
+
+  test("shows no Admin link for a non-admin user", () => {
+    renderWithProviders(<Nav />, { auth: { status: "authenticated", user } });
+    expect(screen.queryByRole("link", { name: "Admin" })).not.toBeInTheDocument();
+  });
+
+  test("shows an Admin link to /admin/tournaments for an admin user", () => {
+    renderWithProviders(<Nav />, { auth: { status: "authenticated", user: { ...user, isAdmin: true } } });
+    expect(screen.getByRole("link", { name: "Admin" })).toHaveAttribute("href", "/admin/tournaments");
   });
 
   test("renders the language toggle for everyone", () => {

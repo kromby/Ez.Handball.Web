@@ -11,7 +11,7 @@ import type { AuthUser } from "../api/types";
 
 const user = (language: "is" | "en"): AuthUser => ({
   id: "u1", email: "a@b.is", displayName: "Jon", language,
-  favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
+  favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
 });
 
 function wrap(authOverrides = {}) {

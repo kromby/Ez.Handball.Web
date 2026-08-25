@@ -9,7 +9,7 @@ import { renderWithProviders } from "../test/renderWithQuery";
 
 afterEach(() => vi.restoreAllMocks());
 
-const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null };
+const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null };
 
 const entry: PoolEntry = {
   rank: 1, playerId: "p1", name: "Bergström", clubId: "1", clubName: "Catalunya",

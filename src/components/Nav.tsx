@@ -39,6 +39,9 @@ function AuthArea() {
         <Link to="/shortlist" className="nav-shortlist">
           {data ? t("nav.shortlistWithCount", { count: data.count }) : t("nav.shortlist")}
         </Link>
+        {user.isAdmin && (
+          <Link to="/admin/tournaments" className="nav-link">{t("nav.admin")}</Link>
+        )}
         <Link to="/account" className="user-name">{user.displayName}</Link>
       </nav>
     );

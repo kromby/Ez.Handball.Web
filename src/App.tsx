@@ -2,7 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import { Nav } from "./components/Nav";
 import { useLanguageSync } from "./i18n/useLanguage";
 import { HomeOrLegacyRedirect } from "./components/LegacyPlayerRedirect";
-import { ProtectedRoute } from "./auth/ProtectedRoute";
+import { AdminRoute, ProtectedRoute } from "./auth/ProtectedRoute";
 import MatchPage from "./pages/MatchPage";
 import PlayerPage from "./pages/PlayerPage";
 import LoginPage from "./pages/LoginPage";
@@ -19,6 +19,9 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import VerifyEmailPage from "./pages/VerifyEmailPage";
 import GameweeksPage from "./pages/GameweeksPage";
 import ClubPage from "./pages/ClubPage";
+import AdminTournamentsPage from "./pages/AdminTournamentsPage";
+import AdminGamesPage from "./pages/AdminGamesPage";
+import AdminGameDetailPage from "./pages/AdminGameDetailPage";
 
 export default function App() {
   useLanguageSync();
@@ -45,6 +48,11 @@ export default function App() {
             <Route path="/leagues" element={<LeaguesPage />} />
             <Route path="/leagues/:id" element={<LeaguePage />} />
             <Route path="/invite/:token" element={<JoinPage />} />
+          </Route>
+          <Route element={<AdminRoute />}>
+            <Route path="/admin/tournaments" element={<AdminTournamentsPage />} />
+            <Route path="/admin/games" element={<AdminGamesPage />} />
+            <Route path="/admin/games/:tournamentId" element={<AdminGameDetailPage />} />
           </Route>
         </Routes>
       </main>

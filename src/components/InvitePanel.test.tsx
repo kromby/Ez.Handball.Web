@@ -7,7 +7,7 @@ import { InvitePanel } from "./InvitePanel";
 import { renderWithProviders } from "../test/renderWithQuery";
 
 afterEach(() => vi.restoreAllMocks());
-const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, createdAt: "", lastLoginAt: null };
+const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "", lastLoginAt: null };
 const authed = { status: "authenticated" as const, user };
 const league = (role: string | null): MiniLeague => ({ id: "L1", name: "Office", season: "2025-26", creatorUserId: "u1", memberCount: 1, role, createdAt: "", members: [] });
 
