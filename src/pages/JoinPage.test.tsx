@@ -8,7 +8,7 @@ import JoinPage from "./JoinPage";
 import { renderWithProviders } from "../test/renderWithQuery";
 
 afterEach(() => vi.restoreAllMocks());
-const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, createdAt: "", lastLoginAt: null };
+const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "", lastLoginAt: null };
 const authed = { status: "authenticated" as const, user };
 
 function LeagueProbe() {

@@ -25,8 +25,12 @@ import type {
   ShortlistResponse,
   Squad,
   SquadConstraints,
+  AdminHbStatzSyncResult,
+  AdminSyncResult,
+  AdminTournamentGames,
   SquadMutationResult,
   Tournament,
+  TournamentStatus,
 } from "./types";
 
 export function getLeaderboard(params: {
@@ -197,4 +201,32 @@ export function getMyGameweeks(): Promise<MyGameweeks> {
 
 export function getRounds(tournamentId: string): Promise<RoundListing> {
   return apiGet<RoundListing>(`/api/tournaments/${encodeURIComponent(tournamentId)}/rounds`);
+}
+
+export function getAdminTournamentStatus(): Promise<TournamentStatus[]> {
+  return authedGet<TournamentStatus[]>("/api/admin/tournaments");
+}
+
+export function getAdminGameStatus(season?: string): Promise<AdminTournamentGames[]> {
+  const qs = season ? `?season=${encodeURIComponent(season)}` : "";
+  return authedGet<AdminTournamentGames[]>(`/api/admin/games${qs}`);
+}
+
+export function triggerAdminSync(): Promise<AdminSyncResult> {
+  return authedSend<AdminSyncResult>("/api/admin/sync", "POST");
+}
+
+export interface HbStatzSyncScope {
+  tournamentId?: string;
+  round?: string;
+  matchId?: string;
+}
+
+export function triggerAdminHbStatzSync(scope: HbStatzSyncScope = {}): Promise<AdminHbStatzSyncResult> {
+  const sp = new URLSearchParams();
+  if (scope.tournamentId) sp.set("tournamentId", scope.tournamentId);
+  if (scope.round) sp.set("round", scope.round);
+  if (scope.matchId) sp.set("matchId", scope.matchId);
+  const qs = sp.toString();
+  return authedSend<AdminHbStatzSyncResult>(`/api/admin/hbstatz-sync${qs ? `?${qs}` : ""}`, "POST");
 }

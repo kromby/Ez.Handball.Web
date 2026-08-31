@@ -1407,6 +1407,42 @@ button {
 .gw-pill--upcoming,
 .gw-pill--final { color: var(--ink-2); }
 
+.status-badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1.5px solid var(--line-2);
+  background: var(--paper-3);
+}
+.status-badge--on { color: #3c5a2c; background: #dde7cf; border-color: var(--good); }
+.status-badge--off { color: var(--ink-2); }
+
+/* Admin */
+.admin-subnav { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-subnav-link {
+  border: 2px solid var(--ink); border-radius: 999px; padding: 4px 14px;
+  font-weight: 700; text-decoration: none; color: var(--ink);
+}
+.admin-subnav-link.is-active { background: var(--ink); color: var(--paper-2); }
+.admin-tournament-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.admin-tournament-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.admin-tournament-sync { color: var(--ink-3); font-size: 13px; }
+.admin-round { margin-top: 8px; }
+.admin-round-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.admin-round-title { font-family: "Spectral", Georgia, serif; font-weight: 700; font-size: 18px; margin: 0 0 6px; }
+.admin-hbstatz-cell { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.admin-sync-inline-btn {
+  border: 1.5px solid var(--ink); border-radius: 999px; background: var(--paper-2);
+  font-size: 12px; font-weight: 700; padding: 2px 10px; cursor: pointer;
+}
+.admin-sync-inline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.admin-back-link { display: inline-block; font-weight: 700; color: var(--amber-deep); text-decoration: none; }
+.admin-back-link:hover { text-decoration: underline; }
+
 /* hero */
 .gw-hero { padding: 18px 20px; }
 .gw-hero-head { display: flex; align-items: baseline; gap: 12px; }

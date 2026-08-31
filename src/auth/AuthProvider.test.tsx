@@ -17,6 +17,7 @@ const user: AuthUser = {
   language: "is",
   favoriteClubId: "385",
   emailVerified: false,
+  isAdmin: false,
   createdAt: "2026-06-02T00:00:00Z",
   lastLoginAt: null,
 };

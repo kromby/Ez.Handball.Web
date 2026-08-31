@@ -9,7 +9,7 @@ afterEach(() => vi.restoreAllMocks());
 
 const user: AuthUser = {
   id: "u1", email: "a@b.is", displayName: "Jon", language: "is",
-  favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
+  favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
 };
 const authed = { status: "authenticated" as const, user };
 

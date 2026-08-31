@@ -17,7 +17,8 @@
     "language": "Language",
     "players": "Players",
     "mySquad": "My Squad",
-    "leagues": "Leagues"
+    "leagues": "Leagues",
+    "admin": "Admin"
   },
   "leaderboard": {
     "title": "Leaderboard",
@@ -379,5 +380,61 @@
     "invalid": "This invite link isn't valid.",
     "expired": "This invite link has expired.",
     "joinError": "Couldn't join — please try again."
+  },
+  "admin": {
+    "eyebrow": "admin",
+    "tournaments": {
+      "title": "Tournament status",
+      "notFound": "Couldn't load tournament status",
+      "empty": "No tournaments found.",
+      "season": "Season",
+      "competition": "Competition",
+      "tournament": "Tournament",
+      "gender": "Gender",
+      "type": "Type",
+      "active": "Active",
+      "ingest": "Ingest",
+      "priority": "Priority",
+      "on": "On",
+      "off": "Off"
+    },
+    "games": {
+      "title": "Games",
+      "filterSeason": "Season",
+      "notFound": "Couldn't load games",
+      "empty": "No active tournaments for this season.",
+      "noGames": "No games found — this tournament may not have synced yet.",
+      "round": "Round {{round}}",
+      "date": "Date",
+      "home": "Home",
+      "away": "Away",
+      "venue": "Venue",
+      "status": "Status",
+      "ingested": "Ingested",
+      "hbStatzIngested": "HBStatz",
+      "statusPlayed": "Played",
+      "statusUpcoming": "Upcoming",
+      "lastSynced": "Last synced {{time}}",
+      "neverSynced": "Never synced",
+      "competition": "Competition",
+      "lastSyncedHeader": "Last synced",
+      "totalGames": "Games",
+      "notIngested": "Not ingested",
+      "backToList": "← Back to tournaments",
+      "tournamentNotFound": "Tournament not found for this season",
+      "syncNow": "Sync now",
+      "syncing": "Syncing…",
+      "syncResult": "Synced {{synced}} tournament(s).",
+      "syncResultWithFailures": "Synced {{synced}} tournament(s) — {{failed}} failed.",
+      "syncError": "Sync failed. Please try again.",
+      "syncUnreachable": "Couldn't reach the ingestion service — is it running?",
+      "hbStatzSyncNow": "Sync HBStatz",
+      "hbStatzSyncing": "Syncing HBStatz…",
+      "hbStatzSyncResult": "Checked {{checked}} match(es), synced {{synced}}.",
+      "hbStatzSyncResultWithIssues": "Checked {{checked}} match(es), synced {{synced}} — {{unmatched}} unmatched, {{failed}} failed.",
+      "hbStatzSyncRound": "Sync round {{round}}",
+      "hbStatzSyncGame": "Sync",
+      "hbStatzSyncRetry": "Retry"
+    }
   }
 }

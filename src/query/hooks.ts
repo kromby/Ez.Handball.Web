@@ -324,3 +324,37 @@ export function useJoinMiniLeague() {
     mutationFn: (token: string) => api.joinMiniLeague(token),
   });
 }
+
+export function useAdminTournamentStatus() {
+  const { status, user } = useAuth();
+  return useQuery({
+    queryKey: ["admin-tournament-status"],
+    queryFn: () => api.getAdminTournamentStatus(),
+    enabled: status === "authenticated" && Boolean(user?.isAdmin),
+  });
+}
+
+export function useAdminGameStatus(season: string | undefined) {
+  const { status, user } = useAuth();
+  return useQuery({
+    queryKey: ["admin-game-status", season ?? null],
+    queryFn: () => api.getAdminGameStatus(season),
+    enabled: status === "authenticated" && Boolean(user?.isAdmin),
+  });
+}
+
+export function useTriggerAdminSync() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.triggerAdminSync(),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-game-status"] }),
+  });
+}
+
+export function useTriggerAdminHbStatzSync() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (scope: api.HbStatzSyncScope = {}) => api.triggerAdminHbStatzSync(scope),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-game-status"] }),
+  });
+}

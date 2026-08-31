@@ -17,7 +17,8 @@
     "language": "Tungumál",
     "players": "Leikmenn",
     "mySquad": "Liðið mitt",
-    "leagues": "Deildir"
+    "leagues": "Deildir",
+    "admin": "Stjórnun"
   },
   "leaderboard": {
     "title": "Stigatafla",
@@ -379,5 +380,61 @@
     "invalid": "Þessi boðshlekkur er ógildur.",
     "expired": "Þessi boðshlekkur er útrunninn.",
     "joinError": "Tókst ekki að ganga í — reyndu aftur."
+  },
+  "admin": {
+    "eyebrow": "stjórnun",
+    "tournaments": {
+      "title": "Staða móta",
+      "notFound": "Tókst ekki að sækja stöðu móta",
+      "empty": "Engin mót fundust.",
+      "season": "Tímabil",
+      "competition": "Keppni",
+      "tournament": "Mót",
+      "gender": "Kyn",
+      "type": "Tegund",
+      "active": "Virkt",
+      "ingest": "Innlestur",
+      "priority": "Forgangur",
+      "on": "Á",
+      "off": "Af"
+    },
+    "games": {
+      "title": "Leikir",
+      "filterSeason": "Tímabil",
+      "notFound": "Tókst ekki að sækja leiki",
+      "empty": "Engin virk mót fyrir þetta tímabil.",
+      "noGames": "Engir leikir fundust — mótið hefur ef til vill ekki verið samstillt enn.",
+      "round": "Umferð {{round}}",
+      "date": "Dagsetning",
+      "home": "Heima",
+      "away": "Úti",
+      "venue": "Völlur",
+      "status": "Staða",
+      "ingested": "Innlestur",
+      "hbStatzIngested": "HBStatz",
+      "statusPlayed": "Leikið",
+      "statusUpcoming": "Framundan",
+      "lastSynced": "Síðast samstillt {{time}}",
+      "neverSynced": "Aldrei samstillt",
+      "competition": "Keppni",
+      "lastSyncedHeader": "Síðast samstillt",
+      "totalGames": "Leikir",
+      "notIngested": "Ekki innlesnir",
+      "backToList": "← Til baka í mót",
+      "tournamentNotFound": "Mót fannst ekki fyrir þetta tímabil",
+      "syncNow": "Samstilla núna",
+      "syncing": "Samstilli…",
+      "syncResult": "{{synced}} mót samstillt.",
+      "syncResultWithFailures": "{{synced}} mót samstillt — {{failed}} mistókust.",
+      "syncError": "Samstilling mistókst. Reyndu aftur.",
+      "syncUnreachable": "Næ ekki sambandi við innlestursþjónustuna — er hún í gangi?",
+      "hbStatzSyncNow": "Samstilla HBStatz",
+      "hbStatzSyncing": "Samstilli HBStatz…",
+      "hbStatzSyncResult": "{{checked}} leikir skoðaðir, {{synced}} samstilltir.",
+      "hbStatzSyncResultWithIssues": "{{checked}} leikir skoðaðir, {{synced}} samstilltir — {{unmatched}} ófundnir, {{failed}} mistókust.",
+      "hbStatzSyncRound": "Samstilla umferð {{round}}",
+      "hbStatzSyncGame": "Samstilla",
+      "hbStatzSyncRetry": "Reyna aftur"
+    }
   }
 }

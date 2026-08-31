@@ -10,7 +10,7 @@ afterEach(() => vi.restoreAllMocks());
 
 const user: AuthUser = {
   id: "u1", email: "a@b.is", displayName: "Jon", language: "is",
-  favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
+  favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null,
 };
 const authed = { status: "authenticated" as const, user };
 
@@ -74,7 +74,7 @@ test("renders a Buy button for a shortlisted player found in the pool", async ()
   });
   renderWithProviders(
     <ToastProvider><ShortlistPage /></ToastProvider>,
-    { auth: { status: "authenticated", user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } } },
+    { auth: { status: "authenticated", user: { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "2026-06-02T00:00:00Z", lastLoginAt: null } } },
   );
   expect(await screen.findByRole("button", { name: /buy/i })).toBeEnabled();
 });
