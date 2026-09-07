@@ -55,7 +55,7 @@ test("picking a position saves it and the row drops off the list once refetched"
   vi.spyOn(api, "getPlayersMissingPosition")
     .mockResolvedValueOnce(players)
     .mockResolvedValueOnce([]);
-  const setPosition = vi.spyOn(api, "setPlayerPosition").mockResolvedValue(undefined);
+  const setPosition = vi.spyOn(api, "setPlayerPosition").mockResolvedValue();
 
   renderPage();
 

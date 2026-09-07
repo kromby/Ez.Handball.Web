@@ -236,6 +236,6 @@ export function getPlayersMissingPosition(): Promise<PlayerMissingPosition[]> {
   return authedGet<PlayerMissingPosition[]>("/api/admin/players/missing-position");
 }
 
-export function setPlayerPosition(playerId: string, position: string): Promise<void> {
-  return authedSend<void>(`/api/admin/players/${encodeURIComponent(playerId)}/position`, "POST", { position });
+export async function setPlayerPosition(playerId: string, position: string): Promise<void> {
+  await authedSend(`/api/admin/players/${encodeURIComponent(playerId)}/position`, "POST", { position });
 }
