@@ -358,3 +358,21 @@ export function useTriggerAdminHbStatzSync() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-game-status"] }),
   });
 }
+
+export function useAdminPlayersMissingPosition() {
+  const { status, user } = useAuth();
+  return useQuery({
+    queryKey: ["admin-players-missing-position"],
+    queryFn: () => api.getPlayersMissingPosition(),
+    enabled: status === "authenticated" && Boolean(user?.isAdmin),
+  });
+}
+
+export function useSetPlayerPosition() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ playerId, position }: { playerId: string; position: string }) =>
+      api.setPlayerPosition(playerId, position),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-players-missing-position"] }),
+  });
+}

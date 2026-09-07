@@ -22,6 +22,7 @@ import ClubPage from "./pages/ClubPage";
 import AdminTournamentsPage from "./pages/AdminTournamentsPage";
 import AdminGamesPage from "./pages/AdminGamesPage";
 import AdminGameDetailPage from "./pages/AdminGameDetailPage";
+import AdminPlayersPage from "./pages/AdminPlayersPage";
 
 export default function App() {
   useLanguageSync();
@@ -53,6 +54,7 @@ export default function App() {
             <Route path="/admin/tournaments" element={<AdminTournamentsPage />} />
             <Route path="/admin/games" element={<AdminGamesPage />} />
             <Route path="/admin/games/:tournamentId" element={<AdminGameDetailPage />} />
+            <Route path="/admin/players" element={<AdminPlayersPage />} />
           </Route>
         </Routes>
       </main>

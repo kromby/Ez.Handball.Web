@@ -17,6 +17,7 @@ import type {
   MyGameweeks,
   Player,
   PlayerHistoryResponse,
+  PlayerMissingPosition,
   PlayerPool,
   PlayerStatsResponse,
   PoolSort,
@@ -229,4 +230,12 @@ export function triggerAdminHbStatzSync(scope: HbStatzSyncScope = {}): Promise<A
   if (scope.matchId) sp.set("matchId", scope.matchId);
   const qs = sp.toString();
   return authedSend<AdminHbStatzSyncResult>(`/api/admin/hbstatz-sync${qs ? `?${qs}` : ""}`, "POST");
+}
+
+export function getPlayersMissingPosition(): Promise<PlayerMissingPosition[]> {
+  return authedGet<PlayerMissingPosition[]>("/api/admin/players/missing-position");
+}
+
+export function setPlayerPosition(playerId: string, position: string): Promise<void> {
+  return authedSend<void>(`/api/admin/players/${encodeURIComponent(playerId)}/position`, "POST", { position });
 }

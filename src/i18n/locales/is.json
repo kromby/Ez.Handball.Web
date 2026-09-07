@@ -435,6 +435,18 @@
       "hbStatzSyncRound": "Samstilla umferð {{round}}",
       "hbStatzSyncGame": "Samstilla",
       "hbStatzSyncRetry": "Reyna aftur"
+    },
+    "players": {
+      "title": "Stöður leikmanna",
+      "notFound": "Tókst ekki að sækja leikmenn",
+      "empty": "Enginn leikmaður vantar stöðu.",
+      "name": "Nafn",
+      "club": "Félag",
+      "gender": "Kyn",
+      "position": "Staða",
+      "choosePosition": "Velja stöðu",
+      "saving": "Vista…",
+      "saveError": "Tókst ekki að vista stöðu. Reyndu aftur."
     }
   }
 }
