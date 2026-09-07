@@ -1,4 +1,4 @@
-import { screen, waitFor } from "@testing-library/react";
+import { screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { afterEach, expect, test, vi } from "vitest";
 import * as api from "../api/endpoints";
@@ -48,13 +48,13 @@ test("shows an error message when the request fails", async () => {
   expect(await screen.findByText("Something went wrong. Please try again.")).toBeInTheDocument();
 });
 
-test("picking a position saves it and the row drops off the list once refetched", async () => {
+test("picking a position saves it and the row drops off the list immediately", async () => {
   const players: PlayerMissingPosition[] = [
     { playerId: "p1", name: "Jón Jónsson", clubId: "c1", clubName: "Stjarnan", gender: "male", position: null },
   ];
-  vi.spyOn(api, "getPlayersMissingPosition")
-    .mockResolvedValueOnce(players)
-    .mockResolvedValueOnce([]);
+  // The list endpoint keeps returning the same (stale) data on every call, simulating
+  // a backend that hasn't caught up to the write yet — the UI must not depend on it.
+  vi.spyOn(api, "getPlayersMissingPosition").mockResolvedValue(players);
   const setPosition = vi.spyOn(api, "setPlayerPosition").mockResolvedValue();
 
   renderPage();
@@ -64,6 +64,19 @@ test("picking a position saves it and the row drops off the list once refetched"
 
   expect(setPosition).toHaveBeenCalledWith("p1", "LW");
   await waitFor(() => expect(screen.queryByText("Jón Jónsson")).not.toBeInTheDocument());
+});
+
+test("the placeholder option is not disabled, so browsers can select it as the controlled value", async () => {
+  const players: PlayerMissingPosition[] = [
+    { playerId: "p1", name: "Jón Jónsson", clubId: "c1", clubName: "Stjarnan", gender: "male", position: null },
+  ];
+  vi.spyOn(api, "getPlayersMissingPosition").mockResolvedValue(players);
+
+  renderPage();
+
+  const select = await screen.findByRole("combobox", { name: "Position" });
+  const placeholder = within(select).getByText("Choose position") as HTMLOptionElement;
+  expect(placeholder.disabled).toBe(false);
 });
 
 test("shows an inline error if saving a position fails", async () => {

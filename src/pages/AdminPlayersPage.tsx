@@ -22,7 +22,7 @@ function PlayerRow({ player }: { player: PlayerMissingPosition }) {
           disabled={setPosition.isPending}
           onChange={(e) => setPosition.mutate({ playerId: player.playerId, position: e.target.value })}
         >
-          <option value="" disabled>{t("admin.players.choosePosition")}</option>
+          <option value="">{t("admin.players.choosePosition")}</option>
           {POSITION_CODES.map((code) => (
             <option key={code} value={code}>{t(`positions.${code}`, { defaultValue: code })}</option>
           ))}

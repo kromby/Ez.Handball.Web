@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as api from "../api/endpoints";
-import type { LeaderboardMetric, PoolSort, ShortlistItem, ShortlistResponse } from "../api/types";
+import type { LeaderboardMetric, PlayerMissingPosition, PoolSort, ShortlistItem, ShortlistResponse } from "../api/types";
 import { ApiError } from "../api/client";
 import { useAuth } from "../auth/useAuth";
 
@@ -373,6 +373,10 @@ export function useSetPlayerPosition() {
   return useMutation({
     mutationFn: ({ playerId, position }: { playerId: string; position: string }) =>
       api.setPlayerPosition(playerId, position),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["admin-players-missing-position"] }),
+    onSuccess: (_data, { playerId }) => {
+      qc.setQueryData<PlayerMissingPosition[]>(["admin-players-missing-position"], (players) =>
+        players?.filter((p) => p.playerId !== playerId),
+      );
+    },
   });
 }
