@@ -435,6 +435,18 @@
       "hbStatzSyncRound": "Sync round {{round}}",
       "hbStatzSyncGame": "Sync",
       "hbStatzSyncRetry": "Retry"
+    },
+    "players": {
+      "title": "Player positions",
+      "notFound": "Couldn't load players",
+      "empty": "No players are missing a position.",
+      "name": "Name",
+      "club": "Club",
+      "gender": "Gender",
+      "position": "Position",
+      "choosePosition": "Choose position",
+      "saving": "Saving…",
+      "saveError": "Couldn't save this position. Please try again."
     }
   }
 }

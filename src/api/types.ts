@@ -109,6 +109,15 @@ export interface Player {
   retired?: boolean; // true = player has retired (Backend bootstrap/manual flag); absent/false = active
 }
 
+export interface PlayerMissingPosition {
+  playerId: string;
+  name: string;
+  clubId: string;
+  clubName: string | null;
+  gender: string;
+  position: string | null;
+}
+
 export interface PlayerHistoryEntry {
   season: string;
   tournamentId: string;

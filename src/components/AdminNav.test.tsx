@@ -3,10 +3,11 @@ import { expect, test } from "vitest";
 import { AdminNav } from "./AdminNav";
 import { renderWithProviders } from "../test/renderWithQuery";
 
-test("links to both admin pages", () => {
+test("links to all admin pages", () => {
   renderWithProviders(<AdminNav />);
   expect(screen.getByRole("link", { name: "Tournament status" })).toHaveAttribute("href", "/admin/tournaments");
   expect(screen.getByRole("link", { name: "Games" })).toHaveAttribute("href", "/admin/games");
+  expect(screen.getByRole("link", { name: "Player positions" })).toHaveAttribute("href", "/admin/players");
 });
 
 test("marks the current page's link active", () => {

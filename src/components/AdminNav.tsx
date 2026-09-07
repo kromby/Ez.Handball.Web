@@ -13,6 +13,9 @@ export function AdminNav() {
       <NavLink to="/admin/games" className={linkClass}>
         {t("admin.games.title")}
       </NavLink>
+      <NavLink to="/admin/players" className={linkClass}>
+        {t("admin.players.title")}
+      </NavLink>
     </nav>
   );
 }
