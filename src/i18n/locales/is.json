@@ -204,7 +204,6 @@
   },
   "buy": {
     "buy": "Kaupa",
-    "buyWithPrice": "Kaupa · {{price}}",
     "buyName": "Kaupa {{name}}",
     "inSquadShort": "Í liðinu",
     "inSquad": "{{name}} er í liðinu þínu",
