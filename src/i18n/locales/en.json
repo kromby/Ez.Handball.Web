@@ -204,7 +204,6 @@
   },
   "buy": {
     "buy": "Buy",
-    "buyWithPrice": "Buy · {{price}}",
     "buyName": "Buy {{name}}",
     "inSquadShort": "In squad",
     "inSquad": "{{name}} is in your squad",

@@ -1,7 +1,6 @@
 import type { MouseEvent } from "react";
 import { useTranslation } from "react-i18next";
 import { ApiError } from "../api/client";
-import { formatMoney } from "../api/money";
 import type { Money } from "../api/types";
 import { useAuth } from "../auth/useAuth";
 import { useBuyPlayer, useSquad, useSquadConstraints } from "../query/hooks";
@@ -100,7 +99,7 @@ export function BuyButton({ player }: { player: BuyButtonPlayer }) {
       aria-label={t("buy.buyName", { name: playerName })}
       onClick={onClick}
     >
-      {buy.isPending ? "…" : t("buy.buyWithPrice", { price: formatMoney(player.price) })}
+      {buy.isPending ? "…" : t("buy.buy")}
     </button>
   );
 }
