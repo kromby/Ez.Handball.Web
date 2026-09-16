@@ -311,6 +311,29 @@ export interface ShortlistItem {
   price: number | null;
   pickPercentage: number | null;
   createdAt: string;
+  // HBStatz-derived aggregates (current season); null when the player can't be resolved
+  // this season — same condition that nulls position/gender above (Backend#126).
+  positionSecondary: string | null;
+  games: number | null;
+  goals: number | null;
+  yellowCards: number | null;
+  twoMinuteSuspensions: number | null;
+  redCards: number | null;
+  assists: number | null;
+  steals: number | null;
+  blocks: number | null;
+  saves: number | null;
+  turnovers: number | null;
+  legalStops: number | null;
+  shots: number | null;
+  expectedGoals: number | null;
+  shotsFaced: number | null;
+  savePct: number | null;
+  expectedSaves: number | null;
+  gradeTotal: number | null;
+  gradeOffense: number | null;
+  gradeDefense: number | null;
+  gradeGoalkeeping: number | null;
 }
 
 export interface ShortlistResponse {
@@ -387,6 +410,7 @@ export interface PoolEntry {
   clubName: string | null;
   gender: string;
   position: string;
+  positionSecondary: string | null;
   games: number;
   goals: number;
   yellowCards: number;
@@ -396,6 +420,23 @@ export interface PoolEntry {
   price: Money;
   rating: number;
   pickPercentage: number | null; // always null for now
+  // HBStatz-derived aggregates (current season); 0 for players HBStatz hasn't
+  // observed yet, null for rates/grades that can't be computed (Backend#126).
+  assists: number;
+  steals: number;
+  blocks: number;
+  saves: number;
+  turnovers: number;
+  legalStops: number;
+  shots: number;
+  expectedGoals: number;
+  shotsFaced: number;
+  savePct: number | null;
+  expectedSaves: number;
+  gradeTotal: number | null;
+  gradeOffense: number | null;
+  gradeDefense: number | null;
+  gradeGoalkeeping: number | null;
 }
 
 export interface PlayerPool {

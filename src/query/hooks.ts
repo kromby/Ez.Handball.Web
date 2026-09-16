@@ -153,6 +153,11 @@ export function useAddToShortlist() {
         const optimistic: ShortlistItem = {
           playerId, name: null, clubId: null, clubName: null, position: null,
           gender: null, price: null, pickPercentage: null, createdAt: "",
+          positionSecondary: null, games: null, goals: null, yellowCards: null,
+          twoMinuteSuspensions: null, redCards: null, assists: null, steals: null,
+          blocks: null, saves: null, turnovers: null, legalStops: null, shots: null,
+          expectedGoals: null, shotsFaced: null, savePct: null, expectedSaves: null,
+          gradeTotal: null, gradeOffense: null, gradeDefense: null, gradeGoalkeeping: null,
         };
         qc.setQueryData<ShortlistResponse>(SHORTLIST_KEY, {
           ...prev, items: [...prev.items, optimistic], count: prev.count + 1,

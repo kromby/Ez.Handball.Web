@@ -16,7 +16,12 @@ const authed = { status: "authenticated" as const, user };
 
 const item = (over: Partial<ShortlistItem>): ShortlistItem => ({
   playerId: "p1", name: "Aron Pálmarsson", clubId: "c1", clubName: "Stjarnan",
-  position: "VS", gender: "karlar", price: null, pickPercentage: null, createdAt: "", ...over,
+  position: "VS", gender: "karlar", price: null, pickPercentage: null, createdAt: "",
+  positionSecondary: null, games: 10, goals: 25, yellowCards: 2, twoMinuteSuspensions: 1, redCards: 0,
+  assists: 6, steals: 3, blocks: 0, saves: 0, turnovers: 4, legalStops: 0, shots: 40,
+  expectedGoals: 22.1, shotsFaced: 0, savePct: null, expectedSaves: 0,
+  gradeTotal: 6.5, gradeOffense: 6.9, gradeDefense: 5.8, gradeGoalkeeping: null,
+  ...over,
 });
 
 const emptyPool = { sort: "Rating" as const, total: 0, offset: 0, limit: 200, entries: [] };
@@ -32,6 +37,9 @@ test("renders the shortlisted players and the count header", async () => {
   expect(await screen.findByRole("link", { name: "Aron Pálmarsson" })).toHaveAttribute("href", "/players/p1");
   expect(screen.getByText("Stjarnan")).toBeInTheDocument();
   expect(screen.getByText("VS")).toBeInTheDocument();
+  expect(screen.getByText("25")).toBeInTheDocument(); // goals
+  expect(screen.getByText("6")).toBeInTheDocument();  // assists
+  expect(screen.getByText("6.5")).toBeInTheDocument(); // gradeTotal form badge
   expect(screen.getByText("1 / 20")).toBeInTheDocument();
 });
 
@@ -63,14 +71,21 @@ test("removing a player calls the remove endpoint", async () => {
 
 test("renders a Buy button for a shortlisted player found in the pool", async () => {
   vi.spyOn(api, "getShortlist").mockResolvedValue({
-    items: [{ playerId: "p1", name: "Vik", clubId: "1", clubName: "Aalvik", position: "LB", gender: "karlar", price: null, pickPercentage: null, createdAt: "" }],
+    items: [item({ playerId: "p1", name: "Vik", clubId: "1", clubName: "Aalvik", position: "LB" })],
     count: 1, max: 20,
   });
   vi.spyOn(api, "getSquadConstraints").mockResolvedValue({ ruleSetVersion: 1, maxSquadSize: 15, startingCap: { amount: 100_000_000, currency: "ISK" }, posLimits: { LB: 3 } });
   vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [], budgetUsed: { amount: 0, currency: "ISK" }, remainingBudget: { amount: 100_000_000, currency: "ISK" }, squadValue: { amount: 0, currency: "ISK" } });
   vi.spyOn(api, "getPlayers").mockResolvedValue({
     sort: "Rating", total: 1, offset: 0, limit: 200,
-    entries: [{ rank: 1, playerId: "p1", name: "Vik", clubId: "1", clubName: "Aalvik", gender: "karlar", position: "LB", games: 0, goals: 0, yellowCards: 0, twoMinuteSuspensions: 0, redCards: 0, avgGoals: 0, price: { amount: 9_000_000, currency: "ISK" }, rating: 30, pickPercentage: null }],
+    entries: [{
+      rank: 1, playerId: "p1", name: "Vik", clubId: "1", clubName: "Aalvik", gender: "karlar", position: "LB",
+      positionSecondary: null, games: 0, goals: 0, yellowCards: 0, twoMinuteSuspensions: 0, redCards: 0, avgGoals: 0,
+      price: { amount: 9_000_000, currency: "ISK" }, rating: 30, pickPercentage: null,
+      assists: 0, steals: 0, blocks: 0, saves: 0, turnovers: 0, legalStops: 0, shots: 0,
+      expectedGoals: 0, shotsFaced: 0, savePct: null, expectedSaves: 0,
+      gradeTotal: null, gradeOffense: null, gradeDefense: null, gradeGoalkeeping: null,
+    }],
   });
   renderWithProviders(
     <ToastProvider><ShortlistPage /></ToastProvider>,

@@ -13,12 +13,20 @@ const user: AuthUser = {
 };
 const authed = { status: "authenticated" as const, user };
 
+const nullEnrichment = {
+  positionSecondary: null, games: null, goals: null, yellowCards: null,
+  twoMinuteSuspensions: null, redCards: null, assists: null, steals: null,
+  blocks: null, saves: null, turnovers: null, legalStops: null, shots: null,
+  expectedGoals: null, shotsFaced: null, savePct: null, expectedSaves: null,
+  gradeTotal: null, gradeOffense: null, gradeDefense: null, gradeGoalkeeping: null,
+} as const;
+
 function mockShortlist(over: Partial<{ ids: string[]; count: number; max: number }> = {}) {
   const ids = over.ids ?? [];
   return vi.spyOn(api, "getShortlist").mockResolvedValue({
     items: ids.map((playerId) => ({
       playerId, name: null, clubId: null, clubName: null, position: null,
-      gender: null, price: null, pickPercentage: null, createdAt: "",
+      gender: null, price: null, pickPercentage: null, createdAt: "", ...nullEnrichment,
     })),
     count: over.count ?? ids.length,
     max: over.max ?? 20,
@@ -59,7 +67,7 @@ test("clicking an empty star adds the player and flips to filled", async () => {
   vi.spyOn(api, "getShortlist")
     .mockResolvedValueOnce({ items: [], count: 0, max: 20 })
     .mockResolvedValue({
-      items: [{ playerId: "p1", name: null, clubId: null, clubName: null, position: null, gender: null, price: null, pickPercentage: null, createdAt: "" }],
+      items: [{ playerId: "p1", name: null, clubId: null, clubName: null, position: null, gender: null, price: null, pickPercentage: null, createdAt: "", ...nullEnrichment }],
       count: 1, max: 20,
     });
   const add = vi.spyOn(api, "addToShortlist").mockResolvedValue(undefined);
