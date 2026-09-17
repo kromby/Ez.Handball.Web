@@ -13,9 +13,12 @@ const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language
 
 const entry: PoolEntry = {
   rank: 1, playerId: "p1", name: "Bergström", clubId: "1", clubName: "Catalunya",
-  gender: "karlar", position: "CB", games: 8, goals: 20, yellowCards: 3,
+  gender: "karlar", position: "CB", positionSecondary: null, games: 8, goals: 20, yellowCards: 3,
   twoMinuteSuspensions: 2, redCards: 1, avgGoals: 2.5,
   price: { amount: 11_000_000, currency: "ISK" }, rating: 49, pickPercentage: null,
+  assists: 5, steals: 4, blocks: 1, saves: 0, turnovers: 3, legalStops: 0, shots: 30,
+  expectedGoals: 18.4, shotsFaced: 0, savePct: null, expectedSaves: 0,
+  gradeTotal: 7.2, gradeOffense: 7.5, gradeDefense: 6.8, gradeGoalkeeping: null,
 };
 
 function mock() {

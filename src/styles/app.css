@@ -1204,6 +1204,11 @@ button {
 .buy-owned { color: var(--ink-3); font-weight: 700; white-space: nowrap; }
 .sell-btn { border: 2px solid var(--ink-2); background: transparent; border-radius: 8px; padding: 4px 12px; font-weight: 700; cursor: pointer; }
 .pos-chip { display: inline-block; background: var(--ink); color: var(--paper-2); border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
+.pos-chip--secondary { background: var(--paper-3); color: var(--ink-2); margin-left: 4px; }
+.grade-chip { display: inline-block; min-width: 26px; text-align: center; background: var(--paper-3); color: var(--ink-2); border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
+.grade-chip--good { background: #dde7cf; color: var(--good); }
+.grade-chip--bad { background: #f3d9d4; color: var(--bad); }
+.grade-chip--none { color: var(--ink-3); }
 .market-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
 .market-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .market-sort { margin-left: auto; }

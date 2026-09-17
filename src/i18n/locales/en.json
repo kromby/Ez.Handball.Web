@@ -100,7 +100,12 @@
     "add": "Add {{name}} to shortlist",
     "remove": "Remove {{name}} from shortlist",
     "label": "Shortlist",
-    "position": "Pos"
+    "position": "Pos",
+    "games": "GP",
+    "goals": "Goals",
+    "assists": "Ast",
+    "saves": "Sv",
+    "form": "Form"
   },
   "account": {
     "title": "Your account",
@@ -230,6 +235,9 @@
     "pos": "Pos",
     "games": "GP",
     "goals": "Goals",
+    "assists": "Ast",
+    "saves": "Sv",
+    "form": "Form",
     "avgGoals": "Avg",
     "rating": "Rating",
     "price": "Price",

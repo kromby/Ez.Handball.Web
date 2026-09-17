@@ -100,7 +100,12 @@
     "add": "Bæta {{name}} í æfingahópinn",
     "remove": "Fjarlægja {{name}} úr æfingahópnum",
     "label": "Æfingahópur",
-    "position": "Sæti"
+    "position": "Sæti",
+    "games": "L",
+    "goals": "Mörk",
+    "assists": "Stoð",
+    "saves": "MV",
+    "form": "Form"
   },
   "account": {
     "title": "Aðgangurinn þinn",
@@ -230,6 +235,9 @@
     "pos": "Staða",
     "games": "L",
     "goals": "Mörk",
+    "assists": "Stoð",
+    "saves": "MV",
+    "form": "Form",
     "avgGoals": "Með.",
     "rating": "Einkunn",
     "price": "Verð",
