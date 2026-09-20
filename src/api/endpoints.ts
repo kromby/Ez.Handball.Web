@@ -136,6 +136,7 @@ export function getPlayers(params: {
   sort?: PoolSort;
   offset?: number;
   limit?: number;
+  playerIds?: string[];
 }): Promise<PlayerPool> {
   const sp = new URLSearchParams();
   if (params.season) sp.set("season", params.season);
@@ -147,6 +148,7 @@ export function getPlayers(params: {
   if (params.sort) sp.set("sort", params.sort);
   if (params.offset != null) sp.set("offset", String(params.offset));
   if (params.limit != null) sp.set("limit", String(params.limit));
+  if (params.playerIds?.length) sp.set("playerIds", params.playerIds.join(","));
   const qs = sp.toString();
   return apiGet<PlayerPool>(`/api/players${qs ? `?${qs}` : ""}`);
 }

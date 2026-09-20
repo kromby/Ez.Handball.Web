@@ -99,13 +99,7 @@
     "full": "Shortlist full ({{max}}/{{max}}) — remove one to add more",
     "add": "Add {{name}} to shortlist",
     "remove": "Remove {{name}} from shortlist",
-    "label": "Shortlist",
-    "position": "Pos",
-    "games": "GP",
-    "goals": "Goals",
-    "assists": "Ast",
-    "saves": "Sv",
-    "form": "Form"
+    "label": "Shortlist"
   },
   "account": {
     "title": "Your account",

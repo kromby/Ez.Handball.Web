@@ -1,64 +1,151 @@
-import { useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { Money, ShortlistItem } from "../api/types";
-import { BuyButton } from "../components/BuyButton";
-import { GradeBadge } from "../components/GradeBadge";
+import type { PoolSort } from "../api/types";
+import { FilterSelect } from "../components/FilterSelect";
+import { SearchInput } from "../components/SearchInput";
+import { PlayerHubTable } from "../components/PlayerHubTable";
+import { Pagination } from "../components/Pagination";
 import { Panel } from "../components/Panel";
-import { PlayerTable, type PlayerColumn } from "../components/PlayerTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useAuth } from "../auth/useAuth";
-import { usePlayers, useShortlist } from "../query/hooks";
+import {
+  useClubs, useGenders, usePlayers, useSeasons, useShortlist, useSquadConstraints, useTournaments,
+} from "../query/hooks";
+
+const LIMIT = 50;
+const SORTS: PoolSort[] = ["Goals", "Games", "YellowCards", "TwoMinuteSuspensions", "RedCards", "Rating", "Price"];
+const VALID = new Set<PoolSort>(SORTS);
+
+function parseSort(raw: string | null): PoolSort {
+  return raw && VALID.has(raw as PoolSort) ? (raw as PoolSort) : "Goals";
+}
 
 export default function ShortlistPage() {
   const { t } = useTranslation();
   const { status } = useAuth();
-  const { data, isPending, isError, error } = useShortlist();
-  const pool = usePlayers({ limit: 200 }, { enabled: status === "authenticated" });
+  const authed = status === "authenticated";
+  const [params, setParams] = useSearchParams();
 
-  const priceById = useMemo(() => {
-    const map = new Map<string, { position: string; price: Money }>();
-    for (const e of pool.data?.entries ?? []) map.set(e.playerId, { position: e.position, price: e.price });
-    return map;
-  }, [pool.data]);
+  const offset = Math.max(0, Number(params.get("offset") ?? "0") || 0);
+  const urlSeason = params.get("season") ?? undefined;
+  const gender = params.get("gender") ?? undefined;
+  const position = params.get("position") ?? undefined;
+  const tournamentId = params.get("tournamentId") ?? undefined;
+  const name = params.get("name") ?? undefined;
+  const clubId = params.get("clubId") ?? undefined;
+  const sort = parseSort(params.get("sort"));
 
-  const after: PlayerColumn<ShortlistItem>[] = [
-    {
-      key: "position",
-      header: t("shortlist.position"),
-      render: (r) => (
-        <>
-          {r.position ?? "—"}
-          {r.positionSecondary && <span className="pos-chip pos-chip--secondary">{r.positionSecondary}</span>}
-        </>
-      ),
-    },
-    { key: "games", header: t("shortlist.games"), align: "right", render: (r) => r.games ?? "—" },
-    { key: "goals", header: t("shortlist.goals"), align: "right", render: (r) => r.goals ?? "—" },
-    { key: "assists", header: t("shortlist.assists"), align: "right", render: (r) => r.assists ?? "—" },
-    { key: "saves", header: t("shortlist.saves"), align: "right", render: (r) => r.saves ?? "—" },
-    { key: "form", header: t("shortlist.form"), align: "right", render: (r) => <GradeBadge grade={r.gradeTotal} /> },
-    {
-      key: "buy",
-      header: "",
-      render: (r) => {
-        const info = priceById.get(r.playerId);
-        return <BuyButton player={{ playerId: r.playerId, name: r.name, position: info?.position ?? r.position, price: info?.price ?? null }} />;
-      },
-    },
-  ];
+  const seasons = useSeasons();
+  const currentSeason = seasons.data?.find((s) => s.isCurrent)?.label;
+  const season = urlSeason ?? currentSeason;
+  const ready = urlSeason != null || !seasons.isPending;
+
+  const tournaments = useTournaments(season);
+  const genders = useGenders();
+  const clubs = useClubs();
+  const constraints = useSquadConstraints();
+  const shortlist = useShortlist();
+
+  const playerIds = shortlist.data?.items.map((i) => i.playerId) ?? [];
+  const hasShortlistedPlayers = playerIds.length > 0;
+
+  const players = usePlayers(
+    { season, tournamentId, gender, position, name, clubId, sort, offset, limit: LIMIT, playerIds },
+    { enabled: ready && hasShortlistedPlayers },
+  );
+
+  // Merge param updates so filters compose; "" / undefined removes a param.
+  const update = (next: Record<string, string | undefined>) => {
+    const merged = new URLSearchParams(params);
+    for (const [k, v] of Object.entries(next)) {
+      if (v == null || v === "") merged.delete(k);
+      else merged.set(k, v);
+    }
+    setParams(merged);
+  };
+
+  const positionCodes = constraints.data ? Object.keys(constraints.data.posLimits) : [];
+  const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
 
   return (
     <section className="stack">
       <div className="page-head">
         <h1 className="title">{t("shortlist.title")}</h1>
-        {data && <p className="subtitle">{t("shortlist.countOfMax", { count: data.count, max: data.max })}</p>}
+        {shortlist.data && (
+          <p className="subtitle">{t("shortlist.countOfMax", { count: shortlist.data.count, max: shortlist.data.max })}</p>
+        )}
       </div>
-      {isPending && <Loading />}
-      {isError && <ErrorView error={error} notFoundLabel={t("shortlist.notFound")} />}
-      {data && (
-        <Panel>
-          <PlayerTable<ShortlistItem> rows={data.items} after={after} emptyLabel={t("shortlist.empty")} />
-        </Panel>
+
+      {shortlist.isPending && <Loading />}
+      {shortlist.isError && <ErrorView error={shortlist.error} notFoundLabel={t("shortlist.notFound")} />}
+
+      {shortlist.data && !hasShortlistedPlayers && <p className="status">{t("shortlist.empty")}</p>}
+
+      {shortlist.data && hasShortlistedPlayers && (
+        <>
+          <div className="market-filters">
+            <SearchInput
+              initialValue={name ?? ""}
+              placeholder={t("playerHub.searchName")}
+              clearLabel={t("playerHub.clearSearch")}
+              onSearch={(v) => update({ name: v, offset: undefined })}
+            />
+            <FilterSelect
+              label={t("playerHub.filterSeason")}
+              value={season ?? ""}
+              options={(seasons.data ?? []).map((s) => ({ value: s.label, label: s.label }))}
+              onChange={(v) => update({ season: v, tournamentId: undefined, offset: undefined })}
+            />
+            <FilterSelect
+              label={t("playerHub.filterGender")}
+              value={gender ?? ""}
+              options={[{ value: "", label: t("playerHub.allGenders") }, ...(genders.data ?? []).map((g) => ({ value: g.value, label: g.label }))]}
+              onChange={(v) => update({ gender: v, offset: undefined })}
+            />
+            <FilterSelect
+              label={t("playerHub.filterPosition")}
+              value={position ?? ""}
+              options={[{ value: "", label: t("playerHub.allPositions") }, ...positionCodes.map((c) => ({ value: c, label: posLabel(c) }))]}
+              onChange={(v) => update({ position: v, offset: undefined })}
+            />
+            <FilterSelect
+              label={t("playerHub.filterTournament")}
+              value={tournamentId ?? ""}
+              options={[{ value: "", label: t("playerHub.allTournaments") }, ...(tournaments.data ?? []).map((tn) => ({ value: tn.tournamentId, label: tn.name }))]}
+              onChange={(v) => update({ tournamentId: v, offset: undefined })}
+            />
+            <FilterSelect
+              label={t("playerHub.filterTeam")}
+              value={clubId ?? ""}
+              options={[
+                { value: "", label: t("playerHub.allTeams") },
+                ...[...(clubs.data ?? [])]
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((c) => ({ value: c.clubId, label: c.name })),
+              ]}
+              onChange={(v) => update({ clubId: v, offset: undefined })}
+            />
+          </div>
+
+          {players.isPending && <Loading />}
+          {players.isError && <ErrorView error={players.error} notFoundLabel={t("playerHub.notFound")} />}
+          {players.data && (
+            <Panel>
+              <PlayerHubTable
+                entries={players.data.entries}
+                sort={sort}
+                onSort={(s) => update({ sort: s, offset: undefined })}
+                authed={authed}
+              />
+              <Pagination
+                offset={players.data.offset}
+                limit={players.data.limit}
+                total={players.data.total}
+                onOffsetChange={(o) => update({ offset: String(o) })}
+              />
+            </Panel>
+          )}
+        </>
       )}
     </section>
   );
