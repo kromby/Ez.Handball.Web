@@ -1,8 +1,7 @@
 import { screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, expect, test, vi } from "vitest";
 import * as api from "../../api/endpoints";
-import type { AuthUser } from "../../api/types";
-import type { ClubMatch, ClubMatchListing, MyGameweeks, SquadPlayer } from "../../api/types";
+import type { AuthUser, ClubMatch, ClubMatchListing, MyGameweeks, SquadPlayer } from "../../api/types";
 import { renderWithProviders } from "../../test/renderWithQuery";
 import { ToastProvider } from "../Toast";
 import { SelectedPlayerPanel } from "./SelectedPlayerPanel";
