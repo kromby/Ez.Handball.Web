@@ -25,7 +25,24 @@ function renderPage() {
   );
 }
 
+test("shows the leagues you're a member of", async () => {
+  vi.spyOn(api, "getMyMiniLeagues").mockResolvedValue([
+    { id: "lg-1", name: "Klettódeildin", season: "2026-27", role: "creator", memberCount: 3 },
+  ]);
+  renderPage();
+  expect(await screen.findByText("Klettódeildin")).toBeInTheDocument();
+  expect(screen.getByText(/2026-27/)).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "Klettódeildin" })).toHaveAttribute("href", "/leagues/lg-1");
+});
+
+test("shows a message when you're not in any leagues yet", async () => {
+  vi.spyOn(api, "getMyMiniLeagues").mockResolvedValue([]);
+  renderPage();
+  expect(await screen.findByText(/haven't joined/i)).toBeInTheDocument();
+});
+
 test("creating a league navigates to its detail page", async () => {
+  vi.spyOn(api, "getMyMiniLeagues").mockResolvedValue([]);
   vi.spyOn(api, "createMiniLeague").mockResolvedValue({ id: "abc", name: "Office", season: "2025-26", creatorUserId: "u1", memberCount: 1, role: "creator", createdAt: "", members: [] });
   renderPage();
   fireEvent.change(screen.getByLabelText("League name"), { target: { value: "Office" } });
@@ -35,6 +52,7 @@ test("creating a league navigates to its detail page", async () => {
 });
 
 test("blocks creating with a blank name", () => {
+  vi.spyOn(api, "getMyMiniLeagues").mockResolvedValue([]);
   const spy = vi.spyOn(api, "createMiniLeague");
   renderPage();
   fireEvent.click(screen.getByRole("button", { name: /create league/i }));
@@ -43,6 +61,7 @@ test("blocks creating with a blank name", () => {
 });
 
 test("shows the season message on no_current_season", async () => {
+  vi.spyOn(api, "getMyMiniLeagues").mockResolvedValue([]);
   vi.spyOn(api, "createMiniLeague").mockRejectedValue(new ApiError(409, "no_current_season", "HTTP 409"));
   renderPage();
   fireEvent.change(screen.getByLabelText("League name"), { target: { value: "Office" } });

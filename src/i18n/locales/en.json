@@ -342,6 +342,8 @@
   "leagues": {
     "title": "Mini-leagues",
     "blurb": "Create a private league and share the link with friends. Joining opens up soon.",
+    "yourLeagues": "Your leagues",
+    "noneYet": "You haven't joined a league yet.",
     "nameLabel": "League name",
     "namePlaceholder": "e.g. Office Olís",
     "nameInvalid": "1–60 characters.",
