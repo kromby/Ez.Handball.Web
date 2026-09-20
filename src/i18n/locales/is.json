@@ -273,7 +273,10 @@
     "frees": "losar {{price}}",
     "viewProfile": "Skoða leikmann →",
     "tapPrompt": "smelltu á leikmann til að sjá spjaldið",
-    "addSlot": "Bæta við {{code}} — fara á markaðinn"
+    "addSlot": "Bæta við {{code}} — fara á markaðinn",
+    "lastRound": "Síðasta umferð",
+    "nextMatch": "Næsti leikur",
+    "pts": "{{points}} stig"
   },
   "gameweek": {
     "navLink": "Umferðir",
