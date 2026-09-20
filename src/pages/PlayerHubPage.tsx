@@ -2,8 +2,7 @@ import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { formatMoney } from "../api/money";
 import type { PoolSort } from "../api/types";
-import { FilterSelect } from "../components/FilterSelect";
-import { SearchInput } from "../components/SearchInput";
+import { PlayerFilterBar } from "../components/PlayerFilterBar";
 import { PlayerHubTable } from "../components/PlayerHubTable";
 import { Pagination } from "../components/Pagination";
 import { Panel } from "../components/Panel";
@@ -62,7 +61,6 @@ export default function PlayerHubPage() {
   };
 
   const positionCodes = constraints.data ? Object.keys(constraints.data.posLimits) : [];
-  const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
 
   return (
     <section className="stack">
@@ -78,37 +76,19 @@ export default function PlayerHubPage() {
         )}
       </div>
 
-      <div className="market-filters">
-        <SearchInput
-          initialValue={name ?? ""}
-          placeholder={t("playerHub.searchName")}
-          clearLabel={t("playerHub.clearSearch")}
-          onSearch={(v) => update({ name: v, offset: undefined })}
-        />
-        <FilterSelect
-          label={t("playerHub.filterSeason")}
-          value={season ?? ""}
-          options={(seasons.data ?? []).map((s) => ({ value: s.label, label: s.label }))}
-          onChange={(v) => update({ season: v, tournamentId: undefined, offset: undefined })}
-        />
-        <FilterSelect
-          label={t("playerHub.filterPosition")}
-          value={position ?? ""}
-          options={[{ value: "", label: t("playerHub.allPositions") }, ...positionCodes.map((c) => ({ value: c, label: posLabel(c) }))]}
-          onChange={(v) => update({ position: v, offset: undefined })}
-        />
-        <FilterSelect
-          label={t("playerHub.filterTeam")}
-          value={clubId ?? ""}
-          options={[
-            { value: "", label: t("playerHub.allTeams") },
-            ...[...(clubs.data ?? [])]
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((c) => ({ value: c.clubId, label: c.name })),
-          ]}
-          onChange={(v) => update({ clubId: v, offset: undefined })}
-        />
-      </div>
+      <PlayerFilterBar
+        name={name ?? ""}
+        onNameChange={(v) => update({ name: v, offset: undefined })}
+        season={season ?? ""}
+        seasons={seasons.data ?? []}
+        onSeasonChange={(v) => update({ season: v, tournamentId: undefined, offset: undefined })}
+        position={position ?? ""}
+        positionCodes={positionCodes}
+        onPositionChange={(v) => update({ position: v, offset: undefined })}
+        clubId={clubId ?? ""}
+        clubs={clubs.data ?? []}
+        onClubIdChange={(v) => update({ clubId: v, offset: undefined })}
+      />
 
       {players.isPending && <Loading />}
       {players.isError && <ErrorView error={players.error} notFoundLabel={t("playerHub.notFound")} />}
