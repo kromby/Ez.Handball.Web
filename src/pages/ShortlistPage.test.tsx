@@ -31,8 +31,6 @@ const emptyConstraints = { ruleSetVersion: 1, maxSquadSize: 15, startingCap: { a
 
 function mock() {
   vi.spyOn(api, "getSeasons").mockResolvedValue([{ label: "2025-26", isCurrent: true }]);
-  vi.spyOn(api, "getTournaments").mockResolvedValue([]);
-  vi.spyOn(api, "getGenders").mockResolvedValue([{ value: "karlar", label: "Karlar" }, { value: "kvenna", label: "Kvenna" }]);
   vi.spyOn(api, "getSquadConstraints").mockResolvedValue(emptyConstraints);
   vi.spyOn(api, "getSquad").mockResolvedValue(emptySquad);
   vi.spyOn(api, "getClubs").mockResolvedValue([
@@ -55,6 +53,25 @@ test("renders the shortlisted players in the same grid as the players page", asy
   expect(screen.getByRole("link", { name: "Stjarnan" })).toBeInTheDocument();
   expect(screen.getByText("1 / 20")).toBeInTheDocument();
   await waitFor(() => expect(players.mock.calls.some(([p]) => p.playerIds?.includes("p1"))).toBe(true));
+});
+
+test("shows the same filter controls as the players page — no gender or tournament filter", async () => {
+  mock();
+  vi.spyOn(api, "getShortlist").mockResolvedValue({
+    items: [{ playerId: "p1", name: "Aron Pálmarsson", clubId: "c1", clubName: "Stjarnan", position: "VS", gender: "karlar", price: null, pickPercentage: null, createdAt: "", positionSecondary: null, games: null, goals: null, yellowCards: null, twoMinuteSuspensions: null, redCards: null, assists: null, steals: null, blocks: null, saves: null, turnovers: null, legalStops: null, shots: null, expectedGoals: null, shotsFaced: null, savePct: null, expectedSaves: null, gradeTotal: null, gradeOffense: null, gradeDefense: null, gradeGoalkeeping: null }],
+    count: 1, max: 20,
+  });
+  vi.spyOn(api, "getPlayers").mockResolvedValue({ sort: "Goals", total: 1, offset: 0, limit: 50, entries: [entry()] });
+
+  renderWithProviders(<ToastProvider><ShortlistPage /></ToastProvider>, { auth: authed });
+  await screen.findByText("Aron Pálmarsson");
+
+  expect(screen.getByRole("searchbox", { name: /Search players/i })).toBeInTheDocument();
+  expect(screen.getByRole("combobox", { name: /Season/i })).toBeInTheDocument();
+  expect(screen.getByRole("combobox", { name: /Position/i })).toBeInTheDocument();
+  expect(screen.getByRole("combobox", { name: /Team/i })).toBeInTheDocument();
+  expect(screen.queryByRole("combobox", { name: /Gender/i })).not.toBeInTheDocument();
+  expect(screen.queryByRole("combobox", { name: /Tournament/i })).not.toBeInTheDocument();
 });
 
 test("shows the empty state and never calls getPlayers when the shortlist is empty", async () => {
