@@ -267,7 +267,10 @@
     "frees": "frees {{price}}",
     "viewProfile": "View full profile →",
     "tapPrompt": "tap a player to see their card",
-    "addSlot": "Add a {{code}} — go to the market"
+    "addSlot": "Add a {{code}} — go to the market",
+    "lastRound": "Last round",
+    "nextMatch": "Next match",
+    "pts": "{{points}} pts"
   },
   "gameweek": {
     "navLink": "Gameweeks",
