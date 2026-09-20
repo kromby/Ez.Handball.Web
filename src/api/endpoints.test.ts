@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getMyMiniLeagues, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getMyMiniLeagues, getMiniLeagueStandings, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -175,6 +175,18 @@ test("getMyMiniLeagues calls the authed get for /api/mini-leagues/mine", async (
   const spy = spyAuthedGet();
   await getMyMiniLeagues();
   expect(spy).toHaveBeenCalledWith("/api/mini-leagues/mine");
+});
+
+test("getMiniLeagueStandings calls the authed get for /api/mini-leagues/:id/standings", async () => {
+  const spy = spyAuthedGet();
+  await getMiniLeagueStandings("abc123");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc123/standings");
+});
+
+test("getMiniLeagueStandings builds query string with offset/limit", async () => {
+  const spy = spyAuthedGet();
+  await getMiniLeagueStandings("abc123", { offset: 50, limit: 25 });
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc123/standings?offset=50&limit=25");
 });
 
 test("getInvite calls authedGet for /api/mini-leagues/:id/invite", async () => {
