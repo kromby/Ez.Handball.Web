@@ -286,6 +286,15 @@ export function useMiniLeague(id: string) {
   });
 }
 
+export function useMyMiniLeagues() {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["my-mini-leagues"],
+    queryFn: () => api.getMyMiniLeagues(),
+    enabled: status === "authenticated",
+  });
+}
+
 export function useCreateMiniLeague() {
   return useMutation({
     mutationFn: (name: string) => api.createMiniLeague(name),

@@ -345,6 +345,8 @@
   "leagues": {
     "title": "Einkadeildir",
     "blurb": "Stofnaðu einkadeild og deildu hlekknum með vinum. Hægt verður að ganga í deildir fljótlega.",
+    "yourLeagues": "Deildirnar þínar",
+    "noneYet": "Þú ert ekki komin(n) í neina deild enn.",
     "nameLabel": "Nafn deildar",
     "namePlaceholder": "t.d. Vinnudeildin",
     "nameInvalid": "1–60 stafir.",
