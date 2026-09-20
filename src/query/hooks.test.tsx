@@ -7,7 +7,7 @@ import { ApiError } from "../api/client";
 import { AuthContext } from "../auth/useAuth";
 import { buildAuth, queryWrapper } from "../test/renderWithQuery";
 import { createQueryClient } from "./queryClient";
-import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useCreateMiniLeague, useInvite, useJoinMiniLeague, useManager } from "./hooks";
+import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useMyMiniLeagues, useCreateMiniLeague, useInvite, useJoinMiniLeague, useManager } from "./hooks";
 import type { Manager } from "../api/types";
 
 afterEach(() => vi.restoreAllMocks());
@@ -82,6 +82,20 @@ test("useMiniLeague is disabled when not authenticated", () => {
   const spy = vi.spyOn(api, "getMiniLeague");
   renderHook(() => useMiniLeague("abc"), { wrapper: anonymousWrapper() });
   expect(spy).not.toHaveBeenCalled();
+});
+
+test("useMyMiniLeagues is disabled when not authenticated", () => {
+  const spy = vi.spyOn(api, "getMyMiniLeagues");
+  renderHook(() => useMyMiniLeagues(), { wrapper: anonymousWrapper() });
+  expect(spy).not.toHaveBeenCalled();
+});
+
+test("useMyMiniLeagues returns the caller's leagues", async () => {
+  const leagues = [{ id: "lg-1", name: "Office League", season: "2025-26", role: "creator", memberCount: 3 }];
+  vi.spyOn(api, "getMyMiniLeagues").mockResolvedValue(leagues as never);
+  const { result } = renderHook(() => useMyMiniLeagues(), { wrapper: authenticatedWrapper() });
+  await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  expect(result.current.data).toEqual(leagues);
 });
 
 test("useCreateMiniLeague returns the created league", async () => {

@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { Panel } from "../components/Panel";
 import { RegField } from "../auth/registration/RegField";
-import { useCreateMiniLeague } from "../query/hooks";
+import { useCreateMiniLeague, useMyMiniLeagues } from "../query/hooks";
 
 export default function LeaguesPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const create = useCreateMiniLeague();
+  const mine = useMyMiniLeagues();
   const [name, setName] = useState("");
   const [touched, setTouched] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -37,6 +38,27 @@ export default function LeaguesPage() {
       <div className="page-head">
         <h1 className="title">{t("leagues.title")}</h1>
       </div>
+      {mine.data && mine.data.length > 0 && (
+        <Panel>
+          <h2 className="label">{t("leagues.yourLeagues")}</h2>
+          <ul className="position-group-list">
+            {mine.data.map((l) => (
+              <li key={l.id} className="squad-row">
+                <Link to={`/leagues/${encodeURIComponent(l.id)}`}>{l.name}</Link>
+                <span className="squad-row-price">
+                  {l.season} · {t(l.role === "creator" ? "leagues.roleCreator" : "leagues.roleMember")}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </Panel>
+      )}
+      {mine.data && mine.data.length === 0 && (
+        <Panel>
+          <h2 className="label">{t("leagues.yourLeagues")}</h2>
+          <p className="status">{t("leagues.noneYet")}</p>
+        </Panel>
+      )}
       <Panel>
         <p className="subtitle">{t("leagues.blurb")}</p>
         <RegField

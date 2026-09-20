@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { formatMoney } from "../../api/money";
-import type { SquadPlayer } from "../../api/types";
+import type { ClubMatch, SquadPlayer } from "../../api/types";
+import { useClub, useClubMatches, useMyGameweeks } from "../../query/hooks";
 import { BallAvatar } from "../BallAvatar";
 import { SketchBox } from "../SketchBox";
 import { SellButton } from "../SellButton";
@@ -30,11 +31,15 @@ function StatCell({
 }
 
 /** Avatar + name/club/position + big rating. Kept as its own component to keep the panel's JSX shallow. */
-function PanelHead({ player }: { player: SquadPlayer }) {
+function PanelHead({ player, clubLogoUrl }: { player: SquadPlayer; clubLogoUrl: string | null | undefined }) {
   const { t } = useTranslation();
   return (
     <div className="panel-head">
-      <BallAvatar size={46} />
+      {clubLogoUrl ? (
+        <img className="panel-crest" src={clubLogoUrl} alt="" />
+      ) : (
+        <BallAvatar size={46} />
+      )}
       <div className="panel-id">
         <h3 className="panel-name">{player.name ?? t("match.unknownPlayer")}</h3>
         <div className="panel-meta">
@@ -49,8 +54,44 @@ function PanelHead({ player }: { player: SquadPlayer }) {
   );
 }
 
+/** One row of the "form" section: a label plus optional points and/or opponent crest+name. */
+function PanelFixtureRow({
+  label,
+  points,
+  opponent,
+}: {
+  label: string;
+  points?: string | null;
+  opponent: ClubMatch | null;
+}) {
+  const { t } = useTranslation();
+  return (
+    <div className="panel-fixture">
+      <span className="poslabel">{label}</span>
+      <span className="panel-fixture-body">
+        {points != null && <span className="panel-fixture-pts">{points}</span>}
+        {opponent && (
+          <span className="panel-fixture-opp">
+            {opponent.opponentLogoUrl ? (
+              <img className="panel-fixture-logo" src={opponent.opponentLogoUrl} alt="" />
+            ) : (
+              <span className="panel-fixture-logo panel-fixture-logo--blank" aria-hidden="true" />
+            )}
+            {t("match.versus")} {opponent.opponentName ?? t("club.unknownOpponent")}
+          </span>
+        )}
+      </span>
+    </div>
+  );
+}
+
 export function SelectedPlayerPanel({ player }: { player: SquadPlayer | null }) {
   const { t } = useTranslation();
+  const clubId = player?.clubId ?? "";
+  const club = useClub(clubId);
+  const played = useClubMatches(clubId, "played");
+  const upcoming = useClubMatches(clubId, "upcoming");
+  const gameweeks = useMyGameweeks();
 
   if (!player) {
     return (
@@ -64,9 +105,25 @@ export function SelectedPlayerPanel({ player }: { player: SquadPlayer | null }) 
   const driftValue = (amount: number, currency: string): string =>
     `${amount >= 0 ? "▲" : "▼"} ${formatMoney({ amount: Math.abs(amount), currency })}`;
 
+  const settledGameweeks = gameweeks.data?.gameweeks ?? [];
+  const lastSettled = settledGameweeks[settledGameweeks.length - 1] ?? null;
+  const lastRoundScore = lastSettled?.breakdown.find((entry) => entry.playerId === player.playerId) ?? null;
+  const lastOpponent = played.data?.matches[0] ?? null;
+  const nextOpponent = upcoming.data?.matches[0] ?? null;
+  const lastRoundPoints = lastRoundScore
+    ? lastRoundScore.played
+      ? t("squad.pts", { points: lastRoundScore.points })
+      : t("gameweekScores.dnp")
+    : null;
+
   return (
     <SketchBox tone="paper" radius={14} pad="18px 20px">
-      <PanelHead player={player} />
+      <PanelHead player={player} clubLogoUrl={club.data?.logoUrl} />
+
+      {lastRoundScore && (
+        <PanelFixtureRow label={t("squad.lastRound")} points={lastRoundPoints} opponent={lastOpponent} />
+      )}
+      {nextOpponent && <PanelFixtureRow label={t("squad.nextMatch")} opponent={nextOpponent} />}
 
       <div className="panel-stats">
         <StatCell label={t("squad.price")} value={formatMoney(player.price)} valueClassName="amber" />

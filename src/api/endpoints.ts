@@ -15,6 +15,7 @@ import type {
   MatchDetail,
   MiniLeague,
   MyGameweeks,
+  MyMiniLeague,
   Player,
   PlayerHistoryResponse,
   PlayerMissingPosition,
@@ -170,6 +171,10 @@ export function createMiniLeague(name: string): Promise<MiniLeague> {
 
 export function getMiniLeague(id: string): Promise<MiniLeague> {
   return authedGet<MiniLeague>(`/api/mini-leagues/${encodeURIComponent(id)}`);
+}
+
+export function getMyMiniLeagues(): Promise<MyMiniLeague[]> {
+  return authedGet<MyMiniLeague[]>("/api/mini-leagues/mine");
 }
 
 export function getInvite(id: string): Promise<Invite> {
