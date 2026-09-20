@@ -9,7 +9,7 @@ import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useAuth } from "../auth/useAuth";
 import {
-  useClubs, useGenders, usePlayers, useSeasons, useShortlist, useSquadConstraints, useTournaments,
+  useClubs, usePlayers, useSeasons, useShortlist, useSquadConstraints,
 } from "../query/hooks";
 
 const LIMIT = 50;
@@ -40,8 +40,6 @@ export default function ShortlistPage() {
   const season = urlSeason ?? currentSeason;
   const ready = urlSeason != null || !seasons.isPending;
 
-  const tournaments = useTournaments(season);
-  const genders = useGenders();
   const clubs = useClubs();
   const constraints = useSquadConstraints();
   const shortlist = useShortlist();
@@ -97,22 +95,10 @@ export default function ShortlistPage() {
               onChange={(v) => update({ season: v, tournamentId: undefined, offset: undefined })}
             />
             <FilterSelect
-              label={t("playerHub.filterGender")}
-              value={gender ?? ""}
-              options={[{ value: "", label: t("playerHub.allGenders") }, ...(genders.data ?? []).map((g) => ({ value: g.value, label: g.label }))]}
-              onChange={(v) => update({ gender: v, offset: undefined })}
-            />
-            <FilterSelect
               label={t("playerHub.filterPosition")}
               value={position ?? ""}
               options={[{ value: "", label: t("playerHub.allPositions") }, ...positionCodes.map((c) => ({ value: c, label: posLabel(c) }))]}
               onChange={(v) => update({ position: v, offset: undefined })}
-            />
-            <FilterSelect
-              label={t("playerHub.filterTournament")}
-              value={tournamentId ?? ""}
-              options={[{ value: "", label: t("playerHub.allTournaments") }, ...(tournaments.data ?? []).map((tn) => ({ value: tn.tournamentId, label: tn.name }))]}
-              onChange={(v) => update({ tournamentId: v, offset: undefined })}
             />
             <FilterSelect
               label={t("playerHub.filterTeam")}
