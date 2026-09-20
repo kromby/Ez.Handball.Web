@@ -256,10 +256,14 @@ export function usePlayers(params: {
   sort?: PoolSort;
   offset?: number;
   limit?: number;
+  playerIds?: string[];
 }, options: { enabled?: boolean } = {}) {
-  const { season, tournamentId, gender, position, name, clubId, sort, offset, limit } = params;
+  const { season, tournamentId, gender, position, name, clubId, sort, offset, limit, playerIds } = params;
   return useQuery({
-    queryKey: ["players", season ?? null, tournamentId ?? null, gender ?? null, position ?? null, name ?? null, clubId ?? null, sort ?? "Goals", offset ?? 0, limit ?? 50],
+    queryKey: [
+      "players", season ?? null, tournamentId ?? null, gender ?? null, position ?? null, name ?? null,
+      clubId ?? null, sort ?? "Goals", offset ?? 0, limit ?? 50, playerIds?.join(",") ?? null,
+    ],
     queryFn: () => api.getPlayers(params),
     enabled: options.enabled ?? true,
   });
@@ -283,6 +287,15 @@ export function useMiniLeague(id: string) {
     queryKey: ["mini-league", id],
     queryFn: () => api.getMiniLeague(id),
     enabled: status === "authenticated" && id.length > 0,
+  });
+}
+
+export function useMyMiniLeagues() {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["my-mini-leagues"],
+    queryFn: () => api.getMyMiniLeagues(),
+    enabled: status === "authenticated",
   });
 }
 

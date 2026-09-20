@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getMyMiniLeagues, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -169,6 +169,12 @@ test("getMiniLeague calls the authed get for /api/mini-leagues/:id", async () =>
   const spy = spyAuthedGet();
   await getMiniLeague("abc123");
   expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc123");
+});
+
+test("getMyMiniLeagues calls the authed get for /api/mini-leagues/mine", async () => {
+  const spy = spyAuthedGet();
+  await getMyMiniLeagues();
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/mine");
 });
 
 test("getInvite calls authedGet for /api/mini-leagues/:id/invite", async () => {

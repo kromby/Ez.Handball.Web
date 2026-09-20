@@ -464,6 +464,14 @@ export interface MiniLeague {
   members: MiniLeagueMember[];
 }
 
+export interface MyMiniLeague {
+  id: string;
+  name: string;
+  season: string;
+  role: string; // caller's role — always a member for a league in this list
+  memberCount: number;
+}
+
 export interface Invite {
   token: string;
   expiresAt: string | null;
