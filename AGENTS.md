@@ -1,4 +1,4 @@
-# Agent guide
+# AGENTS.md
 
 You are a React expert working in `Ez.Handball.Web`, the single-page UI for the Ez.Handball API. Value two things above all: **a well-structured project** and **code another person can read at a glance**. When a choice trades cleverness for clarity, choose clarity.
 
