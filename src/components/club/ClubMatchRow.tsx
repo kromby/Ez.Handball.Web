@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { ClubLink } from "../ClubLink";
 import type { ClubMatch } from "../../api/types";
 import { formatKickoff } from "../gameweek/datetime";
@@ -24,25 +25,26 @@ export function ClubMatchRow({ match }: { match: ClubMatch }) {
 
   return (
     <div className="club-match">
-      <div className="club-match-main">
-        <ClubLink clubId={match.opponentClubId} className="club-match-opp">
-          {match.opponentLogoUrl ? (
-            <img className="club-match-logo" src={match.opponentLogoUrl} alt="" />
-          ) : (
-            <span className="club-match-logo club-match-logo--blank" aria-hidden="true" />
-          )}
-          <span>{match.opponentName ?? t("club.unknownOpponent")}</span>
-        </ClubLink>
-        <span className="club-match-ha">{match.isHome ? t("club.home") : t("club.away")}</span>
-        {scores ? (
-          <span className={`club-match-score club-match-score--${outcome}`}>
-            {`${scores.club}–${scores.opponent}`}
-          </span>
+      <ClubLink clubId={match.opponentClubId} className="club-match-opp">
+        {match.opponentLogoUrl ? (
+          <img className="club-match-logo" src={match.opponentLogoUrl} alt="" />
         ) : (
-          <span className="club-match-time">{formatKickoff(match.date)}</span>
+          <span className="club-match-logo club-match-logo--blank" aria-hidden="true" />
         )}
-      </div>
-      <div className="club-match-meta">{meta}</div>
+        <span>{match.opponentName ?? t("club.unknownOpponent")}</span>
+      </ClubLink>
+      <span className="club-match-ha">{match.isHome ? t("club.home") : t("club.away")}</span>
+      <span className="club-match-meta">{meta}</span>
+      {scores ? (
+        <Link
+          to={`/matches/${encodeURIComponent(match.matchId)}`}
+          className={`club-match-score club-match-score--${outcome}`}
+        >
+          {`${scores.club}–${scores.opponent}`}
+        </Link>
+      ) : (
+        <span className="club-match-time">{formatKickoff(match.date)}</span>
+      )}
     </div>
   );
 }
