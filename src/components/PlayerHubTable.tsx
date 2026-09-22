@@ -6,7 +6,6 @@ import { useClubs } from "../query/hooks";
 import { PlayerTable, type PlayerColumn } from "./PlayerTable";
 import { SortHeader } from "./SortHeader";
 import { BuyButton } from "./BuyButton";
-import { GradeBadge } from "./GradeBadge";
 
 export function PlayerHubTable<T extends PoolEntry>({
   entries,
@@ -61,7 +60,6 @@ export function PlayerHubTable<T extends PoolEntry>({
     { key: "saves", header: t("playerHub.saves"), align: "right", render: (e) => e.saves },
     { key: "avg", header: t("playerHub.avgGoals"), align: "right", render: (e) => e.avgGoals.toFixed(2) },
     { key: "rating", header: sortable(t("playerHub.rating"), "Rating"), align: "right", render: (e) => e.rating.toFixed(0) },
-    { key: "form", header: t("playerHub.form"), align: "right", render: (e) => <GradeBadge grade={e.gradeTotal} /> },
     { key: "price", header: sortable(t("playerHub.price"), "Price"), align: "right", render: (e) => formatMoney(e.price) },
   ];
 

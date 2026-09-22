@@ -19,6 +19,11 @@ const entry: PlayerHistoryEntry = {
   avgYellowCards: 0.13,
   avgTwoMinuteSuspensions: 0.22,
   avgRedCards: 0,
+  totalAssists: 31,
+  totalSteals: 4,
+  totalBlocks: 2,
+  totalSaves: 0,
+  points: 318,
 };
 
 const totals: PlayerHistoryTotals = {
@@ -31,6 +36,11 @@ const totals: PlayerHistoryTotals = {
   avgYellowCards: 0.13,
   avgTwoMinuteSuspensions: 0.22,
   avgRedCards: 0,
+  totalAssists: 31,
+  totalSteals: 4,
+  totalBlocks: 2,
+  totalSaves: 0,
+  points: 318,
 };
 
 test("renders one row per history entry plus a totals row", () => {
@@ -43,4 +53,26 @@ test("renders one row per history entry plus a totals row", () => {
   expect(screen.getByText("Total")).toBeInTheDocument();
   expect(screen.getAllByText("6.17")[0]).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "Valur" })).toHaveAttribute("href", "/clubs/c1");
+});
+
+test("shows HBStatz assists, saves and points per season and in the totals", () => {
+  render(
+    <MemoryRouter>
+      <StatTable entries={[entry]} totals={totals} />
+    </MemoryRouter>,
+  );
+  for (const header of ["Ast", "Sv", "Points"]) {
+    expect(screen.getByRole("columnheader", { name: header })).toBeInTheDocument();
+  }
+  expect(screen.getAllByText("31")).toHaveLength(2);
+  expect(screen.getAllByText("318")).toHaveLength(2);
+});
+
+test("shows a dash when the server could not score the points", () => {
+  render(
+    <MemoryRouter>
+      <StatTable entries={[{ ...entry, points: null }]} totals={null} />
+    </MemoryRouter>,
+  );
+  expect(screen.getByText("—")).toBeInTheDocument();
 });

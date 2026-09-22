@@ -1,26 +1,15 @@
 import { useTranslation } from "react-i18next";
-import type { TFunction } from "i18next";
 import { useParams } from "react-router-dom";
-import type { PlayerStat } from "../api/types";
 import { formatMoney } from "../api/money";
 import { BuyButton } from "../components/BuyButton";
 import { ClubLink } from "../components/ClubLink";
-import { MatchList, type MatchSummary } from "../components/MatchList";
 import { Panel } from "../components/Panel";
+import { PlayerMatchTable } from "../components/PlayerMatchTable";
 import { SellButton } from "../components/SellButton";
 import { StarToggle } from "../components/StarToggle";
 import { StatTable } from "../components/StatTable";
 import { ErrorView, Loading } from "../components/StateViews";
-import { usePlayer, usePlayerHistory, usePlayerStats, useSquad } from "../query/hooks";
-
-function toSummary(stat: PlayerStat, t: TFunction): MatchSummary {
-  return {
-    matchId: stat.matchId,
-    season: stat.season,
-    tournamentName: stat.tournamentName,
-    context: `${stat.clubName ?? "—"} · ${t("player.goalsCount", { count: stat.goals })}`,
-  };
-}
+import { useClubs, usePlayer, usePlayerHistory, usePlayerStats, useSquad } from "../query/hooks";
 
 function formatBirthday(iso: string | null): string {
   if (!iso) return "";
@@ -36,6 +25,7 @@ export default function PlayerPage() {
   const history = usePlayerHistory(playerId);
   const stats = usePlayerStats(playerId);
   const squad = useSquad();
+  const clubs = useClubs();
 
   if (profile.isPending) return <Loading />;
   if (profile.isError) return <ErrorView error={profile.error} notFoundLabel={t("player.notFound")} />;
@@ -46,6 +36,7 @@ export default function PlayerPage() {
     Boolean,
   );
   const metaText = metaBits.join(" · ");
+  const clubLogoUrl = clubs.data?.find((club) => club.clubId === p.clubId)?.logoUrl ?? null;
 
   return (
     <section className="stack">
@@ -64,13 +55,17 @@ export default function PlayerPage() {
           )}
         </div>
         <p className="subtitle">
-          {p.clubName ? <ClubLink clubId={p.clubId} name={p.clubName} /> : null}
+          {p.clubName ? (
+            <ClubLink clubId={p.clubId} className="club-inline">
+              {clubLogoUrl && <img className="club-logo-sm" src={clubLogoUrl} alt="" />}
+              {p.clubName}
+            </ClubLink>
+          ) : null}
           {p.clubName && metaText ? " · " : null}
           {metaText}
         </p>
         {(p.rating != null || p.price != null) && (
           <div className="fantasy-strip">
-            <span className="label">{t("player.fantasyHeading")}</span>
             <dl className="fantasy-strip-stats">
               <div>
                 <dt>{t("player.rating")}</dt>
@@ -101,7 +96,7 @@ export default function PlayerPage() {
         <h2 className="section-title">{t("player.matches")}</h2>
         {stats.isPending && <Loading />}
         {stats.isError && <ErrorView error={stats.error} notFoundLabel={t("player.noMatches")} />}
-        {stats.data && <MatchList matches={stats.data.stats.map((s) => toSummary(s, t))} />}
+        {stats.data && <PlayerMatchTable stats={stats.data.stats} />}
       </Panel>
     </section>
   );
