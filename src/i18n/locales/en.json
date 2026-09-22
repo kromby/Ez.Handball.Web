@@ -355,6 +355,7 @@
     "members": "Members",
     "you": "{{name}} (you)",
     "memberShort": "Member {{id}}",
+    "memberPoints": "{{points}} pts",
     "roleCreator": "creator",
     "roleMember": "member",
     "badgeCreator": "You · creator",

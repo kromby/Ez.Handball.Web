@@ -355,6 +355,7 @@
     "members": "Meðlimir",
     "you": "{{name}} (þú)",
     "memberShort": "Meðlimur {{id}}",
+    "memberPoints": "{{points}} stig",
     "roleCreator": "stofnandi",
     "roleMember": "meðlimur",
     "badgeCreator": "Þú · stofnandi",
