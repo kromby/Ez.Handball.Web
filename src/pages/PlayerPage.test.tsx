@@ -192,7 +192,7 @@ test("renders rating 0 as '0' and a null price as '—'", async () => {
   vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
   vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
   renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
-  const strip = (await screen.findByText("Points")).closest("dl")!;
+  const strip = (await screen.findByText("Points")).closest("dl") as HTMLElement;
   expect(within(strip).getByText("0")).toBeInTheDocument();
   expect(within(strip).getByText("—")).toBeInTheDocument();
 });
