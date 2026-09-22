@@ -41,6 +41,8 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/verify-email" element={<VerifyEmailPage />} />
+          {/* Verification emails link to /verify?token=…, per Auth:VerificationUrlTemplate on the API. */}
+          <Route path="/verify" element={<VerifyEmailPage />} />
           <Route path="/gameweeks" element={<GameweeksPage />} />
           <Route element={<ProtectedRoute />}>
             <Route path="/account" element={<AccountPage />} />
