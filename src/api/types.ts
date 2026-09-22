@@ -73,6 +73,18 @@ export interface AdminSyncResult {
   failed: string[];
 }
 
+export interface AdminSettleRoundReport {
+  round: string;
+  teamsConsidered: number;
+  settled: number;
+  notReady: number;
+  skipped: number;
+}
+
+export interface AdminSettleGameweeksResult {
+  rounds: AdminSettleRoundReport[];
+}
+
 export interface AdminHbStatzSyncResult {
   matchesChecked: number;
   matchesSynced: number;

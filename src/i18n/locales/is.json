@@ -440,7 +440,15 @@
       "hbStatzSyncResultWithIssues": "{{checked}} leikir skoðaðir, {{synced}} samstilltir — {{unmatched}} ófundnir, {{failed}} mistókust.",
       "hbStatzSyncRound": "Samstilla umferð {{round}}",
       "hbStatzSyncGame": "Samstilla",
-      "hbStatzSyncRetry": "Reyna aftur"
+      "hbStatzSyncRetry": "Reyna aftur",
+      "settleNow": "Gera upp umferðir",
+      "settling": "Geri upp umferðir…",
+      "settleResult": "Umferð {{round}}: {{settled}} af {{teams}} liðum gerð upp, {{notReady}} ekki tilbúin, {{skipped}} sleppt.",
+      "settleNothing": "Engar kláraðar umferðir til að gera upp.",
+      "settleConfigMissing": "Stillingar umferða vantar — settu þær inn fyrst.",
+      "settleRuleSetMissing": "Stigareglur eða liðsuppstillingarreglur vantar.",
+      "settleTournamentNotFound": "Stillt fantasy-mót fannst ekki.",
+      "settleError": "Uppgjör mistókst. Reyndu aftur."
     },
     "players": {
       "title": "Stöður leikmanna",

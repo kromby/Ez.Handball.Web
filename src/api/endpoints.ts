@@ -29,6 +29,7 @@ import type {
   Squad,
   SquadConstraints,
   AdminHbStatzSyncResult,
+  AdminSettleGameweeksResult,
   AdminSyncResult,
   AdminTournamentGames,
   SquadMutationResult,
@@ -251,6 +252,11 @@ export function triggerAdminHbStatzSync(scope: HbStatzSyncScope = {}): Promise<A
   if (scope.matchId) sp.set("matchId", scope.matchId);
   const qs = sp.toString();
   return authedSend<AdminHbStatzSyncResult>(`/api/admin/hbstatz-sync${qs ? `?${qs}` : ""}`, "POST");
+}
+
+/** Settles every complete gameweek for all fantasy teams. Idempotent — safe to re-run. */
+export function settleAdminGameweeks(): Promise<AdminSettleGameweeksResult> {
+  return authedSend<AdminSettleGameweeksResult>("/api/admin/gameweeks/settle", "POST");
 }
 
 export function getPlayersMissingPosition(): Promise<PlayerMissingPosition[]> {
