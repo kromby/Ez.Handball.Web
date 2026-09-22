@@ -41,3 +41,20 @@ test("renders before-columns ahead of the player cell", () => {
   expect(screen.getByText("1")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "Aron" })).toHaveAttribute("href", "/players/p1");
 });
+
+test("shows the club logo with the club name as tooltip when a logo is known", () => {
+  const logos = new Map([["c1", "https://cdn.example/stjarnan.png"]]);
+  renderWithProviders(<PlayerTable<Row> rows={rows} after={after} clubLogos={logos} />);
+  const link = screen.getByRole("link", { name: "Stjarnan" });
+  expect(link).toHaveAttribute("href", "/clubs/c1");
+  expect(link).toHaveAttribute("title", "Stjarnan");
+  const img = screen.getByRole("img", { name: "Stjarnan" });
+  expect(img).toHaveAttribute("src", "https://cdn.example/stjarnan.png");
+  expect(screen.queryByText("Stjarnan")).not.toBeInTheDocument();
+});
+
+test("falls back to the club name when the club has no logo", () => {
+  renderWithProviders(<PlayerTable<Row> rows={rows} after={after} clubLogos={new Map()} />);
+  expect(screen.getByRole("link", { name: "Stjarnan" })).toHaveTextContent("Stjarnan");
+  expect(screen.queryByRole("img")).not.toBeInTheDocument();
+});

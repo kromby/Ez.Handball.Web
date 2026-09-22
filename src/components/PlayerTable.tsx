@@ -18,6 +18,15 @@ interface PlayerRow {
   clubName: string | null;
 }
 
+function ClubCell({ clubId, clubName, logoUrl }: { clubId?: string | null; clubName: string | null; logoUrl?: string | null }) {
+  if (!logoUrl) return <ClubLink clubId={clubId} name={clubName} />;
+  return (
+    <ClubLink clubId={clubId} title={clubName ?? undefined}>
+      <img className="club-logo-sm" src={logoUrl} alt={clubName ?? ""} />
+    </ClubLink>
+  );
+}
+
 const numClass = (align?: "right") => (align === "right" ? "num" : undefined);
 
 export function PlayerTable<T extends PlayerRow>({
@@ -25,11 +34,14 @@ export function PlayerTable<T extends PlayerRow>({
   before = [],
   after = [],
   emptyLabel,
+  clubLogos,
 }: {
   rows: T[];
   before?: PlayerColumn<T>[];
   after?: PlayerColumn<T>[];
   emptyLabel?: string;
+  /** clubId → logo URL; when a row's club has a logo it replaces the club name (shown as tooltip). */
+  clubLogos?: ReadonlyMap<string, string | null>;
 }) {
   const { t } = useTranslation();
   if (rows.length === 0) return <p className="status">{emptyLabel ?? t("leaderboard.noPlayers")}</p>;
@@ -58,7 +70,7 @@ export function PlayerTable<T extends PlayerRow>({
             <td>
               <Link to={`/players/${encodeURIComponent(row.playerId)}`}>{row.name ?? t("match.unknownPlayer")}</Link>
             </td>
-            <td><ClubLink clubId={row.clubId} name={row.clubName} /></td>
+            <td><ClubCell clubId={row.clubId} clubName={row.clubName} logoUrl={row.clubId ? clubLogos?.get(row.clubId) : null} /></td>
             {after.map((c) => (
               <td key={c.key} className={numClass(c.align)}>{c.render(row)}</td>
             ))}

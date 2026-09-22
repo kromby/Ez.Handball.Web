@@ -106,3 +106,14 @@ test("changing the team resets the pagination offset", async () => {
     expect(spy.mock.calls.some(([p]) => p.clubId === "385" && (p.offset ?? 0) === 0)).toBe(true),
   );
 });
+
+test("Félag column shows the club logo from the clubs list with the name as tooltip", async () => {
+  mock();
+  vi.spyOn(api, "getClubs").mockResolvedValue([
+    { clubId: "1", name: "Catalunya", logoUrl: "https://cdn.example/catalunya.png" },
+  ]);
+  renderWithProviders(<ToastProvider><PlayerHubPage /></ToastProvider>, { initialEntries: ["/players"] });
+  const img = await screen.findByRole("img", { name: "Catalunya" });
+  expect(img).toHaveAttribute("src", "https://cdn.example/catalunya.png");
+  expect(screen.getByRole("link", { name: "Catalunya" })).toHaveAttribute("title", "Catalunya");
+});
