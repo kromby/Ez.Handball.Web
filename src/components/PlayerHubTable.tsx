@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
-import type { PoolEntry, PoolSort } from "../api/types";
+import { useMemo } from "react";
+import type { Club, PoolEntry, PoolSort } from "../api/types";
 import { formatMoney } from "../api/money";
 import { PlayerTable, type PlayerColumn } from "./PlayerTable";
 import { SortHeader } from "./SortHeader";
@@ -11,13 +12,16 @@ export function PlayerHubTable({
   sort,
   onSort,
   authed,
+  clubs,
 }: {
   entries: PoolEntry[];
   sort: PoolSort;
   onSort: (sort: PoolSort) => void;
   authed: boolean;
+  clubs?: Club[];
 }) {
   const { t } = useTranslation();
+  const clubLogos = useMemo(() => new Map((clubs ?? []).map((c) => [c.clubId, c.logoUrl])), [clubs]);
   const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
 
   const before: PlayerColumn<PoolEntry>[] = [
@@ -58,5 +62,5 @@ export function PlayerHubTable({
     });
   }
 
-  return <PlayerTable<PoolEntry> rows={entries} before={before} after={after} emptyLabel={t("playerHub.empty")} />;
+  return <PlayerTable<PoolEntry> rows={entries} before={before} after={after} emptyLabel={t("playerHub.empty")} clubLogos={clubLogos} />;
 }

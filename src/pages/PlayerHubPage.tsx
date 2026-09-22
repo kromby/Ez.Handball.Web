@@ -99,6 +99,7 @@ export default function PlayerHubPage() {
             sort={sort}
             onSort={(s) => update({ sort: s, offset: undefined })}
             authed={authed}
+            clubs={clubs.data}
           />
           <Pagination
             offset={players.data.offset}
