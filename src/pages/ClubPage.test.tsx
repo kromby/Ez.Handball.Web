@@ -5,6 +5,7 @@ import * as api from "../api/endpoints";
 import ClubPage from "./ClubPage";
 import { renderWithProviders } from "../test/renderWithQuery";
 import { ApiError } from "../api/client";
+import type { ClubRosterPlayer } from "../api/types";
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -18,7 +19,21 @@ function setup() {
   );
 }
 
-test("renders club name and roster rows in server order with player links", async () => {
+function rosterPlayer(overrides: Partial<ClubRosterPlayer>): ClubRosterPlayer {
+  return {
+    rank: 1, playerId: "p", name: "Player", clubId: "c1", clubName: "Valur",
+    gender: "karlar", position: "CB", positionSecondary: null, games: 3, goals: 0, yellowCards: 0,
+    twoMinuteSuspensions: 0, redCards: 0, avgGoals: 0,
+    price: { amount: 5_000_000, currency: "ISK" }, rating: 0, pickPercentage: null,
+    assists: 0, steals: 0, blocks: 0, saves: 0, turnovers: 0, legalStops: 0, shots: 0,
+    expectedGoals: 0, shotsFaced: 0, savePct: null, expectedSaves: 0,
+    gradeTotal: null, gradeOffense: null, gradeDefense: null, gradeGoalkeeping: null,
+    jerseyNumber: null, age: null,
+    ...overrides,
+  };
+}
+
+test("renders club name and roster rows in server order with player stats", async () => {
   vi.spyOn(api, "getClub").mockResolvedValue({
     clubId: "c1",
     name: "Valur",
@@ -30,8 +45,11 @@ test("renders club name and roster rows in server order with player links", asyn
     clubId: "c1",
     season: "2025-2026",
     players: [
-      { playerId: "p7", name: "Jón Jónsson", jerseyNumber: "7", position: "Skytta", age: 24 },
-      { playerId: "p9", name: "Geir Geirsson", jerseyNumber: null, position: "Leikmaður", age: null },
+      rosterPlayer({
+        playerId: "p7", name: "Jón Jónsson", jerseyNumber: "7", position: "RB", age: 24,
+        games: 3, goals: 21, avgGoals: 7, rating: 64, price: { amount: 12_000_000, currency: "ISK" },
+      }),
+      rosterPlayer({ playerId: "p9", name: "Geir Geirsson", jerseyNumber: null, position: "Leikmaður", age: null }),
     ],
   });
 
@@ -44,13 +62,17 @@ test("renders club name and roster rows in server order with player links", asyn
   const rows = await screen.findAllByRole("row");
   const first = within(rows[1]);
   expect(first.getByRole("link", { name: "Jón Jónsson" })).toHaveAttribute("href", "/players/p7");
-  expect(first.getByText("7")).toBeInTheDocument();
-  expect(first.getByText("Skytta")).toBeInTheDocument();
-  expect(first.getByText("24")).toBeInTheDocument();
+  expect(first.getByText("7")).toBeInTheDocument();       // jersey
+  expect(first.getByText("Right back")).toBeInTheDocument(); // position label
+  expect(first.getByText("24")).toBeInTheDocument();      // age
+  expect(first.getByText("21")).toBeInTheDocument();      // goals
+  expect(first.getByText("7.00")).toBeInTheDocument();    // avgGoals
+  expect(first.getByText("64")).toBeInTheDocument();      // rating
+  expect(first.getByText(/12M ISK/)).toBeInTheDocument(); // price
 
   const second = within(rows[2]);
   expect(second.getByRole("link", { name: "Geir Geirsson" })).toHaveAttribute("href", "/players/p9");
-  expect(second.getByText("—")).toBeInTheDocument();
+  expect(second.getAllByText("—").length).toBeGreaterThan(0); // missing age
 });
 
 test("renders an empty state when the club has no players", async () => {
