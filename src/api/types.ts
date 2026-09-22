@@ -471,7 +471,9 @@ export interface MiniLeagueMember {
   userId: string;
   role: string; // "creator" | "member"
   joinedAt: string;
+  teamId: string; // matches ManagerStanding.teamId
   teamName: string | null;
+  favoriteClubId: string | null;
 }
 
 export interface ManagerStanding {
