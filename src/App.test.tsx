@@ -39,6 +39,12 @@ test("renders the match page at /matches/:id", () => {
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
 });
 
+test("renders the verify page at the /verify link sent in verification emails", () => {
+  localStorage.setItem(LANG_STORAGE_KEY, "en");
+  renderWithProviders(<App />, { initialEntries: ["/verify?token=abc"] });
+  expect(screen.getByRole("heading", { name: "Email verification" })).toBeInTheDocument();
+});
+
 test("navigates to the public gameweeks page", async () => {
   localStorage.setItem(LANG_STORAGE_KEY, "en");
   vi.spyOn(api, "getGameweeks").mockResolvedValue([
