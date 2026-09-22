@@ -155,3 +155,21 @@ test("clicking a column header re-queries getPlayers with that sort, scoped to t
   await userEvent.click(screen.getByRole("button", { name: /Price/i }));
   await waitFor(() => expect(players.mock.calls.some(([p]) => p.sort === "Price")).toBe(true));
 });
+
+test("Félag column shows the club logo with the name as tooltip, same as the players page", async () => {
+  mock();
+  vi.spyOn(api, "getClubs").mockResolvedValue([
+    { clubId: "c1", name: "Stjarnan", logoUrl: "https://cdn.example/stjarnan.png" },
+  ]);
+  vi.spyOn(api, "getShortlist").mockResolvedValue({
+    items: [{ playerId: "p1", name: "Aron Pálmarsson", clubId: "c1", clubName: "Stjarnan", position: "VS", gender: "karlar", price: null, pickPercentage: null, createdAt: "", positionSecondary: null, games: null, goals: null, yellowCards: null, twoMinuteSuspensions: null, redCards: null, assists: null, steals: null, blocks: null, saves: null, turnovers: null, legalStops: null, shots: null, expectedGoals: null, shotsFaced: null, savePct: null, expectedSaves: null, gradeTotal: null, gradeOffense: null, gradeDefense: null, gradeGoalkeeping: null }],
+    count: 1, max: 20,
+  });
+  vi.spyOn(api, "getPlayers").mockResolvedValue({ sort: "Goals", total: 1, offset: 0, limit: 50, entries: [entry()] });
+
+  renderWithProviders(<ToastProvider><ShortlistPage /></ToastProvider>, { auth: authed });
+
+  const img = await screen.findByRole("img", { name: "Stjarnan" });
+  expect(img).toHaveAttribute("src", "https://cdn.example/stjarnan.png");
+  expect(screen.getByRole("link", { name: "Stjarnan" })).toHaveAttribute("title", "Stjarnan");
+});
