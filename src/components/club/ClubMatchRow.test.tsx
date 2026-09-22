@@ -70,3 +70,13 @@ test("renders a blank logo placeholder when opponent logo is null", () => {
   expect(document.querySelector(".club-match-logo--blank")).not.toBeNull();
   expect(document.querySelector("img.club-match-logo")).toBeNull();
 });
+
+test("shows tournament and round alongside the opponent", () => {
+  renderRow(base({ status: "upcoming", clubScore: null, opponentScore: null }));
+  expect(screen.getByText(/Olís deild karla · .*12/u)).toBeInTheDocument();
+});
+
+test("played score links to the match page", () => {
+  renderRow(base());
+  expect(screen.getByRole("link", { name: "28–24" })).toHaveAttribute("href", "/matches/m1");
+});
