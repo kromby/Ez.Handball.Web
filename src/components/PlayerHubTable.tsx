@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next";
 import { useMemo } from "react";
-import type { Club, PoolEntry, PoolSort } from "../api/types";
+import type { PoolEntry, PoolSort } from "../api/types";
 import { formatMoney } from "../api/money";
+import { useClubs } from "../query/hooks";
 import { PlayerTable, type PlayerColumn } from "./PlayerTable";
 import { SortHeader } from "./SortHeader";
 import { BuyButton } from "./BuyButton";
@@ -12,16 +13,16 @@ export function PlayerHubTable({
   sort,
   onSort,
   authed,
-  clubs,
 }: {
   entries: PoolEntry[];
   sort: PoolSort;
   onSort: (sort: PoolSort) => void;
   authed: boolean;
-  clubs?: Club[];
 }) {
   const { t } = useTranslation();
-  const clubLogos = useMemo(() => new Map((clubs ?? []).map((c) => [c.clubId, c.logoUrl])), [clubs]);
+  // Looked up here rather than passed in, so every page using this table shows logos.
+  const clubs = useClubs();
+  const clubLogos = useMemo(() => new Map((clubs.data ?? []).map((c) => [c.clubId, c.logoUrl])), [clubs.data]);
   const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
 
   const before: PlayerColumn<PoolEntry>[] = [
