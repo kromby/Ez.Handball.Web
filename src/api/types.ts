@@ -265,11 +265,10 @@ export interface ClubDetail {
   foundedYear: number | null;
 }
 
-export interface ClubRosterPlayer {
-  playerId: string;
-  name: string;
+// The club's slice of the current-season player pool (Backend#133): every
+// PoolEntry field plus the roster-only jersey number and age.
+export interface ClubRosterPlayer extends PoolEntry {
   jerseyNumber: string | null;
-  position: string;
   age: number | null;
 }
 

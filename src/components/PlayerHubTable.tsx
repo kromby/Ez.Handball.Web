@@ -8,16 +8,22 @@ import { SortHeader } from "./SortHeader";
 import { BuyButton } from "./BuyButton";
 import { GradeBadge } from "./GradeBadge";
 
-export function PlayerHubTable({
+export function PlayerHubTable<T extends PoolEntry>({
   entries,
   sort,
   onSort,
   authed,
+  leadingColumns,
+  afterPositionColumns = [],
 }: {
-  entries: PoolEntry[];
-  sort: PoolSort;
-  onSort: (sort: PoolSort) => void;
+  entries: T[];
+  /** Omit both to show plain headers and keep the server's row order. */
+  sort?: PoolSort;
+  onSort?: (sort: PoolSort) => void;
   authed: boolean;
+  /** Columns before the player name; defaults to the pool rank. */
+  leadingColumns?: PlayerColumn<T>[];
+  afterPositionColumns?: PlayerColumn<T>[];
 }) {
   const { t } = useTranslation();
   // Looked up here rather than passed in, so every page using this table shows logos.
@@ -25,7 +31,10 @@ export function PlayerHubTable({
   const clubLogos = useMemo(() => new Map((clubs.data ?? []).map((c) => [c.clubId, c.logoUrl])), [clubs.data]);
   const posLabel = (code: string) => t(`positions.${code}`, { defaultValue: code });
 
-  const before: PlayerColumn<PoolEntry>[] = [
+  const sortable = (label: string, sortKey: PoolSort) =>
+    sort && onSort ? <SortHeader label={label} sortKey={sortKey} active={sort} onSort={onSort} /> : label;
+
+  const before: PlayerColumn<T>[] = leadingColumns ?? [
     {
       key: "rank",
       header: "#",
@@ -34,7 +43,7 @@ export function PlayerHubTable({
     },
   ];
 
-  const after: PlayerColumn<PoolEntry>[] = [
+  const after: PlayerColumn<T>[] = [
     {
       key: "pos",
       header: t("playerHub.pos"),
@@ -45,14 +54,15 @@ export function PlayerHubTable({
         </>
       ),
     },
-    { key: "games", header: <SortHeader label={t("playerHub.games")} sortKey="Games" active={sort} onSort={onSort} />, align: "right", render: (e) => e.games },
-    { key: "goals", header: <SortHeader label={t("playerHub.goals")} sortKey="Goals" active={sort} onSort={onSort} />, align: "right", render: (e) => e.goals },
+    ...afterPositionColumns,
+    { key: "games", header: sortable(t("playerHub.games"), "Games"), align: "right", render: (e) => e.games },
+    { key: "goals", header: sortable(t("playerHub.goals"), "Goals"), align: "right", render: (e) => e.goals },
     { key: "assists", header: t("playerHub.assists"), align: "right", render: (e) => e.assists },
     { key: "saves", header: t("playerHub.saves"), align: "right", render: (e) => e.saves },
     { key: "avg", header: t("playerHub.avgGoals"), align: "right", render: (e) => e.avgGoals.toFixed(2) },
-    { key: "rating", header: <SortHeader label={t("playerHub.rating")} sortKey="Rating" active={sort} onSort={onSort} />, align: "right", render: (e) => e.rating.toFixed(0) },
+    { key: "rating", header: sortable(t("playerHub.rating"), "Rating"), align: "right", render: (e) => e.rating.toFixed(0) },
     { key: "form", header: t("playerHub.form"), align: "right", render: (e) => <GradeBadge grade={e.gradeTotal} /> },
-    { key: "price", header: <SortHeader label={t("playerHub.price")} sortKey="Price" active={sort} onSort={onSort} />, align: "right", render: (e) => formatMoney(e.price) },
+    { key: "price", header: sortable(t("playerHub.price"), "Price"), align: "right", render: (e) => formatMoney(e.price) },
   ];
 
   if (authed) {
@@ -63,5 +73,5 @@ export function PlayerHubTable({
     });
   }
 
-  return <PlayerTable<PoolEntry> rows={entries} before={before} after={after} emptyLabel={t("playerHub.empty")} clubLogos={clubLogos} />;
+  return <PlayerTable<T> rows={entries} before={before} after={after} emptyLabel={t("playerHub.empty")} clubLogos={clubLogos} />;
 }
