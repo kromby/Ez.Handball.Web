@@ -37,3 +37,28 @@ test("hides the Buy column when not authed", () => {
   );
   expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument();
 });
+
+test("without sort props, headers are plain labels in server order", () => {
+  renderWithProviders(
+    <ToastProvider><PlayerHubTable entries={[entry]} authed={false} /></ToastProvider>,
+  );
+  expect(screen.getByRole("columnheader", { name: "Rating" })).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /Rating/ })).not.toBeInTheDocument();
+});
+
+test("leading and after-position columns replace the rank column", () => {
+  renderWithProviders(
+    <ToastProvider>
+      <PlayerHubTable
+        entries={[entry]}
+        authed={false}
+        leadingColumns={[{ key: "jersey", header: "#", align: "right", render: () => "77" }]}
+        afterPositionColumns={[{ key: "age", header: "Age", align: "right", render: () => "31" }]}
+      />
+    </ToastProvider>,
+  );
+  const headers = screen.getAllByRole("columnheader").map((header) => header.textContent);
+  expect(headers.slice(1, 6)).toEqual(["#", "Player", "Club", "Pos", "Age"]);
+  expect(screen.getByText("77")).toBeInTheDocument();
+  expect(screen.getByText("31")).toBeInTheDocument();
+});

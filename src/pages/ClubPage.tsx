@@ -1,8 +1,10 @@
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import type { ClubRosterPlayer } from "../api/types";
+import { useAuth } from "../auth/useAuth";
 import { ClubMatchRow } from "../components/club/ClubMatchRow";
 import { Panel } from "../components/Panel";
+import { PlayerHubTable } from "../components/PlayerHubTable";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useClub, useClubMatches, useClubRoster } from "../query/hooks";
 
@@ -35,29 +37,16 @@ function MatchSection({
 
 function RosterTable({ players }: { players: ClubRosterPlayer[] }) {
   const { t } = useTranslation();
+  const { status } = useAuth();
+  // Same stat columns as /players; jersey # replaces the pool rank and rows keep
+  // the server's jersey order.
   return (
-    <table className="stats-table">
-      <thead>
-        <tr>
-          <th className="num">#</th>
-          <th>{t("leaderboard.player")}</th>
-          <th>{t("club.colPosition")}</th>
-          <th className="num">{t("club.colAge")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {players.map((player) => (
-          <tr key={player.playerId}>
-            <td className="num">{player.jerseyNumber ?? ""}</td>
-            <td>
-              <Link to={`/players/${encodeURIComponent(player.playerId)}`}>{player.name}</Link>
-            </td>
-            <td>{player.position}</td>
-            <td className="num">{player.age ?? "—"}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <PlayerHubTable
+      entries={players}
+      authed={status === "authenticated"}
+      leadingColumns={[{ key: "jersey", header: "#", align: "right", render: (player) => player.jerseyNumber ?? "" }]}
+      afterPositionColumns={[{ key: "age", header: t("club.colAge"), align: "right", render: (player) => player.age ?? "—" }]}
+    />
   );
 }
 
