@@ -41,6 +41,15 @@ const renderPage = (squadData: Squad) => {
 describe("SquadPage", () => {
   beforeEach(() => {
     vi.spyOn(api, "getCurrentGameweek").mockResolvedValue({ current: null, lastSettled: null });
+    vi.spyOn(api, "getClubs").mockResolvedValue([]);
+  });
+
+  it("shows the club logo on the court token when the club has one", async () => {
+    vi.spyOn(api, "getClubs").mockResolvedValue([{ clubId: "c", name: "Catalunya BM", logoUrl: "https://cdn.example/catalunya.png" }]);
+    const { container } = renderPage(squad);
+    await waitFor(() =>
+      expect(container.querySelector(".player-token img.token-crest")).toHaveAttribute("src", "https://cdn.example/catalunya.png"),
+    );
   });
 
   it("renders the team name title and manager-name scribble from the auth user", async () => {

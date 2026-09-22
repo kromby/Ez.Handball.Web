@@ -18,9 +18,11 @@ export interface SquadCourtProps {
   players: SquadPlayer[];
   selectedId: string | null;
   onSelect: (playerId: string) => void;
+  /** clubId → logo URL; a token shows its club's logo instead of the ball when present. */
+  clubLogos?: ReadonlyMap<string, string | null>;
 }
 
-export function SquadCourt({ players, selectedId, onSelect }: SquadCourtProps) {
+export function SquadCourt({ players, selectedId, onSelect, clubLogos }: SquadCourtProps) {
   const { t } = useTranslation();
   const { byPos, others } = useMemo(() => {
     const byPos = new Map<string, SquadPlayer[]>();
@@ -58,6 +60,7 @@ export function SquadCourt({ players, selectedId, onSelect }: SquadCourtProps) {
                 x={anchor.x + spread}
                 y={anchor.y}
                 player={p}
+                logoUrl={p.clubId ? clubLogos?.get(p.clubId) : null}
                 selected={p.playerId === selectedId}
                 onSelect={onSelect}
               />

@@ -1260,6 +1260,7 @@ button {
 .player-token.is-selected .token-av::before { content: ""; position: absolute; width: 56px; height: 56px;
   border-radius: 999px; background: var(--amber-wash); box-shadow: 0 0 0 2px var(--amber); }
 .ball-avatar { display: block; filter: drop-shadow(0 2px 4px #28241d3a); position: relative; }
+.token-crest { display: block; width: 42px; height: 42px; object-fit: contain; filter: drop-shadow(0 2px 4px #28241d3a); position: relative; }
 .token-badge { display: inline-block; background: var(--ink); color: #f1e6cc; font-size: 8px; font-weight: 800;
   border-radius: 5px; padding: 1px 4px; letter-spacing: .04em; }
 .player-token .token-badge { position: absolute; top: -4px; right: 4px; }
