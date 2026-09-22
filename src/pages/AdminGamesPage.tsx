@@ -6,6 +6,7 @@ import { FilterSelect } from "../components/FilterSelect";
 import { ErrorView, Loading } from "../components/StateViews";
 import { formatDateTime } from "../components/adminGames/formatDateTime";
 import { HbStatzSyncButton } from "../components/adminGames/HbStatzSyncButton";
+import { SettleGameweeksButton } from "../components/adminGames/SettleGameweeksButton";
 import { SyncButton } from "../components/adminGames/SyncButton";
 import { useAdminGameStatus, useSeasons } from "../query/hooks";
 
@@ -80,6 +81,8 @@ export default function AdminGamesPage() {
         <SyncButton />
         <HbStatzSyncButton />
       </div>
+
+      <SettleGameweeksButton />
 
       <FilterSelect
         label={t("admin.games.filterSeason")}

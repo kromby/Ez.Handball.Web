@@ -386,6 +386,18 @@ export function useTriggerAdminHbStatzSync() {
   });
 }
 
+export function useSettleAdminGameweeks() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => api.settleAdminGameweeks(),
+    // Fresh scores change league standings and the admin's own gameweek points.
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["mini-league-standings"] });
+      qc.invalidateQueries({ queryKey: ["my-gameweeks"] });
+    },
+  });
+}
+
 export function useAdminPlayersMissingPosition() {
   const { status, user } = useAuth();
   return useQuery({

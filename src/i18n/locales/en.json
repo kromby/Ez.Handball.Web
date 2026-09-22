@@ -438,7 +438,15 @@
       "hbStatzSyncResultWithIssues": "Checked {{checked}} match(es), synced {{synced}} — {{unmatched}} unmatched, {{failed}} failed.",
       "hbStatzSyncRound": "Sync round {{round}}",
       "hbStatzSyncGame": "Sync",
-      "hbStatzSyncRetry": "Retry"
+      "hbStatzSyncRetry": "Retry",
+      "settleNow": "Settle gameweeks",
+      "settling": "Settling gameweeks…",
+      "settleResult": "Round {{round}}: {{settled}} of {{teams}} team(s) settled, {{notReady}} not ready, {{skipped}} skipped.",
+      "settleNothing": "No completed gameweeks to settle yet.",
+      "settleConfigMissing": "Gameweek config is missing — seed it first.",
+      "settleRuleSetMissing": "Scoring rule set or lineup constraints are missing.",
+      "settleTournamentNotFound": "The configured fantasy tournament wasn't found.",
+      "settleError": "Settling failed. Please try again."
     },
     "players": {
       "title": "Player positions",
