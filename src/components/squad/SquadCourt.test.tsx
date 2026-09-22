@@ -35,4 +35,16 @@ describe("SquadCourt", () => {
     const others = screen.getByTestId("court-others");
     expect(within(others).getByText("Oddball")).toBeInTheDocument();
   });
+
+  it("forwards each player's club logo to its token", () => {
+    const players = [
+      { ...mk("p-1", "Siggi", "GK"), clubId: "c1" },
+      { ...mk("p-2", "Bjössi", "LW"), clubId: "c2" },
+    ];
+    const logos = new Map([["c1", "https://cdn.example/c1.png"], ["c2", null]]);
+    const { container } = renderCourt(<SquadCourt players={players} selectedId={null} onSelect={vi.fn()} clubLogos={logos} />);
+    const crests = container.querySelectorAll("img.token-crest");
+    expect(crests).toHaveLength(1);
+    expect(crests[0]).toHaveAttribute("src", "https://cdn.example/c1.png");
+  });
 });

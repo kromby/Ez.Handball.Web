@@ -40,4 +40,20 @@ describe("PlayerToken", () => {
     expect(screen.getByText("LP")).toBeInTheDocument();
     expect(screen.getByRole("link")).toHaveAttribute("href", "/players");
   });
+
+  it("shows the club logo instead of the ball when a logo is known", () => {
+    const { container } = renderTok(
+      <PlayerToken code="CB" x={50} y={75} player={player} logoUrl="https://cdn.example/catalunya.png" onSelect={vi.fn()} />,
+    );
+    const img = container.querySelector("img.token-crest");
+    expect(img).toHaveAttribute("src", "https://cdn.example/catalunya.png");
+    expect(container.querySelector(".ball-avatar")).not.toBeInTheDocument();
+    expect(screen.getByText("CB")).toBeInTheDocument();
+  });
+
+  it("falls back to the ball when there is no logo", () => {
+    const { container } = renderTok(<PlayerToken code="CB" x={50} y={75} player={player} logoUrl={null} onSelect={vi.fn()} />);
+    expect(container.querySelector("img.token-crest")).not.toBeInTheDocument();
+    expect(container.querySelector(".ball-avatar")).toBeInTheDocument();
+  });
 });
