@@ -290,6 +290,15 @@ export function useMiniLeague(id: string) {
   });
 }
 
+export function useMiniLeagueStandings(id: string) {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["mini-league-standings", id],
+    queryFn: () => api.getMiniLeagueStandings(id),
+    enabled: status === "authenticated" && id.length > 0,
+  });
+}
+
 export function useMyMiniLeagues() {
   const { status } = useAuth();
   return useQuery({

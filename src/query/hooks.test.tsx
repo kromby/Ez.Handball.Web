@@ -7,7 +7,7 @@ import { ApiError } from "../api/client";
 import { AuthContext } from "../auth/useAuth";
 import { buildAuth, queryWrapper } from "../test/renderWithQuery";
 import { createQueryClient } from "./queryClient";
-import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useMyMiniLeagues, useCreateMiniLeague, useInvite, useJoinMiniLeague, useManager } from "./hooks";
+import { useLeaderboard, usePlayer, useSquad, useBuyPlayer, useSellPlayer, useMiniLeague, useMiniLeagueStandings, useMyMiniLeagues, useCreateMiniLeague, useInvite, useJoinMiniLeague, useManager } from "./hooks";
 import type { Manager } from "../api/types";
 
 afterEach(() => vi.restoreAllMocks());
@@ -82,6 +82,22 @@ test("useMiniLeague is disabled when not authenticated", () => {
   const spy = vi.spyOn(api, "getMiniLeague");
   renderHook(() => useMiniLeague("abc"), { wrapper: anonymousWrapper() });
   expect(spy).not.toHaveBeenCalled();
+});
+
+test("useMiniLeagueStandings is disabled when not authenticated", () => {
+  const spy = vi.spyOn(api, "getMiniLeagueStandings");
+  renderHook(() => useMiniLeagueStandings("abc"), { wrapper: anonymousWrapper() });
+  expect(spy).not.toHaveBeenCalled();
+});
+
+test("useMiniLeagueStandings returns the ranked entries", async () => {
+  const standings = { total: 1, offset: 0, limit: 50, latestRoundLabel: "1", entries: [
+    { rank: 1, previousRank: null, rankDelta: null, teamId: "u1:fantasy", teamName: "Alpha", color: "#abcdef", totalPoints: 70, roundPoints: 70 },
+  ] };
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings as never);
+  const { result } = renderHook(() => useMiniLeagueStandings("abc"), { wrapper: authenticatedWrapper() });
+  await waitFor(() => expect(result.current.isSuccess).toBe(true));
+  expect(result.current.data).toEqual(standings);
 });
 
 test("useMyMiniLeagues is disabled when not authenticated", () => {

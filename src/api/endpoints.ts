@@ -12,6 +12,7 @@ import type {
   Leaderboard,
   LeaderboardMetric,
   Manager,
+  ManagerStandings,
   MatchDetail,
   MiniLeague,
   MyGameweeks,
@@ -175,6 +176,19 @@ export function getMiniLeague(id: string): Promise<MiniLeague> {
 
 export function getMyMiniLeagues(): Promise<MyMiniLeague[]> {
   return authedGet<MyMiniLeague[]>("/api/mini-leagues/mine");
+}
+
+export function getMiniLeagueStandings(
+  id: string,
+  params: { offset?: number; limit?: number } = {},
+): Promise<ManagerStandings> {
+  const searchParams = new URLSearchParams();
+  if (params.offset != null) searchParams.set("offset", String(params.offset));
+  if (params.limit != null) searchParams.set("limit", String(params.limit));
+  const queryString = searchParams.toString();
+  return authedGet<ManagerStandings>(
+    `/api/mini-leagues/${encodeURIComponent(id)}/standings${queryString ? `?${queryString}` : ""}`,
+  );
 }
 
 export function getInvite(id: string): Promise<Invite> {

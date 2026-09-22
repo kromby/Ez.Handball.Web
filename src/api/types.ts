@@ -451,6 +451,26 @@ export interface MiniLeagueMember {
   userId: string;
   role: string; // "creator" | "member"
   joinedAt: string;
+  teamName: string | null;
+}
+
+export interface ManagerStanding {
+  rank: number;
+  previousRank: number | null;
+  rankDelta: number | null;
+  teamId: string;
+  teamName: string;
+  color: string;
+  totalPoints: number;
+  roundPoints: number;
+}
+
+export interface ManagerStandings {
+  total: number;
+  offset: number;
+  limit: number;
+  latestRoundLabel: string | null;
+  entries: ManagerStanding[];
 }
 
 export interface MiniLeague {
