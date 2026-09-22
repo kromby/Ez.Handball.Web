@@ -16,7 +16,7 @@ const entry: PoolEntry = {
   gradeTotal: 7.2, gradeOffense: 7.5, gradeDefense: 6.8, gradeGoalkeeping: null,
 };
 
-test("shows stats + rating + price; clicking a header sorts", async () => {
+test("shows stats + points + price; clicking a header sorts", async () => {
   const onSort = vi.fn();
   renderWithProviders(
     <ToastProvider><PlayerHubTable entries={[entry]} sort="Goals" onSort={onSort} authed={false} /></ToastProvider>,
@@ -25,9 +25,10 @@ test("shows stats + rating + price; clicking a header sorts", async () => {
   expect(screen.getByText("20")).toBeInTheDocument();   // goals
   expect(screen.getByText("5")).toBeInTheDocument();    // assists
   expect(screen.getByText("2.50")).toBeInTheDocument(); // avgGoals (toFixed(2))
-  expect(screen.getByText("7.2")).toBeInTheDocument();  // gradeTotal form badge
+  expect(screen.queryByText("7.2")).not.toBeInTheDocument(); // no Form (grade) column
+  expect(screen.queryByRole("columnheader", { name: "Form" })).not.toBeInTheDocument();
   expect(screen.getByText(/11M ISK/)).toBeInTheDocument();
-  await userEvent.click(screen.getByRole("button", { name: /Rating/ }));
+  await userEvent.click(screen.getByRole("button", { name: /Points/ }));
   expect(onSort).toHaveBeenCalledWith("Rating");
 });
 
@@ -42,8 +43,8 @@ test("without sort props, headers are plain labels in server order", () => {
   renderWithProviders(
     <ToastProvider><PlayerHubTable entries={[entry]} authed={false} /></ToastProvider>,
   );
-  expect(screen.getByRole("columnheader", { name: "Rating" })).toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: /Rating/ })).not.toBeInTheDocument();
+  expect(screen.getByRole("columnheader", { name: "Points" })).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /Points/ })).not.toBeInTheDocument();
 });
 
 test("leading and after-position columns replace the rank column", () => {

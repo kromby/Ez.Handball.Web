@@ -47,6 +47,11 @@ test("renders profile, history, and the player's match list", async () => {
         avgYellowCards: 0,
         avgTwoMinuteSuspensions: 0.5,
         avgRedCards: 0,
+        totalAssists: 3,
+        totalSteals: 0,
+        totalBlocks: 0,
+        totalSaves: 0,
+        points: 30,
       },
     ],
     totals: null,
@@ -65,6 +70,12 @@ test("renders profile, history, and the player's match list", async () => {
         yellowCards: 0,
         twoMinuteSuspensions: 0,
         redCards: 0,
+        hbStatzAssists: 2,
+        hbStatzSaves: null,
+        date: "2025-09-12T19:30:00Z",
+        opponentClubId: "c2",
+        opponentClubName: "Haukar",
+        points: 17,
       },
     ],
   });
@@ -75,6 +86,20 @@ test("renders profile, history, and the player's match list", async () => {
   expect(within(subtitle).getByRole("link", { name: "Valur" })).toHaveAttribute("href", "/clubs/c1");
   expect(screen.getAllByText("Olís deild karla").length).toBeGreaterThan(0);
   expect(screen.getByRole("link", { name: "View" })).toHaveAttribute("href", "/matches/m1");
+  const gameRow = screen.getByRole("link", { name: "View" }).closest("tr") as HTMLElement;
+  expect(within(gameRow).getByRole("link", { name: "Haukar" })).toHaveAttribute("href", "/clubs/c2");
+  expect(within(gameRow).getByText("17")).toBeInTheDocument();
+  expect(within(gameRow).queryByText("Valur")).not.toBeInTheDocument();
+});
+
+test("shows the club logo next to the club name in the header", async () => {
+  vi.spyOn(api, "getClubs").mockResolvedValue([{ clubId: "c1", name: "Valur", logoUrl: "https://logo/valur.png" }]);
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "t", clubId: "c1", clubName: "Valur", gender: "karlar" } as never);
+  vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
+  vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
+  setup();
+  const clubLink = await screen.findByRole("link", { name: "Valur" });
+  await waitFor(() => expect(clubLink.querySelector("img")).toHaveAttribute("src", "https://logo/valur.png"));
 });
 
 test("shows the shortlist star on the player header when authenticated", async () => {
@@ -156,8 +181,9 @@ test("shows the fantasy rating and price when present", async () => {
   vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
   vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
   renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
-  expect(await screen.findByText("Fantasy · this season")).toBeInTheDocument();
-  expect(screen.getByText("128")).toBeInTheDocument();
+  expect(await screen.findByText("128")).toBeInTheDocument();
+  expect(screen.getByText("Points")).toBeInTheDocument();
+  expect(screen.queryByText("Fantasy · this season")).not.toBeInTheDocument();
   expect(screen.getByText(/12M ISK/)).toBeInTheDocument();
 });
 
@@ -166,7 +192,7 @@ test("renders rating 0 as '0' and a null price as '—'", async () => {
   vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
   vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
   renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
-  const strip = (await screen.findByText("Fantasy · this season")).closest("div")!;
+  const strip = (await screen.findByText("Points")).closest("dl")!;
   expect(within(strip).getByText("0")).toBeInTheDocument();
   expect(within(strip).getByText("—")).toBeInTheDocument();
 });
@@ -177,7 +203,7 @@ test("omits the fantasy strip when both rating and price are absent", async () =
   vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
   renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
   await screen.findByText("Vik");
-  expect(screen.queryByText("Fantasy · this season")).not.toBeInTheDocument();
+  expect(screen.queryByText("Points")).not.toBeInTheDocument();
 });
 
 test("shows the Retired badge when the player is retired", async () => {

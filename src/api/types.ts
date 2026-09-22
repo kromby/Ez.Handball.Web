@@ -133,6 +133,13 @@ export interface PlayerHistoryEntry {
   avgYellowCards: number;
   avgTwoMinuteSuspensions: number;
   avgRedCards: number;
+  // HBStatz sums; 0 where HBStatz has no report for the games (Backend#138).
+  totalAssists: number;
+  totalSteals: number;
+  totalBlocks: number;
+  totalSaves: number;
+  /** Fantasy points for these games; null when the server can't score them. */
+  points: number | null;
 }
 
 export interface PlayerHistoryTotals {
@@ -145,6 +152,11 @@ export interface PlayerHistoryTotals {
   avgYellowCards: number;
   avgTwoMinuteSuspensions: number;
   avgRedCards: number;
+  totalAssists: number;
+  totalSteals: number;
+  totalBlocks: number;
+  totalSaves: number;
+  points: number | null;
 }
 
 export interface PlayerHistoryResponse {
@@ -164,6 +176,15 @@ export interface PlayerStat {
   yellowCards: number;
   twoMinuteSuspensions: number;
   redCards: number;
+  // HBStatz per-match stats; null until HBStatz has a report for the match.
+  hbStatzAssists: number | null;
+  hbStatzSaves: number | null;
+  /** Kick-off time; null when the match isn't in the schedule. */
+  date: string | null;
+  opponentClubId: string | null;
+  opponentClubName: string | null;
+  /** Fantasy points for this match; null when the server can't score it. */
+  points: number | null;
 }
 
 export interface PlayerStatsResponse {

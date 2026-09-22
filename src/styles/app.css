@@ -1625,6 +1625,7 @@ button {
 .club-match-logo--blank { background: #e3d7b8; border: 1px solid var(--line-2); }
 .club-link { color: var(--ink); text-decoration: none; }
 .club-link:hover { text-decoration: underline; }
+.club-inline { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
 .club-logo-sm { width: 22px; height: 22px; object-fit: contain; display: block; }
 .club-match-opp { font-weight: 600; display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .club-match-ha {
