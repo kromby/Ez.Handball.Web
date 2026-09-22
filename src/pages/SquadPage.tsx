@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { formatMoney } from "../api/money";
 import { useAuth } from "../auth/useAuth";
@@ -9,7 +9,7 @@ import { GameweekScores } from "../components/gameweek/GameweekScores";
 import { COURT_ORDER, SquadCourt } from "../components/squad/SquadCourt";
 import { SelectedPlayerPanel } from "../components/squad/SelectedPlayerPanel";
 import { ErrorView, Loading } from "../components/StateViews";
-import { useSquad, useSquadConstraints } from "../query/hooks";
+import { useClubs, useSquad, useSquadConstraints } from "../query/hooks";
 
 /** First owned player in court order — the default selection on load. */
 function firstByCourtOrder(players: { playerId: string; position: string | null }[]): string | null {
@@ -34,7 +34,9 @@ export default function SquadPage() {
   const { user } = useAuth();
   const squad = useSquad();
   const constraints = useSquadConstraints();
+  const clubs = useClubs();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const clubLogos = useMemo(() => new Map((clubs.data ?? []).map((c) => [c.clubId, c.logoUrl])), [clubs.data]);
 
   if (squad.isPending || constraints.isPending) return <Loading />;
   if (squad.isError) return <ErrorView error={squad.error} notFoundLabel={t("squad.notFound")} />;
@@ -67,7 +69,7 @@ export default function SquadPage() {
       </div>
 
       <div className="squad-grid">
-        <SquadCourt players={players} selectedId={activeId} onSelect={setSelectedId} />
+        <SquadCourt players={players} selectedId={activeId} onSelect={setSelectedId} clubLogos={clubLogos} />
 
         <div className="squad-rail">
           <SelectedPlayerPanel player={selected} />

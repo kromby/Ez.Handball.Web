@@ -19,11 +19,12 @@ export interface PlayerTokenProps {
   x: number;             // anchor, % of court width
   y: number;             // anchor, % of court height
   player?: SquadPlayer;  // omit for an empty ghost slot
+  logoUrl?: string | null; // club logo; replaces the ball when present
   selected?: boolean;
   onSelect: (playerId: string) => void;
 }
 
-export function PlayerToken({ code, x, y, player, selected, onSelect }: PlayerTokenProps) {
+export function PlayerToken({ code, x, y, player, logoUrl, selected, onSelect }: PlayerTokenProps) {
   const { t } = useTranslation();
   const style = { left: `${x}%`, top: `${y}%` } as const;
 
@@ -49,7 +50,7 @@ export function PlayerToken({ code, x, y, player, selected, onSelect }: PlayerTo
       onClick={() => onSelect(player.playerId)}
     >
       <span className="token-av">
-        <BallAvatar size={42} />
+        {logoUrl ? <img className="token-crest" src={logoUrl} alt="" /> : <BallAvatar size={42} />}
         <span className="token-badge">{code}</span>
       </span>
       <span className="token-label">
