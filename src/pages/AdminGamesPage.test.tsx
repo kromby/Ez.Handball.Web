@@ -30,11 +30,11 @@ test("lists one row per tournament, linking to its detail page with the resolved
           games: [
             {
               matchId: "103414", date: "2025-09-03T19:30:00Z", venue: "Ásgarður",
-              homeTeamName: "Stjarnan", awayTeamName: "Breiðablik", status: "played", ingested: true, hbStatzIngested: false,
+              homeTeamName: "Stjarnan", awayTeamName: "Breiðablik", status: "played", ingested: true, hbStatzIngested: false, hsiStatus: "S", finalOverride: false,
             },
             {
               matchId: "103415", date: "2025-09-10T19:30:00Z", venue: null,
-              homeTeamName: "Valur", awayTeamName: "KA", status: "upcoming", ingested: false, hbStatzIngested: false,
+              homeTeamName: "Valur", awayTeamName: "KA", status: "upcoming", ingested: false, hbStatzIngested: false, hsiStatus: "", finalOverride: false,
             },
           ],
         },

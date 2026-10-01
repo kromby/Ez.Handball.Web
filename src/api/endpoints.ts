@@ -259,6 +259,11 @@ export function settleAdminGameweeks(): Promise<AdminSettleGameweeksResult> {
   return authedSend<AdminSettleGameweeksResult>("/api/admin/gameweeks/settle", "POST");
 }
 
+/** Treat a played match as final (or stop doing so) when hsi.is never marks it final. */
+export async function setMatchFinalOverride(matchId: string, finalOverride: boolean): Promise<void> {
+  await authedSend(`/api/admin/matches/${encodeURIComponent(matchId)}/final-override`, finalOverride ? "PUT" : "DELETE");
+}
+
 export function getPlayersMissingPosition(): Promise<PlayerMissingPosition[]> {
   return authedGet<PlayerMissingPosition[]>("/api/admin/players/missing-position");
 }
