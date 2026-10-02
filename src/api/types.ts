@@ -61,6 +61,8 @@ export interface AdminGameStatus {
   status: "played" | "upcoming";
   ingested: boolean;
   hbStatzIngested: boolean;
+  hsiStatus: string; // hsi.is's raw code: "S" final, "U"/"L"/"" otherwise
+  finalOverride: boolean; // an admin marked it final because hsi.is never did (Backend#147)
 }
 
 export interface AdminRoundGames {

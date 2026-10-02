@@ -378,6 +378,20 @@ export function useTriggerAdminSync() {
   });
 }
 
+export function useSetMatchFinalOverride() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ matchId, finalOverride }: { matchId: string; finalOverride: boolean }) =>
+      api.setMatchFinalOverride(matchId, finalOverride),
+    // Finality drives the gameweek status shown across the app.
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-game-status"] });
+      qc.invalidateQueries({ queryKey: ["gameweeks"] });
+      qc.invalidateQueries({ queryKey: ["gameweek-current"] });
+    },
+  });
+}
+
 export function useTriggerAdminHbStatzSync() {
   const qc = useQueryClient();
   return useMutation({

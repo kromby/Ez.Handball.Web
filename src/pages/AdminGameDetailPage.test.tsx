@@ -23,7 +23,7 @@ const tournaments: AdminTournamentGames[] = [
         games: [
           {
             matchId: "103414", date: "2025-09-03T19:30:00Z", venue: "Ásgarður",
-            homeTeamName: "Stjarnan", awayTeamName: "Breiðablik", status: "played", ingested: true, hbStatzIngested: false,
+            homeTeamName: "Stjarnan", awayTeamName: "Breiðablik", status: "played", ingested: true, hbStatzIngested: false, hsiStatus: "S", finalOverride: false,
           },
         ],
       },
