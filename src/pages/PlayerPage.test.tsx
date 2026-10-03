@@ -192,7 +192,7 @@ test("renders rating 0 as '0' and a null price as '—'", async () => {
   vi.spyOn(api, "getPlayerHistory").mockResolvedValue({ playerId: "7", history: [], totals: null });
   vi.spyOn(api, "getPlayerStats").mockResolvedValue({ playerId: "7", stats: [] });
   renderWithProviders(<Routes><Route path="/players/:playerId" element={<PlayerPage />} /></Routes>, { initialEntries: ["/players/7"] });
-  const strip = (await screen.findByText("Points")).closest("dl") as HTMLElement;
+  const strip = (await screen.findByText("Points")).closest(".panel-stats") as HTMLElement;
   expect(within(strip).getByText("0")).toBeInTheDocument();
   expect(within(strip).getByText("—")).toBeInTheDocument();
 });
@@ -247,4 +247,33 @@ test("still shows the Sell button for an owned retired player", async () => {
   vi.spyOn(api, "getSquad").mockResolvedValue({ flavor: "fantasy", players: [{ playerId: "7", name: "Vik", clubId: "c1", clubName: "Aalvik", position: "LB", gender: "karlar", price: { amount: 9_000_000, currency: "ISK" }, rating: 70, pricePaid: { amount: 9_000_000, currency: "ISK" } }], budgetUsed: { amount: 9_000_000, currency: "ISK" }, remainingBudget: { amount: 91_000_000, currency: "ISK" }, squadValue: { amount: 9_000_000, currency: "ISK" } });
   renderPlayer();
   expect(await screen.findByRole("button", { name: /sell/i })).toBeInTheDocument();
+});
+
+test("shows the full position name next to the club", async () => {
+  mockPlayerPageQueries(false);
+  renderPlayer();
+  expect(await screen.findByText("Left back")).toHaveClass("token-badge");
+});
+
+test("shows no position badge when the player has none", async () => {
+  mockPlayerPageQueries(false);
+  vi.spyOn(api, "getPlayer").mockResolvedValue({ playerId: "7", name: "Vik", jerseyNumber: null, dateOfBirth: null, age: null, teamId: "tm", clubId: "c1", clubName: "Aalvik", gender: "karlar", price: { amount: 9_000_000, currency: "ISK" } } as never);
+  renderPlayer();
+  await screen.findByText("Vik");
+  expect(document.querySelector(".token-badge")).toBeNull();
+});
+
+test("shows paid and drift cells only for an owned player", async () => {
+  mockPlayerPageQueries(true);
+  renderPlayer();
+  expect(await screen.findByTestId("drift")).toHaveTextContent("▲ 0 ISK");
+  expect(screen.getByText("paid")).toBeInTheDocument();
+});
+
+test("omits paid and drift cells when the player is not owned", async () => {
+  mockPlayerPageQueries(false);
+  renderPlayer();
+  await screen.findByText("Left back");
+  expect(screen.queryByTestId("drift")).not.toBeInTheDocument();
+  expect(screen.queryByText("paid")).not.toBeInTheDocument();
 });

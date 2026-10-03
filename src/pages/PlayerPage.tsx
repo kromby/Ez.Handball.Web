@@ -8,6 +8,7 @@ import { PlayerMatchTable } from "../components/PlayerMatchTable";
 import { SellButton } from "../components/SellButton";
 import { StarToggle } from "../components/StarToggle";
 import { StatTable } from "../components/StatTable";
+import { StatCell, driftValue } from "../components/squad/StatCell";
 import { ErrorView, Loading } from "../components/StateViews";
 import { useClubs, usePlayer, usePlayerHistory, usePlayerStats, useSquad } from "../query/hooks";
 
@@ -31,7 +32,9 @@ export default function PlayerPage() {
   if (profile.isError) return <ErrorView error={profile.error} notFoundLabel={t("player.notFound")} />;
 
   const p = profile.data;
-  const owned = squad.data?.players.some((sp) => sp.playerId === p.playerId) ?? false;
+  const ownedPlayer = squad.data?.players.find((sp) => sp.playerId === p.playerId) ?? null;
+  const owned = ownedPlayer !== null;
+  const drift = ownedPlayer?.price ? ownedPlayer.price.amount - ownedPlayer.pricePaid.amount : null;
   const metaBits = [p.age != null ? t("player.age", { age: p.age }) : null, formatBirthday(p.dateOfBirth)].filter(
     Boolean,
   );
@@ -61,21 +64,30 @@ export default function PlayerPage() {
               {p.clubName}
             </ClubLink>
           ) : null}
-          {p.clubName && metaText ? " · " : null}
+          {p.clubName && p.position ? " · " : null}
+          {p.position && (
+            <span className="token-badge token-badge--lg">
+              {t(`positions.${p.position}`, { defaultValue: p.position })}
+            </span>
+          )}
+          {(p.clubName || p.position) && metaText ? " · " : null}
           {metaText}
         </p>
         {(p.rating != null || p.price != null) && (
-          <div className="fantasy-strip">
-            <dl className="fantasy-strip-stats">
-              <div>
-                <dt>{t("player.rating")}</dt>
-                <dd>{p.rating != null ? p.rating.toFixed(0) : "—"}</dd>
-              </div>
-              <div>
-                <dt>{t("player.price")}</dt>
-                <dd>{formatMoney(p.price ?? null)}</dd>
-              </div>
-            </dl>
+          <div className="panel-stats fantasy-stats">
+            <StatCell label={t("player.rating")} value={p.rating != null ? p.rating.toFixed(0) : "—"} />
+            <StatCell label={t("player.price")} value={formatMoney(p.price ?? null)} valueClassName="amber" />
+            {ownedPlayer && (
+              <StatCell label={t("squad.paidLabel")} value={formatMoney(ownedPlayer.pricePaid)} />
+            )}
+            {ownedPlayer && drift !== null && (
+              <StatCell
+                label={t("squad.drift")}
+                value={driftValue(drift, ownedPlayer.pricePaid.currency)}
+                valueClassName={drift >= 0 ? "drift-up" : "drift-down"}
+                testId="drift"
+              />
+            )}
           </div>
         )}
       </div>

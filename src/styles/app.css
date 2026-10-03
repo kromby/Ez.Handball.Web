@@ -1243,10 +1243,7 @@ button {
 .league-chart-swatch { width: 10px; height: 10px; border-radius: 50%; }
 .invite-meta { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
 
-.fantasy-strip { margin-top: 8px; }
-.fantasy-strip-stats { display: flex; flex-wrap: wrap; gap: 18px; margin: 4px 0 0; }
-.fantasy-strip-stats dt { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.04em; }
-.fantasy-strip-stats dd { margin: 2px 0 0; font-weight: 800; font-size: 18px; }
+.fantasy-stats { margin-top: 10px; max-width: 520px; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); }
 
 /* ---------- Squad screen (PIVOT pitch) ---------- */
 .squad-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
