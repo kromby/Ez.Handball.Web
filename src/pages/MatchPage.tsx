@@ -4,7 +4,7 @@ import { ScoreLine } from "../components/ScoreLine";
 import { MatchRoster } from "../components/MatchRoster";
 import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
-import { useMatch } from "../query/hooks";
+import { useClubs, useMatch } from "../query/hooks";
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
@@ -23,9 +23,14 @@ export default function MatchPage() {
   const { t } = useTranslation();
   const { matchId = "" } = useParams();
   const { data, isPending, isError, error } = useMatch(matchId);
+  const clubs = useClubs();
 
   if (isPending) return <Loading />;
   if (isError) return <ErrorView error={error} notFoundLabel={t("match.notFound")} />;
+
+  const logoOf = (clubId: string) => clubs.data?.find((club) => club.clubId === clubId)?.logoUrl ?? null;
+  const homeLogoUrl = logoOf(data.homeTeam.clubId);
+  const awayLogoUrl = logoOf(data.awayTeam.clubId);
 
   const meta = [
     formatDate(data.date),
@@ -42,12 +47,12 @@ export default function MatchPage() {
           {data.homeTeam.clubName ?? "—"} {t("match.versus")} {data.awayTeam.clubName ?? "—"}
         </h1>
         <p className="match-meta">{meta.join(" · ")}</p>
-        <ScoreLine home={data.homeTeam} away={data.awayTeam} />
+        <ScoreLine home={data.homeTeam} away={data.awayTeam} homeLogoUrl={homeLogoUrl} awayLogoUrl={awayLogoUrl} />
       </Panel>
 
       <div className="rosters">
-        <MatchRoster title={data.homeTeam.clubName ?? t("match.home")} players={data.homeTeam.players} />
-        <MatchRoster title={data.awayTeam.clubName ?? t("match.away")} players={data.awayTeam.players} />
+        <MatchRoster title={data.homeTeam.clubName ?? t("match.home")} players={data.homeTeam.players} logoUrl={homeLogoUrl} />
+        <MatchRoster title={data.awayTeam.clubName ?? t("match.away")} players={data.awayTeam.players} logoUrl={awayLogoUrl} />
       </div>
     </section>
   );

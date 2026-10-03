@@ -57,7 +57,9 @@
     "away": "Gestir",
     "unknownPlayer": "Óþekktur leikmaður",
     "yellow": "Gul",
-    "red": "Rauð"
+    "red": "Rauð",
+    "steals": "Stol",
+    "blocks": "Blokk"
   },
   "player": {
     "notFound": "Leikmaður fannst ekki",

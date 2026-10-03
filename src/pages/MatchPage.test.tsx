@@ -23,6 +23,11 @@ function team(name: string) {
         yellowCards: 0,
         twoMinuteSuspensions: 0,
         redCards: 0,
+        hbStatzAssists: 2,
+        hbStatzSteals: 1,
+        hbStatzBlocks: 0,
+        hbStatzSaves: 0,
+        points: 12,
       },
     ],
   };
@@ -50,8 +55,10 @@ test("renders match metadata, line score, and both rosters", async () => {
     homeTeam: team("Valur"),
     awayTeam: team("Haukar"),
   });
+  vi.spyOn(api, "getClubs").mockResolvedValue([{ clubId: "Valur", name: "Valur", logoUrl: "https://logo/valur.png" }]);
   setup();
   await waitFor(() => expect(screen.getByText(/Vodafonehöllin/)).toBeInTheDocument());
+  await waitFor(() => expect(document.querySelector("img.scoreline-crest")).toHaveAttribute("src", "https://logo/valur.png"));
   expect(screen.getByText("Valur Player")).toBeInTheDocument();
   expect(screen.getByText("Haukar Player")).toBeInTheDocument();
   expect(screen.getAllByText("27").length).toBeGreaterThan(0);

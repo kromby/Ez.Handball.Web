@@ -221,6 +221,11 @@ export interface MatchPlayerLine {
   yellowCards: number;
   twoMinuteSuspensions: number;
   redCards: number;
+  hbStatzAssists: number | null; // null until HBStatz has reported the match
+  hbStatzSteals: number | null;
+  hbStatzBlocks: number | null;
+  hbStatzSaves: number | null;
+  points: number | null;         // fantasy points the player scored in this game
 }
 
 export interface MatchTeam {

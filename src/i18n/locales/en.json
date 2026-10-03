@@ -57,7 +57,9 @@
     "away": "Away",
     "unknownPlayer": "Unknown player",
     "yellow": "Yellow",
-    "red": "Red"
+    "red": "Red",
+    "steals": "Stl",
+    "blocks": "Blk"
   },
   "player": {
     "notFound": "Player not found",
