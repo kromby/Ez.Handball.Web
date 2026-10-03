@@ -576,6 +576,8 @@ export interface CurrentGameweek {
 
 export interface GameweekPlayerScore {
   playerId: string;
+  name?: string | null;     // resolved server-side, so players no longer in the squad keep their name
+  position?: string | null;
   rawPoints: number;
   points: number; // rawPoints * multiplier; 0 for a non-playing unsubbed starter
   played: boolean;
