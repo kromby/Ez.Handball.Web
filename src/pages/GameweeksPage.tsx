@@ -39,7 +39,7 @@ export default function GameweeksPage() {
 
   const current = currentQ.data?.current ?? null;
   const lastSettled = currentQ.data?.lastSettled ?? null;
-  const { hero, comingUp, results } = sectionGameweeks(all, current, lastSettled);
+  const { hero, live, comingUp, results } = sectionGameweeks(all, current, lastSettled);
 
   if (!hero) {
     return (
@@ -63,6 +63,15 @@ export default function GameweeksPage() {
       </header>
 
       <GameweekHeroCard gameweek={hero} current={current} round={roundByLabel(rounds.data, hero.roundLabel)} />
+
+      {live.length > 0 && (
+        <div className="gw-section">
+          <div className="label gw-section-label">{t("gameweek.ongoing")}</div>
+          {live.map((g) => (
+            <GameweekListRow key={g.number} gameweek={g} current={current} round={roundByLabel(rounds.data, g.roundLabel)} defaultOpen />
+          ))}
+        </div>
+      )}
 
       {comingUp.length > 0 && (
         <div className="gw-section">

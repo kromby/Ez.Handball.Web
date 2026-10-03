@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import type { Gameweek, RoundGroup } from "../../api/types";
 import { FixtureRow } from "./FixtureRow";
-import { gameweekLabelKey, isCurrent } from "./gameweekLabels";
+import { gameweekLabelKey, isCurrent, showRoundLabel } from "./gameweekLabels";
 import { GameweekStatusPill } from "./GameweekStatusPill";
 import { useCountdown } from "./useCountdown";
 
@@ -23,7 +23,9 @@ export function GameweekHeroCard({
     <section className="gw-hero">
       <header className="gw-hero-head">
         <h2 className="gw-hero-title">{t("gameweek.heroTitle", { number: gameweek.number })}</h2>
-        <span className="gw-hero-round">{t("gameweek.roundLabel", { label: gameweek.roundLabel })}</span>
+        {showRoundLabel(gameweek) && (
+          <span className="gw-hero-round">{t("gameweek.roundLabel", { label: gameweek.roundLabel })}</span>
+        )}
         <GameweekStatusPill labelKey={gameweekLabelKey(gameweek.status, currentNow)} />
       </header>
 

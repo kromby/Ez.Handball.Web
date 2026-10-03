@@ -9,10 +9,13 @@ import GameweeksPage from "./GameweeksPage";
 
 afterEach(() => vi.restoreAllMocks());
 
-function gw(number: number, status: Gameweek["status"]): Gameweek {
+function gw(number: number, status: Gameweek["status"], finals: boolean[] = []): Gameweek {
   return {
     number, roundLabel: String(number), tournamentId: "8444",
-    deadline: "2099-06-20T18:00:00Z", status, matches: [],
+    deadline: "2099-06-20T18:00:00Z", status,
+    matches: finals.map((isFinal, i) => ({
+      matchId: `${number}-${i}`, date: "2026-06-20T16:00:00Z", isFinal, homeTeamId: "h", awayTeamId: "a",
+    })),
   };
 }
 
@@ -62,4 +65,32 @@ test("shows the not-configured empty state on gameweek_config_missing", async ()
   setup();
 
   expect(await screen.findByText("Gameweeks aren't set up yet")).toBeInTheDocument();
+});
+
+test("shows the ongoing round expanded under the open round, not again under results", async () => {
+  const live = gw(17, "InPlay", [true, false]);
+  vi.spyOn(api, "getGameweeks").mockResolvedValue([gw(16, "Settled", [true]), live, gw(18, "Open", [false])]);
+  vi.spyOn(api, "getCurrentGameweek").mockResolvedValue({ current: gw(18, "Open", [false]), lastSettled: gw(16, "Settled", [true]) });
+  vi.spyOn(api, "getRounds").mockResolvedValue({
+    ...rounds(),
+    rounds: [{ ...rounds().rounds[0], round: "17" }, ...rounds().rounds],
+  });
+
+  setup();
+
+  expect(await screen.findByText("Ongoing")).toBeInTheDocument();
+  const liveRow = screen.getByText("Gameweek 17").closest(".gw-row") as HTMLElement;
+  expect(liveRow).toHaveClass("gw-row--open");
+  expect(screen.getAllByText("Gameweek 17")).toHaveLength(1);
+});
+
+test("does not repeat the round label when it equals the gameweek number", async () => {
+  vi.spyOn(api, "getGameweeks").mockResolvedValue([gw(18, "Open", [false])]);
+  vi.spyOn(api, "getCurrentGameweek").mockResolvedValue({ current: gw(18, "Open", [false]), lastSettled: null });
+  vi.spyOn(api, "getRounds").mockResolvedValue(rounds());
+
+  setup();
+
+  await screen.findByText("Gameweek 18");
+  expect(screen.queryByText("Umferð 18")).not.toBeInTheDocument();
 });
