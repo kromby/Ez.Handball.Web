@@ -6,29 +6,8 @@ import { useClub, useClubMatches, useMyGameweeks } from "../../query/hooks";
 import { BallAvatar } from "../BallAvatar";
 import { SketchBox } from "../SketchBox";
 import { SellButton } from "../SellButton";
+import { StatCell, driftValue } from "./StatCell";
 import { ratingLabel } from "./ratingLabel";
-
-/** One labelled stat cell in the panel's stat row. */
-function StatCell({
-  label,
-  value,
-  valueClassName,
-  testId,
-}: {
-  label: string;
-  value: string;
-  valueClassName?: string;
-  testId?: string;
-}) {
-  return (
-    <div className="panel-stat">
-      <div data-testid={testId} className={`panel-stat-v ${valueClassName ?? ""}`.trim()}>
-        {value}
-      </div>
-      <div className="poslabel">{label}</div>
-    </div>
-  );
-}
 
 /** Avatar + name/club/position + big rating. Kept as its own component to keep the panel's JSX shallow. */
 function PanelHead({ player, clubLogoUrl }: { player: SquadPlayer; clubLogoUrl: string | null | undefined }) {
@@ -105,8 +84,6 @@ export function SelectedPlayerPanel({ player }: { player: SquadPlayer | null }) 
   }
 
   const drift = player.price ? player.price.amount - player.pricePaid.amount : null;
-  const driftValue = (amount: number, currency: string): string =>
-    `${amount >= 0 ? "▲" : "▼"} ${formatMoney({ amount: Math.abs(amount), currency })}`;
 
   const settledGameweeks = gameweeks.data?.gameweeks ?? [];
   const lastSettled = settledGameweeks[settledGameweeks.length - 1] ?? null;
