@@ -450,6 +450,8 @@ button {
 .scoreline-clubs > :last-child {
   grid-column: 3;
 }
+.scoreline-crest-link { display: block; }
+.scoreline-crest { display: block; width: clamp(40px, 9vw, 64px); height: clamp(40px, 9vw, 64px); object-fit: contain; margin: 0 auto 6px; }
 .scoreline-club {
   font-family: "Spectral", Georgia, serif;
   font-size: clamp(1.1rem, 3vw, 1.5rem);
@@ -481,17 +483,14 @@ button {
 }
 
 /* ===================== rosters ===================== */
-/* Each roster is its own Panel; this grid lays the two teams out side by side. */
+/* Each roster is its own Panel; the two teams are stacked, full width, so the wide stat table fits. */
 .rosters {
   display: grid;
   grid-template-columns: 1fr;
   gap: clamp(16px, 2.5vw, 22px);
 }
-@media (min-width: 720px) {
-  .rosters {
-    grid-template-columns: 1fr 1fr;
-  }
-}
+.roster-title { display: flex; align-items: center; gap: 8px; }
+.roster-points { font-weight: 800; color: var(--amber-deep); }
 /* As a grid item, default min-width:auto refuses to shrink below the table's
    content width — so the panel would overflow instead of letting the table
    scroll inside it. min-width:0 lets it shrink to the track. */
