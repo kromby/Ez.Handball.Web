@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { MiniLeague } from "../api/types";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { Panel } from "./Panel";
 import { useGenerateInvite, useInvite } from "../query/hooks";
 
 export function InvitePanel({ league }: { league: MiniLeague }) {
@@ -31,7 +32,7 @@ export function InvitePanel({ league }: { league: MiniLeague }) {
   };
 
   return (
-    <div className="invite-panel">
+    <Panel className="invite-panel">
       <h2 className="label">{t("invite.panelTitle")}</h2>
       {data === null ? (
         <>
@@ -69,6 +70,6 @@ export function InvitePanel({ league }: { league: MiniLeague }) {
           />
         </>
       )}
-    </div>
+    </Panel>
   );
 }
