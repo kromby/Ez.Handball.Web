@@ -92,7 +92,7 @@ test("useMiniLeagueStandings is disabled when not authenticated", () => {
 
 test("useMiniLeagueStandings returns the ranked entries", async () => {
   const standings = { total: 1, offset: 0, limit: 50, latestRoundLabel: "1", entries: [
-    { rank: 1, previousRank: null, rankDelta: null, teamId: "u1:fantasy", teamName: "Alpha", color: "#abcdef", totalPoints: 70, roundPoints: 70 },
+    { rank: 1, previousRank: null, rankDelta: null, teamId: "u1:fantasy", teamName: "Alpha", color: "#abcdef", totalPoints: 70, roundPoints: 70, roundsPlayed: 1, averagePoints: 70, rounds: [{ roundLabel: "1", points: 70, totalPoints: 70 }] },
   ] };
   vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings as never);
   const { result } = renderHook(() => useMiniLeagueStandings("abc"), { wrapper: authenticatedWrapper() });

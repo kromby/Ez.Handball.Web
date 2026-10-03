@@ -490,6 +490,13 @@ export interface MiniLeagueMember {
   favoriteClubId: string | null;
 }
 
+/** One settled round in a manager's history; totalPoints is the running total after it. */
+export interface RoundScore {
+  roundLabel: string;
+  points: number;
+  totalPoints: number;
+}
+
 export interface ManagerStanding {
   rank: number;
   previousRank: number | null;
@@ -499,6 +506,9 @@ export interface ManagerStanding {
   color: string;
   totalPoints: number;
   roundPoints: number;
+  roundsPlayed: number;
+  averagePoints: number;
+  rounds: RoundScore[]; // oldest first
 }
 
 export interface ManagerStandings {
