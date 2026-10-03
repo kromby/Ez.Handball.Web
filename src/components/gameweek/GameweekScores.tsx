@@ -9,7 +9,16 @@ export function GameweekScores({ squad }: { squad: Squad | undefined }) {
   const { data, isError } = useMyGameweeks();
 
   const nameOf = useMemo(() => {
-    const byId = new Map((squad?.players ?? []).map((player) => [player.playerId, player]));
+    // The API resolves names for every scored player (even ones sold since); the current squad
+    // is only a fallback for responses that predate that.
+    const byId = new Map<string, { name?: string | null; position?: string | null }>(
+      (squad?.players ?? []).map((player) => [player.playerId, player]),
+    );
+    for (const score of data?.gameweeks ?? []) {
+      for (const entry of score.breakdown) {
+        if (entry.name) byId.set(entry.playerId, entry);
+      }
+    }
     return (playerId: string): ResolvedPlayer => {
       const player = byId.get(playerId);
       return {
@@ -17,7 +26,7 @@ export function GameweekScores({ squad }: { squad: Squad | undefined }) {
         position: player?.position ?? null,
       };
     };
-  }, [squad, t]);
+  }, [squad, data, t]);
 
   // Fail silently: the section is supplementary to the squad page.
   if (isError || !data) return null;

@@ -163,3 +163,17 @@ test("renders nothing on error (section is supplementary)", async () => {
   await waitFor(() => expect(api.getMyGameweeks).toHaveBeenCalled());
   expect(container.querySelector(".gwsc")).toBeNull();
 });
+
+test("resolves names from the API for players no longer in the squad", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockResolvedValue({
+    runningTotal: 1,
+    gameweeks: [
+      { roundLabel: "3. umferð", points: 1, captainPlayerId: null, breakdown: [
+        { playerId: "sold", name: "Max Emil Stenlund", position: "RB", rawPoints: 1, points: 1, played: true, autoSubbedIn: false, captainApplied: false, multiplier: 1 },
+      ] },
+    ],
+  });
+  renderWithProviders(<GameweekScores squad={squadFixture} />, { auth: { status: "authenticated" } });
+  expect(await screen.findByText("Max Emil Stenlund")).toBeInTheDocument();
+  expect(screen.queryByText("Unknown player")).not.toBeInTheDocument();
+});
