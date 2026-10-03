@@ -155,7 +155,7 @@ test("shows last round points and opponent when a gameweek is settled", async ()
     ],
   });
   renderPanel();
-  expect(await screen.findByText(/12/)).toBeInTheDocument();
+  expect(await screen.findByText("12 pts")).toBeInTheDocument();
   expect(screen.getByText(/Valur/)).toBeInTheDocument();
 });
 
@@ -197,4 +197,37 @@ test("shows next opponent when the club has an upcoming fixture", async () => {
 test("hides the next-match row when the club has no upcoming fixture", () => {
   renderPanel();
   expect(screen.queryByText(/Næsti leikur|Next match/i)).not.toBeInTheDocument();
+});
+
+test("shows the full position name in the header", () => {
+  renderPanel();
+  expect(screen.getByText("Centre back")).toBeInTheDocument();
+});
+
+function scored(roundLabel: string, points: number, played = true) {
+  return {
+    roundLabel,
+    points,
+    captainPlayerId: null,
+    breakdown: [
+      { playerId: "p-1", rawPoints: points, points, played, autoSubbedIn: false, captainApplied: false, multiplier: 1 },
+    ],
+  };
+}
+
+test("lists points for each played round, oldest first, skipping rounds not played", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockResolvedValue({
+    runningTotal: 31,
+    gameweeks: [scored("3", 14), scored("4", 0, false), scored("5", 17)],
+  });
+  renderPanel();
+  const chips = await screen.findAllByTestId("round-points");
+  expect(chips.map((c) => c.textContent)).toEqual(["R3 14", "R5 17"]);
+});
+
+test("hides the round points box when the player has no played rounds", async () => {
+  vi.spyOn(api, "getMyGameweeks").mockResolvedValue({ runningTotal: 0, gameweeks: [scored("4", 0, false)] });
+  renderPanel();
+  await screen.findByText("DNP");
+  expect(screen.queryByTestId("round-points")).not.toBeInTheDocument();
 });

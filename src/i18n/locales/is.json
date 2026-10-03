@@ -267,7 +267,9 @@
     "addSlot": "Bæta við {{code}} — fara á markaðinn",
     "lastRound": "Síðasta umferð",
     "nextMatch": "Næsti leikur",
-    "pts": "{{points}} stig"
+    "pts": "{{points}} stig",
+    "roundPoints": "Stig eftir umferðum",
+    "roundShort": "Umf. {{label}}"
   },
   "gameweek": {
     "navLink": "Umferðir",
