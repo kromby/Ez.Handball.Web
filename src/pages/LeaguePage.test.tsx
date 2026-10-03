@@ -119,6 +119,15 @@ test("draws a line chart of accumulated points with a legend entry per team", as
   expect(within(legend).getByText("Bravo")).toBeInTheDocument();
 });
 
+test("puts the invite panel below the standings and the chart", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([member("u1", { role: "creator", teamName: "Alpha" })]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([standing("u1")]));
+  render();
+  const invite = await screen.findByRole("heading", { name: "Invite link" });
+  const chartTitle = screen.getByRole("heading", { name: "Points after each round" });
+  expect(chartTitle.compareDocumentPosition(invite) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+});
+
 test("shows a message when the standings fail to load, while the league still renders", async () => {
   vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([member("u1", { role: "creator", teamName: "Alpha" })]));
   vi.spyOn(api, "getMiniLeagueStandings").mockRejectedValue(new ApiError(500, "boom", "HTTP 500"));

@@ -1,9 +1,10 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ManagerStanding } from "../api/types";
 
-const WIDTH = 600;
-const HEIGHT = 260;
-const MARGIN = { top: 12, right: 16, bottom: 30, left: 44 };
+const FALLBACK_WIDTH = 600;
+const HEIGHT = 200;
+const MARGIN = { top: 10, right: 12, bottom: 24, left: 36 };
 const GRID_LINES = 4;
 
 interface Props {
@@ -34,8 +35,23 @@ function totalsByRound(entry: ManagerStanding, labels: string[]): number[] {
   });
 }
 
+// The SVG is drawn at its real pixel width (viewBox = size) so text keeps a fixed size
+// instead of scaling up with the panel.
+function useElementWidth(element: HTMLElement | null): number {
+  const [width, setWidth] = useState(FALLBACK_WIDTH);
+  useEffect(() => {
+    if (!element || typeof ResizeObserver === "undefined") return undefined;
+    const observer = new ResizeObserver(() => setWidth(element.clientWidth || FALLBACK_WIDTH));
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [element]);
+  return width;
+}
+
 export function LeagueProgressChart({ entries, myTeamId }: Props) {
   const { t } = useTranslation();
+  const [container, setContainer] = useState<HTMLDivElement | null>(null);
+  const width = useElementWidth(container);
   const labels = roundLabelsOf(entries);
   if (labels.length === 0) return <p className="status">{t("leagues.noRoundsYet")}</p>;
 
@@ -43,7 +59,7 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
   const highestTotal = Math.max(...series.flatMap((line) => line.totals), 1);
   const yMax = Math.ceil(highestTotal / GRID_LINES / 10) * GRID_LINES * 10;
 
-  const plotWidth = WIDTH - MARGIN.left - MARGIN.right;
+  const plotWidth = width - MARGIN.left - MARGIN.right;
   const plotHeight = HEIGHT - MARGIN.top - MARGIN.bottom;
   // A single round has no span to stretch across, so it sits in the middle.
   const xOf = (index: number) =>
@@ -51,13 +67,13 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
   const yOf = (total: number) => MARGIN.top + plotHeight - (total / yMax) * plotHeight;
 
   return (
-    <div className="league-chart">
-      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} role="img" aria-label={t("leagues.chartLabel")}>
+    <div className="league-chart" ref={setContainer}>
+      <svg width={width} height={HEIGHT} viewBox={`0 0 ${width} ${HEIGHT}`} role="img" aria-label={t("leagues.chartLabel")}>
         {Array.from({ length: GRID_LINES + 1 }, (_, step) => {
           const value = (yMax / GRID_LINES) * step;
           return (
             <g key={value}>
-              <line className="league-chart-grid" x1={MARGIN.left} x2={WIDTH - MARGIN.right} y1={yOf(value)} y2={yOf(value)} />
+              <line className="league-chart-grid" x1={MARGIN.left} x2={width - MARGIN.right} y1={yOf(value)} y2={yOf(value)} />
               <text className="league-chart-tick" x={MARGIN.left - 8} y={yOf(value)} textAnchor="end" dominantBaseline="middle">
                 {value}
               </text>
@@ -65,7 +81,7 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
           );
         })}
         {labels.map((label, index) => (
-          <text key={label} className="league-chart-tick" x={xOf(index)} y={HEIGHT - 8} textAnchor="middle">
+          <text key={label} className="league-chart-tick" x={xOf(index)} y={HEIGHT - 6} textAnchor="middle">
             {label}
           </text>
         ))}
