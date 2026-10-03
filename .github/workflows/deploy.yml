@@ -30,4 +30,3 @@ jobs:
           action: upload
           app_location: dist        # pre-built output (we build above)
           skip_app_build: true
-          skip_api_build: true
