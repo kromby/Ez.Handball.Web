@@ -37,8 +37,6 @@ export default function LeaguePage() {
         <span className="chip">{data.season} · {t("leagues.memberCount", { count: data.memberCount })}</span>
       </div>
 
-      <InvitePanel league={data} />
-
       <Panel>
         <span className="chip">{t(roleBadgeKey(data.role))}</span>
         <h2 className="label" style={{ marginTop: 14 }}>{t("leagues.standings")}</h2>
@@ -61,6 +59,8 @@ export default function LeaguePage() {
           <LeagueProgressChart entries={standings.data.entries} myTeamId={myTeamId} />
         </Panel>
       )}
+
+      <InvitePanel league={data} />
     </section>
   );
 }
