@@ -267,7 +267,9 @@
     "addSlot": "Add a {{code}} — go to the market",
     "lastRound": "Last round",
     "nextMatch": "Next match",
-    "pts": "{{points}} pts"
+    "pts": "{{points}} pts",
+    "roundPoints": "Points by round",
+    "roundShort": "R{{label}}"
   },
   "gameweek": {
     "navLink": "Gameweeks",

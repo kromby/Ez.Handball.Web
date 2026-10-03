@@ -1308,6 +1308,11 @@ button {
 .drift-down { color: var(--bad); }
 .panel-actions { margin-top: 14px; display: flex; align-items: center; gap: 10px; }
 .panel-frees { font-size: 12px; color: var(--ink-2); }
+.token-badge--lg { font-size: 11px; padding: 2px 7px; border-radius: 6px; letter-spacing: .02em; }
+.panel-rounds { background: var(--paper-3); border-radius: 9px; padding: 8px 10px; margin-top: 7px; }
+.panel-rounds-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.panel-round-chip { font-size: 12px; color: var(--ink-2); background: var(--paper); border-radius: 7px; padding: 2px 8px; }
+.panel-round-chip b { font-family: "Spectral", Georgia, serif; color: var(--amber-deep); margin-left: 2px; }
 .panel-link { display: block; text-align: center; margin-top: 9px; font-size: 12px; color: var(--amber-deep); font-weight: 700; text-decoration: none; }
 .panel-empty { text-align: center; color: var(--ink-3); font-size: 18px; margin: 0; }
 .panel-crest { display: block; width: 46px; height: 46px; border-radius: 50%; object-fit: contain; }

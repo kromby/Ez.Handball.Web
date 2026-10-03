@@ -43,7 +43,10 @@ function PanelHead({ player, clubLogoUrl }: { player: SquadPlayer; clubLogoUrl: 
       <div className="panel-id">
         <h3 className="panel-name">{player.name ?? t("match.unknownPlayer")}</h3>
         <div className="panel-meta">
-          {player.clubName ?? ""} · <span className="token-badge">{player.position ?? "—"}</span>
+          {player.clubName ?? ""} ·{" "}
+          <span className="token-badge token-badge--lg">
+            {player.position ? t(`positions.${player.position}`, { defaultValue: player.position }) : "—"}
+          </span>
         </div>
       </div>
       <div className="panel-rating">
@@ -108,6 +111,11 @@ export function SelectedPlayerPanel({ player }: { player: SquadPlayer | null }) 
   const settledGameweeks = gameweeks.data?.gameweeks ?? [];
   const lastSettled = settledGameweeks[settledGameweeks.length - 1] ?? null;
   const lastRoundScore = lastSettled?.breakdown.find((entry) => entry.playerId === player.playerId) ?? null;
+  // Oldest first (API order); only rounds this player actually scored in for the manager.
+  const roundPoints = settledGameweeks.flatMap((score) => {
+    const entry = score.breakdown.find((e) => e.playerId === player.playerId);
+    return entry?.played ? [{ roundLabel: score.roundLabel, points: entry.points }] : [];
+  });
   const lastOpponent = played.data?.matches[0] ?? null;
   const nextOpponent = upcoming.data?.matches[0] ?? null;
   const lastRoundPoints = lastRoundScore
@@ -137,6 +145,19 @@ export function SelectedPlayerPanel({ player }: { player: SquadPlayer | null }) 
           />
         )}
       </div>
+
+      {roundPoints.length > 0 && (
+        <div className="panel-rounds">
+          <div className="poslabel">{t("squad.roundPoints")}</div>
+          <div className="panel-rounds-list">
+            {roundPoints.map((r) => (
+              <span key={r.roundLabel} className="panel-round-chip" data-testid="round-points">
+                {t("squad.roundShort", { label: r.roundLabel })} <b>{r.points}</b>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="panel-actions">
         <SellButton player={{ playerId: player.playerId, name: player.name }} />
