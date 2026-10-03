@@ -17,22 +17,36 @@ export function isCurrent(gameweek: Gameweek, current: Gameweek | null): boolean
 
 export interface GameweekSections {
   hero: Gameweek | null;
+  live: Gameweek[];
   comingUp: Gameweek[];
   results: Gameweek[];
 }
 
+/** True while a gameweek has matches and not all of them are final. */
+export function isOngoing(gameweek: Gameweek): boolean {
+  return gameweek.matches.some((m) => !m.isFinal);
+}
+
+/** The round label only adds information when it isn't just the gameweek number again. */
+export function showRoundLabel(gameweek: Gameweek): boolean {
+  return gameweek.roundLabel !== String(gameweek.number);
+}
+
 /** Hero = the current gameweek (or lastSettled when the season is over).
- *  Coming up = numbers above the hero (ascending); results = below (descending). */
+ *  Live = earlier gameweeks still being played (ascending). Coming up = numbers above the
+ *  hero (ascending); results = the remaining earlier ones (descending). */
 export function sectionGameweeks(
   all: Gameweek[],
   current: Gameweek | null,
   lastSettled: Gameweek | null,
 ): GameweekSections {
   const hero = current ?? lastSettled;
-  if (!hero) return { hero: null, comingUp: [], results: [] };
+  if (!hero) return { hero: null, live: [], comingUp: [], results: [] };
+  const earlier = all.filter((g) => g.number < hero.number);
+  const live = earlier.filter(isOngoing).sort((a, b) => a.number - b.number);
   const comingUp = all.filter((g) => g.number > hero.number).sort((a, b) => a.number - b.number);
-  const results = all.filter((g) => g.number < hero.number).sort((a, b) => b.number - a.number);
-  return { hero, comingUp, results };
+  const results = earlier.filter((g) => !isOngoing(g)).sort((a, b) => b.number - a.number);
+  return { hero, live, comingUp, results };
 }
 
 export function roundByLabel(

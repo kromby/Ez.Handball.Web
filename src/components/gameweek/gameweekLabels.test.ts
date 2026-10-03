@@ -5,16 +5,19 @@ import {
   isCurrent,
   roundByLabel,
   sectionGameweeks,
+  showRoundLabel,
 } from "./gameweekLabels";
 
-function gw(number: number, status: Gameweek["status"]): Gameweek {
+function gw(number: number, status: Gameweek["status"], finals: boolean[] = []): Gameweek {
   return {
     number,
     roundLabel: String(number),
     tournamentId: "8444",
     deadline: "2026-06-20T16:00:00Z",
     status,
-    matches: [],
+    matches: finals.map((isFinal, i) => ({
+      matchId: `${number}-${i}`, date: "2026-06-20T16:00:00Z", isFinal, homeTeamId: "h", awayTeamId: "a",
+    })),
   };
 }
 
@@ -37,10 +40,23 @@ test("sectionGameweeks splits around the current gameweek", () => {
   expect(sections.results.map((g) => g.number)).toEqual([6, 5]);
 });
 
-test("a past InPlay gameweek lands in results", () => {
-  const all = [gw(6, "InPlay"), gw(7, "Open")];
+test("a past gameweek with unfinished matches is live, not in results", () => {
+  const all = [gw(4, "Settled", [true, true]), gw(5, "InPlay", [true, false]), gw(6, "Open", [false])];
+  const sections = sectionGameweeks(all, gw(6, "Open", [false]), null);
+  expect(sections.live.map((g) => g.number)).toEqual([5]);
+  expect(sections.results.map((g) => g.number)).toEqual([4]);
+});
+
+test("a past gameweek whose matches are all final is a result", () => {
+  const all = [gw(6, "InPlay", [true, true]), gw(7, "Open")];
   const sections = sectionGameweeks(all, gw(7, "Open"), null);
+  expect(sections.live).toEqual([]);
   expect(sections.results.map((g) => g.number)).toEqual([6]);
+});
+
+test("showRoundLabel hides a label that just repeats the gameweek number", () => {
+  expect(showRoundLabel(gw(6, "Open"))).toBe(false);
+  expect(showRoundLabel({ ...gw(6, "Open"), roundLabel: "6B" })).toBe(true);
 });
 
 test("falls back to lastSettled hero when current is null", () => {

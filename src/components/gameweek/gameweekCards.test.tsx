@@ -42,3 +42,22 @@ test("list row is collapsed, then expands fixtures on click", () => {
   fireEvent.click(screen.getByRole("button"));
   expect(screen.getByText("Valur")).toBeInTheDocument();
 });
+
+test("list row can start open", () => {
+  renderWithProviders(
+    <GameweekListRow gameweek={gw(17, "InPlay")} current={gw(18, "Open")} round={round} defaultOpen />,
+  );
+  expect(screen.getByText("Valur")).toBeInTheDocument();
+});
+
+test("round label is shown only when it differs from the number", () => {
+  const { unmount } = renderWithProviders(
+    <GameweekListRow gameweek={gw(19, "Open")} current={gw(18, "Open")} round={round} />,
+  );
+  expect(screen.queryByText("Umferð 19")).not.toBeInTheDocument();
+  unmount();
+  renderWithProviders(
+    <GameweekListRow gameweek={{ ...gw(19, "Open"), roundLabel: "19B" }} current={gw(18, "Open")} round={round} />,
+  );
+  expect(screen.getByText("Umferð 19B")).toBeInTheDocument();
+});
