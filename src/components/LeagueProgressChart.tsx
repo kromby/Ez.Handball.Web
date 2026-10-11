@@ -1,30 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ManagerStanding } from "../api/types";
-
-const FALLBACK_WIDTH = 600;
-const HEIGHT = 200;
-const MARGIN = { top: 10, right: 12, bottom: 24, left: 36 };
-const GRID_LINES = 4;
-// Matches the --series-N custom properties in app.css.
-const SERIES_COLOR_COUNT = 8;
+import { CHART_HEIGHT, CHART_MARGIN, roundLabelsOf, seriesColorOf, valueScaleOf } from "../lib/leagueChart";
+import { useElementWidth } from "../lib/useElementWidth";
+import { LeagueChartGrid } from "./LeagueChartGrid";
+import { LeagueChartLegend } from "./LeagueChartLegend";
 
 interface Props {
   entries: ManagerStanding[];
   myTeamId: string | undefined;
-}
-
-// Every team shares the same settled rounds except ones it has no score for, so the
-// longest history is a good axis; labels only a shorter history has are appended.
-function roundLabelsOf(entries: ManagerStanding[]): string[] {
-  const labels: string[] = [];
-  const longestFirst = [...entries].sort((first, second) => second.rounds.length - first.rounds.length);
-  for (const entry of longestFirst) {
-    for (const round of entry.rounds) {
-      if (!labels.includes(round.roundLabel)) labels.push(round.roundLabel);
-    }
-  }
-  return labels;
 }
 
 // A team that didn't score in a round keeps the total it had.
@@ -35,36 +19,6 @@ function totalsByRound(entry: ManagerStanding, labels: string[]): number[] {
     lastTotal = totalByLabel.get(label) ?? lastTotal;
     return lastTotal;
   });
-}
-
-// Team colours from the API often repeat, so the chart hands out its own palette:
-// rivals take the series colours in standings order, and the viewer's team always gets
-// the accent, which no series colour resembles.
-function seriesColorOf(entries: ManagerStanding[], myTeamId: string | undefined): Map<string, string> {
-  const colorByTeam = new Map<string, string>();
-  let rivalIndex = 0;
-  for (const entry of entries) {
-    if (entry.teamId === myTeamId) {
-      colorByTeam.set(entry.teamId, "var(--accent)");
-    } else {
-      colorByTeam.set(entry.teamId, `var(--series-${(rivalIndex % SERIES_COLOR_COUNT) + 1})`);
-      rivalIndex += 1;
-    }
-  }
-  return colorByTeam;
-}
-
-// The SVG is drawn at its real pixel width (viewBox = size) so text keeps a fixed size
-// instead of scaling up with the panel.
-function useElementWidth(element: HTMLElement | null): number {
-  const [width, setWidth] = useState(FALLBACK_WIDTH);
-  useEffect(() => {
-    if (!element || typeof ResizeObserver === "undefined") return undefined;
-    const observer = new ResizeObserver(() => setWidth(element.clientWidth || FALLBACK_WIDTH));
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, [element]);
-  return width;
 }
 
 export function LeagueProgressChart({ entries, myTeamId }: Props) {
@@ -79,32 +33,21 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
   const series = [...entries]
     .sort((first, second) => Number(first.teamId === myTeamId) - Number(second.teamId === myTeamId))
     .map((entry) => ({ entry, totals: totalsByRound(entry, labels) }));
-  const highestTotal = Math.max(...series.flatMap((line) => line.totals), 1);
-  const yMax = Math.ceil(highestTotal / GRID_LINES / 10) * GRID_LINES * 10;
+  const scale = valueScaleOf(series.flatMap((line) => line.totals));
 
-  const plotWidth = width - MARGIN.left - MARGIN.right;
-  const plotHeight = HEIGHT - MARGIN.top - MARGIN.bottom;
+  const plotWidth = width - CHART_MARGIN.left - CHART_MARGIN.right;
+  const plotHeight = CHART_HEIGHT - CHART_MARGIN.top - CHART_MARGIN.bottom;
   // A single round has no span to stretch across, so it sits in the middle.
   const xOf = (index: number) =>
-    MARGIN.left + (labels.length === 1 ? plotWidth / 2 : (index / (labels.length - 1)) * plotWidth);
-  const yOf = (total: number) => MARGIN.top + plotHeight - (total / yMax) * plotHeight;
+    CHART_MARGIN.left + (labels.length === 1 ? plotWidth / 2 : (index / (labels.length - 1)) * plotWidth);
+  const yOf = (total: number) => CHART_MARGIN.top + plotHeight - ((total - scale.min) / (scale.max - scale.min)) * plotHeight;
 
   return (
     <div className="league-chart" ref={setContainer}>
-      <svg width={width} height={HEIGHT} viewBox={`0 0 ${width} ${HEIGHT}`} role="img" aria-label={t("leagues.chartLabel")}>
-        {Array.from({ length: GRID_LINES + 1 }, (_, step) => {
-          const value = (yMax / GRID_LINES) * step;
-          return (
-            <g key={value}>
-              <line className="league-chart-grid" x1={MARGIN.left} x2={width - MARGIN.right} y1={yOf(value)} y2={yOf(value)} />
-              <text className="league-chart-tick" x={MARGIN.left - 8} y={yOf(value)} textAnchor="end" dominantBaseline="middle">
-                {value}
-              </text>
-            </g>
-          );
-        })}
+      <svg width={width} height={CHART_HEIGHT} viewBox={`0 0 ${width} ${CHART_HEIGHT}`} role="img" aria-label={t("leagues.chartLabel")}>
+        <LeagueChartGrid ticks={scale.ticks} width={width} yOf={yOf} />
         {labels.map((label, index) => (
-          <text key={label} className="league-chart-tick" x={xOf(index)} y={HEIGHT - 6} textAnchor="middle">
+          <text key={label} className="league-chart-tick" x={xOf(index)} y={CHART_HEIGHT - 6} textAnchor="middle">
             {label}
           </text>
         ))}
@@ -126,14 +69,7 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
           );
         })}
       </svg>
-      <ul className="league-chart-legend">
-        {entries.map((entry) => (
-          <li key={entry.teamId} className={entry.teamId === myTeamId ? "league-chart-legend-mine" : undefined}>
-            <span className="league-chart-swatch" style={{ background: colorByTeam.get(entry.teamId) }} />
-            {entry.teamName}
-          </li>
-        ))}
-      </ul>
+      <LeagueChartLegend entries={entries} myTeamId={myTeamId} colorByTeam={colorByTeam} />
     </div>
   );
 }

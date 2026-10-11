@@ -7,6 +7,7 @@ import { StartRoundPanel } from "../components/league/StartRoundPanel";
 import { BallDefs } from "../components/BallAvatar";
 import { LeagueStandingsTable } from "../components/LeagueStandingsTable";
 import { LeagueProgressChart } from "../components/LeagueProgressChart";
+import { LeagueRoundPointsChart } from "../components/LeagueRoundPointsChart";
 import { useAuth } from "../auth/useAuth";
 import { useClubs, useMiniLeague, useMiniLeagueStandings } from "../query/hooks";
 
@@ -60,6 +61,13 @@ export default function LeaguePage() {
         <Panel>
           <h2 className="label">{t("leagues.chartTitle")}</h2>
           <LeagueProgressChart entries={standings.data.entries} myTeamId={myTeamId} />
+        </Panel>
+      )}
+
+      {standings.data?.entries.some((entry) => entry.rounds.length > 0) && (
+        <Panel>
+          <h2 className="label">{t("leagues.roundChartTitle")}</h2>
+          <LeagueRoundPointsChart entries={standings.data.entries} myTeamId={myTeamId} />
         </Panel>
       )}
 
