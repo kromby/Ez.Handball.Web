@@ -6,6 +6,8 @@ const FALLBACK_WIDTH = 600;
 const HEIGHT = 200;
 const MARGIN = { top: 10, right: 12, bottom: 24, left: 36 };
 const GRID_LINES = 4;
+// Matches the --series-N custom properties in app.css.
+const SERIES_COLOR_COUNT = 8;
 
 interface Props {
   entries: ManagerStanding[];
@@ -35,6 +37,23 @@ function totalsByRound(entry: ManagerStanding, labels: string[]): number[] {
   });
 }
 
+// Team colours from the API often repeat, so the chart hands out its own palette:
+// rivals take the series colours in standings order, and the viewer's team always gets
+// the accent, which no series colour resembles.
+function seriesColorOf(entries: ManagerStanding[], myTeamId: string | undefined): Map<string, string> {
+  const colorByTeam = new Map<string, string>();
+  let rivalIndex = 0;
+  for (const entry of entries) {
+    if (entry.teamId === myTeamId) {
+      colorByTeam.set(entry.teamId, "var(--accent)");
+    } else {
+      colorByTeam.set(entry.teamId, `var(--series-${(rivalIndex % SERIES_COLOR_COUNT) + 1})`);
+      rivalIndex += 1;
+    }
+  }
+  return colorByTeam;
+}
+
 // The SVG is drawn at its real pixel width (viewBox = size) so text keeps a fixed size
 // instead of scaling up with the panel.
 function useElementWidth(element: HTMLElement | null): number {
@@ -55,7 +74,11 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
   const labels = roundLabelsOf(entries);
   if (labels.length === 0) return <p className="status">{t("leagues.noRoundsYet")}</p>;
 
-  const series = entries.map((entry) => ({ entry, totals: totalsByRound(entry, labels) }));
+  const colorByTeam = seriesColorOf(entries, myTeamId);
+  // The viewer's line is drawn last so no rival can cover it.
+  const series = [...entries]
+    .sort((first, second) => Number(first.teamId === myTeamId) - Number(second.teamId === myTeamId))
+    .map((entry) => ({ entry, totals: totalsByRound(entry, labels) }));
   const highestTotal = Math.max(...series.flatMap((line) => line.totals), 1);
   const yMax = Math.ceil(highestTotal / GRID_LINES / 10) * GRID_LINES * 10;
 
@@ -88,7 +111,7 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
         {series.map(({ entry, totals }) => {
           const isMine = entry.teamId === myTeamId;
           return (
-            <g key={entry.teamId} stroke={entry.color || "currentColor"} fill={entry.color || "currentColor"}>
+            <g key={entry.teamId} style={{ color: colorByTeam.get(entry.teamId) }} stroke="currentColor" fill="currentColor">
               <polyline
                 className={isMine ? "league-chart-line league-chart-line--mine" : "league-chart-line"}
                 fill="none"
@@ -105,8 +128,8 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
       </svg>
       <ul className="league-chart-legend">
         {entries.map((entry) => (
-          <li key={entry.teamId}>
-            <span className="league-chart-swatch" style={{ background: entry.color }} />
+          <li key={entry.teamId} className={entry.teamId === myTeamId ? "league-chart-legend-mine" : undefined}>
+            <span className="league-chart-swatch" style={{ background: colorByTeam.get(entry.teamId) }} />
             {entry.teamName}
           </li>
         ))}
