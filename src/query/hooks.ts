@@ -308,6 +308,20 @@ export function useLeagueMemberGameweeks(leagueId: string, userId: string) {
   });
 }
 
+export function useSetMiniLeagueStartRound(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (startRound: string) => api.setMiniLeagueStartRound(id, startRound),
+    // The start round changes which rounds count, so every standing in the league moves.
+    onSuccess: (result) => {
+      qc.setQueryData<import("../api/types").MiniLeague>(["mini-league", id], (league) =>
+        league ? { ...league, startRound: result.startRound } : league,
+      );
+      qc.invalidateQueries({ queryKey: ["mini-league-standings", id] });
+    },
+  });
+}
+
 export function useMyMiniLeagues() {
   const { status } = useAuth();
   return useQuery({
@@ -319,7 +333,8 @@ export function useMyMiniLeagues() {
 
 export function useCreateMiniLeague() {
   return useMutation({
-    mutationFn: (name: string) => api.createMiniLeague(name),
+    mutationFn: ({ name, startRound }: { name: string; startRound?: string }) =>
+      api.createMiniLeague(name, startRound),
   });
 }
 

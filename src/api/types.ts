@@ -530,6 +530,7 @@ export interface MiniLeague {
   id: string;
   name: string;
   season: string;
+  startRound?: string | null; // round label standings count from; null = every round
   creatorUserId: string;
   memberCount: number;
   role: string | null; // caller's role, or null if not a member

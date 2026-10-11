@@ -168,8 +168,14 @@ export function sellPlayer(playerId: string, flavor = "fantasy"): Promise<SquadM
   );
 }
 
-export function createMiniLeague(name: string): Promise<MiniLeague> {
-  return authedSend<MiniLeague>("/api/mini-leagues", "POST", { name });
+// startRound omitted → the server defaults to the season's first gameweek.
+export function createMiniLeague(name: string, startRound?: string): Promise<MiniLeague> {
+  return authedSend<MiniLeague>("/api/mini-leagues", "POST", startRound ? { name, startRound } : { name });
+}
+
+// Creator only. Returns the league id and its new start round.
+export function setMiniLeagueStartRound(id: string, startRound: string): Promise<{ id: string; startRound: string | null }> {
+  return authedSend(`/api/mini-leagues/${encodeURIComponent(id)}/start-round`, "PUT", { startRound });
 }
 
 export function getMiniLeague(id: string): Promise<MiniLeague> {

@@ -123,7 +123,7 @@ test("useCreateMiniLeague returns the created league", async () => {
   );
   const { result } = renderHook(() => useCreateMiniLeague(), { wrapper });
   let created: unknown;
-  await act(async () => { created = await result.current.mutateAsync("L"); });
+  await act(async () => { created = await result.current.mutateAsync({ name: "L" }); });
   expect(created).toMatchObject({ id: "abc" });
 });
 

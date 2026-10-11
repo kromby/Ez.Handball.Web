@@ -175,3 +175,18 @@ test("links each team name to that member's team page", async () => {
   expect(await screen.findByRole("link", { name: "Bravo" })).toHaveAttribute("href", "/leagues/abc/members/u2");
   expect(screen.getByRole("link", { name: "Alpha (you)" })).toHaveAttribute("href", "/leagues/abc/members/u1");
 });
+
+test("shows which round the standings count from", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue({ ...league([member("u1", { role: "creator" })]), startRound: "6" });
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(noStandings);
+  render();
+  expect(await screen.findByText("Counted from round 6")).toBeInTheDocument();
+});
+
+test("a league without a start round shows no counted-from line", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([member("u1", { role: "creator" })]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(noStandings);
+  render();
+  expect(await screen.findByText("Office Olís")).toBeInTheDocument();
+  expect(screen.queryByText(/counted from round/i)).not.toBeInTheDocument();
+});
