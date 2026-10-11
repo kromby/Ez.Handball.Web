@@ -30,7 +30,10 @@ test("draws a bar per team per round with the points scored that round, not the 
   expect(chart().getByText("Bravo · Round 1: 12")).toBeInTheDocument();
   // A zero is a real score and still gets a bar.
   expect(chart().getByText("Bravo · Round 2: 0")).toBeInTheDocument();
-  expect(within(screen.getByRole("list")).getAllByRole("listitem").map((item) => item.textContent)).toEqual(["Alpha", "Bravo"]);
+  const legend = within(screen.getByRole("list"));
+  expect(legend.getAllByRole("listitem").map((item) => item.textContent)).toEqual(["Alpha", "Bravo"]);
+  // Same palette as the cumulative chart: my team takes the accent.
+  expect((legend.getByText("Alpha").querySelector("span") as HTMLElement).style.background).toBe("var(--accent)");
 });
 
 test("leaves out the bar for a round a team has no score in", () => {

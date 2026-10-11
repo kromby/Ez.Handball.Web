@@ -155,6 +155,27 @@ test("draws a second chart of the points each team scored in each round", async 
   expect(within(chart as unknown as HTMLElement).getByText("Alpha · Round 2: 40")).toBeInTheDocument();
 });
 
+test("gives every team its own chart colour, even when the API repeats one, and the accent to my team", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([
+    member("u1", { role: "creator", teamName: "Alpha" }),
+    member("u2", { teamName: "Bravo" }),
+    member("u3", { teamName: "Charlie" }),
+  ]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([
+    standing("u2", { teamName: "Bravo" }),
+    standing("u1", { rank: 2 }),
+    standing("u3", { rank: 3, teamName: "Charlie" }),
+  ]));
+  render();
+  // Both charts draw the same legend; check the first.
+  const [legend] = await screen.findAllByRole("list");
+  const swatchColorOf = (teamName: string) =>
+    (within(legend).getByText(teamName).querySelector("span") as HTMLElement).style.background;
+  const colors = ["Alpha", "Bravo", "Charlie"].map(swatchColorOf);
+  expect(new Set(colors).size).toBe(3);
+  expect(swatchColorOf("Alpha")).toBe("var(--accent)");
+});
+
 test("puts the invite panel below the standings and the chart", async () => {
   vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([member("u1", { role: "creator", teamName: "Alpha" })]));
   vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([standing("u1")]));
@@ -191,4 +212,19 @@ test("links each team name to that member's team page", async () => {
   render();
   expect(await screen.findByRole("link", { name: "Bravo" })).toHaveAttribute("href", "/leagues/abc/members/u2");
   expect(screen.getByRole("link", { name: "Alpha (you)" })).toHaveAttribute("href", "/leagues/abc/members/u1");
+});
+
+test("shows which round the standings count from", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue({ ...league([member("u1", { role: "creator" })]), startRound: "6" });
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(noStandings);
+  render();
+  expect(await screen.findByText("Counted from round 6")).toBeInTheDocument();
+});
+
+test("a league without a start round shows no counted-from line", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([member("u1", { role: "creator" })]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(noStandings);
+  render();
+  expect(await screen.findByText("Office Olís")).toBeInTheDocument();
+  expect(screen.queryByText(/counted from round/i)).not.toBeInTheDocument();
 });

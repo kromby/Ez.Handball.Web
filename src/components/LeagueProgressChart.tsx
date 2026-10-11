@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ManagerStanding } from "../api/types";
-import { CHART_HEIGHT, CHART_MARGIN, roundLabelsOf, valueScaleOf } from "../lib/leagueChart";
+import { CHART_HEIGHT, CHART_MARGIN, roundLabelsOf, seriesColorOf, valueScaleOf } from "../lib/leagueChart";
 import { useElementWidth } from "../lib/useElementWidth";
 import { LeagueChartGrid } from "./LeagueChartGrid";
 import { LeagueChartLegend } from "./LeagueChartLegend";
@@ -28,7 +28,11 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
   const labels = roundLabelsOf(entries);
   if (labels.length === 0) return <p className="status">{t("leagues.noRoundsYet")}</p>;
 
-  const series = entries.map((entry) => ({ entry, totals: totalsByRound(entry, labels) }));
+  const colorByTeam = seriesColorOf(entries, myTeamId);
+  // The viewer's line is drawn last so no rival can cover it.
+  const series = [...entries]
+    .sort((first, second) => Number(first.teamId === myTeamId) - Number(second.teamId === myTeamId))
+    .map((entry) => ({ entry, totals: totalsByRound(entry, labels) }));
   const scale = valueScaleOf(series.flatMap((line) => line.totals));
 
   const plotWidth = width - CHART_MARGIN.left - CHART_MARGIN.right;
@@ -50,7 +54,7 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
         {series.map(({ entry, totals }) => {
           const isMine = entry.teamId === myTeamId;
           return (
-            <g key={entry.teamId} stroke={entry.color || "currentColor"} fill={entry.color || "currentColor"}>
+            <g key={entry.teamId} style={{ color: colorByTeam.get(entry.teamId) }} stroke="currentColor" fill="currentColor">
               <polyline
                 className={isMine ? "league-chart-line league-chart-line--mine" : "league-chart-line"}
                 fill="none"
@@ -65,7 +69,7 @@ export function LeagueProgressChart({ entries, myTeamId }: Props) {
           );
         })}
       </svg>
-      <LeagueChartLegend entries={entries} />
+      <LeagueChartLegend entries={entries} myTeamId={myTeamId} colorByTeam={colorByTeam} />
     </div>
   );
 }

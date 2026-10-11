@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ManagerStanding } from "../api/types";
-import { CHART_HEIGHT, CHART_MARGIN, roundLabelsOf, valueScaleOf } from "../lib/leagueChart";
+import { CHART_HEIGHT, CHART_MARGIN, roundLabelsOf, seriesColorOf, valueScaleOf } from "../lib/leagueChart";
 import { useElementWidth } from "../lib/useElementWidth";
 import { LeagueChartGrid } from "./LeagueChartGrid";
 import { LeagueChartLegend } from "./LeagueChartLegend";
@@ -30,6 +30,7 @@ export function LeagueRoundPointsChart({ entries, myTeamId }: Props) {
   const labels = roundLabelsOf(entries);
   if (labels.length === 0) return null;
 
+  const colorByTeam = seriesColorOf(entries, myTeamId);
   const pointsByTeam = new Map(entries.map((entry) => [
     entry.teamId,
     new Map(entry.rounds.map((round) => [round.roundLabel, round.points])),
@@ -63,7 +64,8 @@ export function LeagueRoundPointsChart({ entries, myTeamId }: Props) {
               <g
                 key={entry.teamId}
                 className={isMine ? "league-chart-bars league-chart-bars--mine" : "league-chart-bars"}
-                fill={entry.color || "currentColor"}
+                style={{ color: colorByTeam.get(entry.teamId) }}
+                fill="currentColor"
               >
                 {labels.map((label, roundIndex) => {
                   const points = pointsByTeam.get(entry.teamId)?.get(label);
@@ -87,7 +89,7 @@ export function LeagueRoundPointsChart({ entries, myTeamId }: Props) {
           })}
         </svg>
       </div>
-      <LeagueChartLegend entries={entries} />
+      <LeagueChartLegend entries={entries} myTeamId={myTeamId} colorByTeam={colorByTeam} />
     </div>
   );
 }

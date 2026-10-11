@@ -3,6 +3,8 @@ import type { ManagerStanding } from "../api/types";
 export const CHART_HEIGHT = 200;
 export const CHART_MARGIN = { top: 10, right: 12, bottom: 24, left: 36 };
 const GRID_LINES = 4;
+// Matches the --series-N custom properties in app.css.
+const SERIES_COLOR_COUNT = 8;
 
 // Every team shares the same settled rounds except ones it has no score for, so the
 // longest history is a good axis; labels only a shorter history has are appended.
@@ -15,6 +17,23 @@ export function roundLabelsOf(entries: ManagerStanding[]): string[] {
     }
   }
   return labels;
+}
+
+// Team colours from the API often repeat, so the charts hand out their own palette:
+// rivals take the series colours in standings order, and the viewer's team always gets
+// the accent, which no series colour resembles.
+export function seriesColorOf(entries: ManagerStanding[], myTeamId: string | undefined): Map<string, string> {
+  const colorByTeam = new Map<string, string>();
+  let rivalIndex = 0;
+  for (const entry of entries) {
+    if (entry.teamId === myTeamId) {
+      colorByTeam.set(entry.teamId, "var(--accent)");
+    } else {
+      colorByTeam.set(entry.teamId, `var(--series-${(rivalIndex % SERIES_COLOR_COUNT) + 1})`);
+      rivalIndex += 1;
+    }
+  }
+  return colorByTeam;
 }
 
 export interface ValueScale {

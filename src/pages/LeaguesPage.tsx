@@ -4,29 +4,37 @@ import { Link, useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { Panel } from "../components/Panel";
 import { RegField } from "../auth/registration/RegField";
-import { useCreateMiniLeague, useMyMiniLeagues } from "../query/hooks";
+import { StartRoundSelect, sortedRounds } from "../components/league/StartRoundSelect";
+import { useCreateMiniLeague, useGameweeks, useMyMiniLeagues } from "../query/hooks";
 
 export default function LeaguesPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const create = useCreateMiniLeague();
   const mine = useMyMiniLeagues();
+  const gameweeks = useGameweeks();
   const [name, setName] = useState("");
+  // Empty until the user picks a round, so the default tracks the first gameweek once it loads.
+  const [pickedStartRound, setPickedStartRound] = useState("");
   const [touched, setTouched] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
   const trimmed = name.trim();
   const nameValid = trimmed.length >= 1 && trimmed.length <= 60;
   const nameError = touched && !nameValid ? t("leagues.nameInvalid") : undefined;
+  const rounds = sortedRounds(gameweeks.data);
+  // Without a calendar the picker is hidden and the server picks the first round itself.
+  const startRound = pickedStartRound || rounds[0]?.roundLabel;
 
   function submit() {
     setTouched(true);
     setFormError(null);
     if (!nameValid) return;
-    create.mutate(trimmed, {
+    create.mutate({ name: trimmed, startRound }, {
       onSuccess: (league) => navigate(`/leagues/${encodeURIComponent(league.id)}`),
       onError: (err) => {
         if (err instanceof ApiError && err.code === "invalid_name") setFormError(t("leagues.nameInvalid"));
+        else if (err instanceof ApiError && err.code === "invalid_start_round") setFormError(t("leagues.startRoundInvalid"));
         else if (err instanceof ApiError && err.code === "no_current_season") setFormError(t("leagues.noCurrentSeason"));
         else setFormError(t("common.error"));
       },
@@ -70,6 +78,11 @@ export default function LeaguesPage() {
           onBlur={() => setTouched(true)}
           error={nameError}
         />
+        {rounds.length > 0 && startRound && (
+          <div style={{ marginTop: 12 }}>
+            <StartRoundSelect id="leagueStartRound" rounds={rounds} value={startRound} onChange={setPickedStartRound} />
+          </div>
+        )}
         {formError && <p className="error" role="alert">{formError}</p>}
         <div style={{ marginTop: 12 }}>
           <button type="button" className="btn btn--amber" onClick={submit} disabled={create.isPending}>

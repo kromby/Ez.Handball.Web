@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getMyMiniLeagues, getMiniLeagueStandings, getLeagueMemberGameweeks, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, setMiniLeagueStartRound, getMiniLeague, getMyMiniLeagues, getMiniLeagueStandings, getLeagueMemberGameweeks, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -163,6 +163,18 @@ test("createMiniLeague POSTs to /api/mini-leagues with name body", async () => {
   const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
   await createMiniLeague("Office Olís");
   expect(spy).toHaveBeenCalledWith("/api/mini-leagues", "POST", { name: "Office Olís" });
+});
+
+test("createMiniLeague sends the chosen start round", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await createMiniLeague("Office Olís", "6");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues", "POST", { name: "Office Olís", startRound: "6" });
+});
+
+test("setMiniLeagueStartRound PUTs the start round for the encoded league id", async () => {
+  const spy = vi.spyOn(client, "authedSend").mockResolvedValue({} as never);
+  await setMiniLeagueStartRound("a/b", "6");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/a%2Fb/start-round", "PUT", { startRound: "6" });
 });
 
 test("getMiniLeague calls the authed get for /api/mini-leagues/:id", async () => {
