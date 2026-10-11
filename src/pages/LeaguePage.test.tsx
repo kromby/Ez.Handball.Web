@@ -138,6 +138,26 @@ test("draws a line chart of accumulated points with a legend entry per team", as
   expect(within(legend).getByText("Bravo")).toBeInTheDocument();
 });
 
+test("gives every team its own chart colour, even when the API repeats one, and the accent to my team", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([
+    member("u1", { role: "creator", teamName: "Alpha" }),
+    member("u2", { teamName: "Bravo" }),
+    member("u3", { teamName: "Charlie" }),
+  ]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([
+    standing("u2", { teamName: "Bravo" }),
+    standing("u1", { rank: 2 }),
+    standing("u3", { rank: 3, teamName: "Charlie" }),
+  ]));
+  render();
+  const legend = await screen.findByRole("list");
+  const swatchColorOf = (teamName: string) =>
+    (within(legend).getByText(teamName).querySelector("span") as HTMLElement).style.background;
+  const colors = ["Alpha", "Bravo", "Charlie"].map(swatchColorOf);
+  expect(new Set(colors).size).toBe(3);
+  expect(swatchColorOf("Alpha")).toBe("var(--accent)");
+});
+
 test("puts the invite panel below the standings and the chart", async () => {
   vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([member("u1", { role: "creator", teamName: "Alpha" })]));
   vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([standing("u1")]));
