@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { Panel } from "../components/Panel";
 import { ErrorView, Loading } from "../components/StateViews";
 import { InvitePanel } from "../components/InvitePanel";
+import { StartRoundPanel } from "../components/league/StartRoundPanel";
 import { BallDefs } from "../components/BallAvatar";
 import { LeagueStandingsTable } from "../components/LeagueStandingsTable";
 import { LeagueProgressChart } from "../components/LeagueProgressChart";
@@ -40,6 +41,7 @@ export default function LeaguePage() {
       <Panel>
         <span className="chip">{t(roleBadgeKey(data.role))}</span>
         <h2 className="label" style={{ marginTop: 14 }}>{t("leagues.standings")}</h2>
+        {data.startRound && <p className="status">{t("leagues.countedFrom", { label: data.startRound })}</p>}
         {standings.isPending && <Loading />}
         {standings.isError && <p className="error">{t("leagues.standingsLoadError")}</p>}
         {standings.data && (
@@ -60,6 +62,8 @@ export default function LeaguePage() {
           <LeagueProgressChart entries={standings.data.entries} myTeamId={myTeamId} />
         </Panel>
       )}
+
+      <StartRoundPanel league={data} />
 
       <InvitePanel league={data} />
     </section>
