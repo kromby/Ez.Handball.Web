@@ -375,6 +375,8 @@
     "standingsLoadError": "Ekki tókst að hlaða stöðunni.",
     "chartTitle": "Stig eftir hverja umferð",
     "chartLabel": "Heildarstig eftir hverja umferð, eftir liðum",
+    "roundChartTitle": "Stig í hverri umferð",
+    "roundChartLabel": "Stig sem hvert lið fékk í hverri umferð",
     "round": "Umferð {{label}}",
     "noRoundsYet": "Engin umferð hefur verið gerð upp enn.",
     "membersOnlyYou": "Bara þú enn sem komið er.",

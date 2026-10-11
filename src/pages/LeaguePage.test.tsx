@@ -117,6 +117,7 @@ test("lists a member with no settled rounds at zero", async () => {
   const mine = await screen.findByText("Alpha (you)");
   expect(within(mine.closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["1", "Alpha (you)", "0", "0", "0", "0.0", "0"]);
   expect(screen.getByText("No rounds have been settled yet.")).toBeInTheDocument();
+  expect(screen.queryByRole("heading", { name: "Points in each round" })).not.toBeInTheDocument();
   expect(screen.getByText("Just you so far.")).toBeInTheDocument();
 });
 
@@ -134,8 +135,24 @@ test("draws a line chart of accumulated points with a legend entry per team", as
   expect(within(chart as unknown as HTMLElement).getByText("Alpha · Round 2: 70")).toBeInTheDocument();
   // Bravo only scored in round 2, so it sits at 0 in round 1
   expect(within(chart as unknown as HTMLElement).getByText("Bravo · Round 1: 0")).toBeInTheDocument();
-  const legend = screen.getByRole("list");
+  const legend = screen.getAllByRole("list")[0];
   expect(within(legend).getByText("Bravo")).toBeInTheDocument();
+});
+
+test("draws a second chart of the points each team scored in each round", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([
+    member("u1", { role: "creator", teamName: "Alpha" }),
+    member("u2", { teamName: "Bravo" }),
+  ]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([
+    standing("u1"),
+    standing("u2", { rank: 2, teamName: "Bravo", rounds: [{ roundLabel: "2", points: 20, totalPoints: 20 }] }),
+  ]));
+  render();
+  expect(await screen.findByRole("heading", { name: "Points in each round" })).toBeInTheDocument();
+  const chart = screen.getByRole("img", { name: "Points scored in each round, per team" });
+  // Round 2 shows the 40 Alpha scored that round, not its 70 running total.
+  expect(within(chart as unknown as HTMLElement).getByText("Alpha · Round 2: 40")).toBeInTheDocument();
 });
 
 test("puts the invite panel below the standings and the chart", async () => {

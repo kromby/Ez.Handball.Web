@@ -375,6 +375,8 @@
     "standingsLoadError": "Couldn't load the standings.",
     "chartTitle": "Points after each round",
     "chartLabel": "Total points after each round, per team",
+    "roundChartTitle": "Points in each round",
+    "roundChartLabel": "Points scored in each round, per team",
     "round": "Round {{label}}",
     "noRoundsYet": "No rounds have been settled yet.",
     "membersOnlyYou": "Just you so far.",

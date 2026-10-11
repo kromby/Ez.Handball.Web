@@ -1240,6 +1240,11 @@ button {
 .league-chart-tick { fill: var(--ink-3); font-size: 12px; }
 .league-chart-line { stroke-width: 2; stroke-linejoin: round; opacity: 0.8; }
 .league-chart-line--mine { stroke-width: 3.5; opacity: 1; }
+/* Bars keep a minimum width, so a long season scrolls inside the chart rather than widening the page. */
+.league-chart-scroll { overflow-x: auto; }
+.league-chart-scroll svg { max-width: none; }
+.league-chart-bars { opacity: 0.75; }
+.league-chart-bars--mine { opacity: 1; }
 .league-chart-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; list-style: none; margin: 10px 0 0; padding: 0; font-size: 13px; }
 .league-chart-legend li { display: inline-flex; align-items: center; gap: 6px; }
 .league-chart-swatch { width: 10px; height: 10px; border-radius: 50%; }
