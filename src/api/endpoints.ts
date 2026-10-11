@@ -14,6 +14,7 @@ import type {
   Manager,
   ManagerStandings,
   MatchDetail,
+  MemberGameweeks,
   MiniLeague,
   MyGameweeks,
   MyMiniLeague,
@@ -202,6 +203,12 @@ export function generateInvite(id: string): Promise<Invite> {
 
 export function previewInvite(token: string): Promise<InvitePreview> {
   return authedGet<InvitePreview>(`/api/mini-leagues/invite/${encodeURIComponent(token)}`);
+}
+
+export function getLeagueMemberGameweeks(leagueId: string, userId: string): Promise<MemberGameweeks> {
+  return authedGet<MemberGameweeks>(
+    `/api/mini-leagues/${encodeURIComponent(leagueId)}/members/${encodeURIComponent(userId)}/gameweeks`,
+  );
 }
 
 export function joinMiniLeague(token: string): Promise<MiniLeague> {

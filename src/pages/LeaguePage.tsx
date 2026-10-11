@@ -44,6 +44,7 @@ export default function LeaguePage() {
         {standings.isError && <p className="error">{t("leagues.standingsLoadError")}</p>}
         {standings.data && (
           <LeagueStandingsTable
+            leagueId={data.id}
             entries={standings.data.entries}
             members={data.members}
             clubs={clubs.data ?? []}

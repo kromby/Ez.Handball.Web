@@ -605,6 +605,33 @@ export interface MyGameweeks {
   gameweeks: MyGameweekScore[]; // ascending (oldest first), as returned by the API
 }
 
+/** A slot in a lineup frozen at a round's deadline. Captain and Vice are starters wearing an armband. */
+export interface MemberLineupSlot {
+  playerId: string;
+  name: string | null;
+  position: string | null;
+  role: "Starter" | "Captain" | "Vice" | "Bench";
+  benchOrder: number | null; // 0-based bench priority; null for starters
+}
+
+/** One locked round of a league member's team. Unsettled rounds have null points and no breakdown. */
+export interface MemberGameweek {
+  number: number;
+  roundLabel: string;
+  deadline: string;
+  settled: boolean;
+  points: number | null;
+  captainPlayerId: string | null;
+  lineup: MemberLineupSlot[];
+  breakdown: GameweekPlayerScore[];
+}
+
+/** A league member's team; only rounds past their deadline are ever returned (Backend#156). */
+export interface MemberGameweeks {
+  runningTotal: number;
+  gameweeks: MemberGameweek[]; // ascending (oldest first)
+}
+
 export interface GameweekApplyEcho {
   appliedToGameweek: number | null; // which gameweek the change landed on
   currentGameweekLocked: boolean;   // backend: true only when no editable gameweek exists

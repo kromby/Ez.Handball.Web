@@ -384,6 +384,24 @@
     "copyLink": "Afrita hlekk",
     "copied": "Afritað"
   },
+  "leagueMember": {
+    "back": "← {{league}}",
+    "notFound": "Liðið fannst ekki í þessari deild",
+    "unnamedTeam": "Nafnlaust lið",
+    "lockedOnlyNote": "Umferðir birtast hér þegar skilafrestur þeirra er liðinn.",
+    "empty": "Engri umferð hefur verið lokað enn.",
+    "lockedCount_one": "{{count}} umferð lokuð",
+    "lockedCount_other": "{{count}} umferðum lokað",
+    "roundPicker": "Umferð",
+    "awaitingResults": "Beðið eftir úrslitum — stig birtast þegar umferðin hefur verið gerð upp",
+    "points": "{{points}} stig",
+    "starters": "Byrjunarlið",
+    "bench": "Varamenn",
+    "captainBadge": "F",
+    "captainLabel": "Fyrirliði",
+    "viceBadge": "V",
+    "viceLabel": "Varafyrirliði"
+  },
   "invite": {
     "panelTitle": "Boðshlekkur",
     "generateBlurb": "Bjóddu vinum í þessa deild.",

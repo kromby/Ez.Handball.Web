@@ -1,5 +1,5 @@
 import { afterEach, expect, test, vi } from "vitest";
-import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getMyMiniLeagues, getMiniLeagueStandings, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
+import { getLeaderboard, getPlayer, getPlayerHistory, getPlayerStats, getMatch, getShortlist, addToShortlist, removeFromShortlist, getSeasons, getTournaments, getGenders, getSquad, getSquadConstraints, getPlayers, buyPlayer, sellPlayer, createMiniLeague, getMiniLeague, getMyMiniLeagues, getMiniLeagueStandings, getLeagueMemberGameweeks, getInvite, generateInvite, previewInvite, joinMiniLeague, getGameweeks, getCurrentGameweek, getRounds, getMyGameweeks, getClubMatches, getManager, renameTeam } from "./endpoints";
 import * as client from "./client";
 
 afterEach(() => vi.restoreAllMocks());
@@ -187,6 +187,12 @@ test("getMiniLeagueStandings builds query string with offset/limit", async () =>
   const spy = spyAuthedGet();
   await getMiniLeagueStandings("abc123", { offset: 50, limit: 25 });
   expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc123/standings?offset=50&limit=25");
+});
+
+test("getLeagueMemberGameweeks calls the authed member-gameweeks endpoint, encoding both ids", async () => {
+  const spy = spyAuthedGet();
+  await getLeagueMemberGameweeks("abc 1", "u/2");
+  expect(spy).toHaveBeenCalledWith("/api/mini-leagues/abc%201/members/u%2F2/gameweeks");
 });
 
 test("getInvite calls authedGet for /api/mini-leagues/:id/invite", async () => {

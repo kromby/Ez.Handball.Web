@@ -161,3 +161,17 @@ test("maps 404 to a not-found message", async () => {
   render();
   expect(await screen.findByText("League not found")).toBeInTheDocument();
 });
+
+test("links each team name to that member's team page", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([
+    member("u1", { role: "creator", teamName: "Alpha" }),
+    member("u2", { teamName: "Bravo" }),
+  ]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([
+    standing("u2", { teamName: "Bravo" }),
+    standing("u1", { rank: 2, teamName: "Alpha" }),
+  ]));
+  render();
+  expect(await screen.findByRole("link", { name: "Bravo" })).toHaveAttribute("href", "/leagues/abc/members/u2");
+  expect(screen.getByRole("link", { name: "Alpha (you)" })).toHaveAttribute("href", "/leagues/abc/members/u1");
+});

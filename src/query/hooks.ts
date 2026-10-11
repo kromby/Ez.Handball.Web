@@ -299,6 +299,15 @@ export function useMiniLeagueStandings(id: string) {
   });
 }
 
+export function useLeagueMemberGameweeks(leagueId: string, userId: string) {
+  const { status } = useAuth();
+  return useQuery({
+    queryKey: ["league-member-gameweeks", leagueId, userId],
+    queryFn: () => api.getLeagueMemberGameweeks(leagueId, userId),
+    enabled: status === "authenticated" && leagueId.length > 0 && userId.length > 0,
+  });
+}
+
 export function useMyMiniLeagues() {
   const { status } = useAuth();
   return useQuery({
