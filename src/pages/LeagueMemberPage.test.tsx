@@ -61,7 +61,10 @@ function render(userId = "u2") {
 }
 
 test("shows a loading state while the team loads", () => {
-  vi.spyOn(api, "getLeagueMemberGameweeks").mockReturnValue(new Promise(() => {}));
+  const neverSettles = new Promise<never>(() => {
+    // Deliberately never resolves, so the query stays pending.
+  });
+  vi.spyOn(api, "getLeagueMemberGameweeks").mockReturnValue(neverSettles);
   render();
   expect(screen.getByText("Loading…")).toBeInTheDocument();
 });
