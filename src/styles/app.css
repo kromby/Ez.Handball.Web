@@ -1470,8 +1470,8 @@ button {
 }
 .admin-sync-inline-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .admin-settle-report { list-style: none; margin: 6px 0 0; padding: 0; }
-.admin-back-link { display: inline-block; font-weight: 700; color: var(--amber-deep); text-decoration: none; }
-.admin-back-link:hover { text-decoration: underline; }
+.admin-back-link, .back-link { display: inline-block; font-weight: 700; color: var(--amber-deep); text-decoration: none; }
+.admin-back-link:hover, .back-link:hover { text-decoration: underline; }
 
 /* hero */
 .gw-hero { padding: 18px 20px; }
@@ -1624,6 +1624,12 @@ button {
   border-radius: 20px; border: 1.5px solid;
 }
 .gwsc-badge--cap { color: #b8860b; border-color: #b8860b; background: #fff7e0; }
+.member-round-picker { margin: 0 0 12px; }
+.member-lineup h3 { margin: 4px 0 2px; }
+.member-lineup-list { list-style: none; margin: 0; padding: 0; }
+.member-lineup .member-lineup-bench { margin-top: 14px; }
+.standings-team-link { color: inherit; font-weight: 700; text-decoration: none; }
+.standings-team-link:hover { text-decoration: underline; }
 .gwsc-badge--sub { color: #2e7d32; border-color: #2e7d32; background: #e9f6ea; }
 
 /* ---------- Club page: fixtures & results rows ---------- */

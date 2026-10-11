@@ -384,6 +384,24 @@
     "copyLink": "Copy link",
     "copied": "Copied"
   },
+  "leagueMember": {
+    "back": "← {{league}}",
+    "notFound": "Team not found in this league",
+    "unnamedTeam": "Unnamed team",
+    "lockedOnlyNote": "Rounds show up here once their deadline has passed.",
+    "empty": "No rounds have locked yet.",
+    "lockedCount_one": "{{count}} round locked",
+    "lockedCount_other": "{{count}} rounds locked",
+    "roundPicker": "Round",
+    "awaitingResults": "Awaiting results — points appear once the round is settled",
+    "points": "{{points}} pts",
+    "starters": "Starting lineup",
+    "bench": "Bench",
+    "captainBadge": "C",
+    "captainLabel": "Captain",
+    "viceBadge": "V",
+    "viceLabel": "Vice-captain"
+  },
   "invite": {
     "panelTitle": "Invite link",
     "generateBlurb": "Invite friends to this league.",

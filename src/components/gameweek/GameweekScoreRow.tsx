@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { MyGameweekScore } from "../../api/types";
+import { byBreakdownOrder } from "./breakdownOrder";
 import { PlayerScoreLine } from "./PlayerScoreLine";
 
 export interface ResolvedPlayer {
@@ -22,11 +23,7 @@ export function GameweekScoreRow({
   const { t } = useTranslation();
   const [open, setOpen] = useState(defaultOpen);
 
-  // Played players by points desc; DNP (did not play) sink to the bottom.
-  const lines = [...score.breakdown].sort((a, b) => {
-    if (a.played !== b.played) return a.played ? -1 : 1;
-    return b.points - a.points;
-  });
+  const lines = byBreakdownOrder(score.breakdown);
 
   return (
     <div className={`gwsc-row${open ? " gwsc-row--open" : ""}`}>
