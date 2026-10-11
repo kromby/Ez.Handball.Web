@@ -514,6 +514,8 @@ export interface ManagerStanding {
   roundsPlayed: number;
   averagePoints: number;
   rounds: RoundScore[]; // oldest first
+  roundsWon: number; // rounds where this team had the top score in the ranked set (ties all count)
+  wonLatestRound: boolean; // won latestRoundLabel; several teams can share it on a tie
 }
 
 export interface ManagerStandings {

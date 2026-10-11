@@ -39,7 +39,7 @@ function render(id = "abc") {
 function standing(userId: string, overrides: Partial<ManagerStanding> = {}): ManagerStanding {
   return {
     rank: 1, previousRank: null, rankDelta: null, teamId: `${userId}:fantasy`, teamName: "Alpha", color: "#123456",
-    totalPoints: 70, roundPoints: 40, roundsPlayed: 2, averagePoints: 35,
+    totalPoints: 70, roundPoints: 40, roundsPlayed: 2, averagePoints: 35, roundsWon: 0, wonLatestRound: false,
     rounds: [{ roundLabel: "1", points: 30, totalPoints: 30 }, { roundLabel: "2", points: 40, totalPoints: 70 }],
     ...overrides,
   };
@@ -56,20 +56,39 @@ function rowOf(text: string) {
   return within(row);
 }
 
-test("shows the standings table with rounds, total, average and last round, marking my team", async () => {
+test("shows the standings table with rounds, rounds won, total, average and last round, marking my team", async () => {
   vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([
     member("u1", { role: "creator", teamName: "Alpha" }),
     member("u2", { teamName: "Bravo" }),
   ]));
   vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([
-    standing("u2", { rank: 1, teamName: "Bravo", totalPoints: 85, roundPoints: 35, averagePoints: 42.5 }),
-    standing("u1", { rank: 2, teamName: "Alpha" }),
+    standing("u2", { rank: 1, teamName: "Bravo", totalPoints: 85, roundPoints: 35, averagePoints: 42.5, roundsWon: 1 }),
+    standing("u1", { rank: 2, teamName: "Alpha", roundsWon: 1 }),
   ]));
   render();
   expect(await screen.findByRole("columnheader", { name: "Avg / round" })).toBeInTheDocument();
+  expect(screen.getByRole("columnheader", { name: "Rounds won" })).toBeInTheDocument();
   const mine = rowOf("Alpha (you)");
-  expect(mine.getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["2", "Alpha (you)", "2", "70", "35.0", "40"]);
-  expect(rowOf("Bravo").getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["1", "Bravo", "2", "85", "42.5", "35"]);
+  expect(mine.getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["2", "Alpha (you)", "2", "1", "70", "35.0", "40"]);
+  expect(rowOf("Bravo").getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["1", "Bravo", "2", "1", "85", "42.5", "35"]);
+});
+
+test("crowns every team that won the latest round, including ties", async () => {
+  vi.spyOn(api, "getMiniLeague").mockResolvedValue(league([
+    member("u1", { role: "creator", teamName: "Alpha" }),
+    member("u2", { teamName: "Bravo" }),
+    member("u3", { teamName: "Charlie" }),
+  ]));
+  vi.spyOn(api, "getMiniLeagueStandings").mockResolvedValue(standings([
+    standing("u2", { rank: 1, teamName: "Bravo", roundsWon: 2, wonLatestRound: true }),
+    standing("u1", { rank: 1, teamName: "Alpha", roundsWon: 1, wonLatestRound: true }),
+    standing("u3", { rank: 3, teamName: "Charlie" }),
+  ]));
+  render();
+  await screen.findByRole("columnheader", { name: "Rounds won" });
+  expect(rowOf("Bravo").getByRole("img", { name: "Last round winner" })).toBeInTheDocument();
+  expect(rowOf("Alpha (you)").getByRole("img", { name: "Last round winner" })).toBeInTheDocument();
+  expect(rowOf("Charlie").queryByRole("img", { name: "Last round winner" })).not.toBeInTheDocument();
 });
 
 test("shows each team's favorite club logo, and no logo when the club has none or is unset", async () => {
@@ -96,7 +115,7 @@ test("lists a member with no settled rounds at zero", async () => {
   ]));
   render();
   const mine = await screen.findByText("Alpha (you)");
-  expect(within(mine.closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["1", "Alpha (you)", "0", "0", "0.0", "0"]);
+  expect(within(mine.closest("tr")!).getAllByRole("cell").map((cell) => cell.textContent)).toEqual(["1", "Alpha (you)", "0", "0", "0", "0.0", "0"]);
   expect(screen.getByText("No rounds have been settled yet.")).toBeInTheDocument();
   expect(screen.getByText("Just you so far.")).toBeInTheDocument();
 });

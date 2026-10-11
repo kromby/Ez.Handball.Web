@@ -21,6 +21,7 @@ export function LeagueStandingsTable({ entries, members, clubs, myTeamId }: Prop
           <th className="num">{t("leagues.rank")}</th>
           <th>{t("leagues.team")}</th>
           <th className="num">{t("leagues.roundsPlayed")}</th>
+          <th className="num standings-col--won">{t("leagues.roundsWon")}</th>
           <th className="num">{t("leagues.totalPoints")}</th>
           <th className="num">{t("leagues.avgPerRound")}</th>
           <th className="num">{t("leagues.lastRound")}</th>
@@ -37,10 +38,16 @@ export function LeagueStandingsTable({ entries, members, clubs, myTeamId }: Prop
               <td>
                 <span className="standings-team">
                   <MemberCrest logoUrl={club?.logoUrl} clubName={club?.name} />
+                  {entry.wonLatestRound && (
+                    <span className="standings-crown" role="img" aria-label={t("leagues.lastRoundWinner")} title={t("leagues.lastRoundWinner")}>
+                      👑
+                    </span>
+                  )}
                   <span>{isMine ? t("leagues.you", { name: entry.teamName }) : entry.teamName}</span>
                 </span>
               </td>
               <td className="num">{entry.roundsPlayed}</td>
+              <td className="num standings-col--won">{entry.roundsWon}</td>
               <td className="num">{entry.totalPoints}</td>
               <td className="num">{entry.averagePoints.toFixed(1)}</td>
               <td className="num">{entry.roundPoints}</td>
