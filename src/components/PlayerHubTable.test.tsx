@@ -19,7 +19,7 @@ const entry: PoolEntry = {
 test("shows stats + points + price; clicking a header sorts", async () => {
   const onSort = vi.fn();
   renderWithProviders(
-    <ToastProvider><PlayerHubTable entries={[entry]} sort="Goals" onSort={onSort} authed={false} /></ToastProvider>,
+    <ToastProvider><PlayerHubTable entries={[entry]} positionFilter={undefined} sort="Goals" onSort={onSort} authed={false} /></ToastProvider>,
   );
   expect(screen.getByText("Bergström")).toBeInTheDocument();
   expect(screen.getByText("20")).toBeInTheDocument();   // goals
@@ -34,14 +34,14 @@ test("shows stats + points + price; clicking a header sorts", async () => {
 
 test("hides the Buy column when not authed", () => {
   renderWithProviders(
-    <ToastProvider><PlayerHubTable entries={[entry]} sort="Goals" onSort={vi.fn()} authed={false} /></ToastProvider>,
+    <ToastProvider><PlayerHubTable entries={[entry]} positionFilter={undefined} sort="Goals" onSort={vi.fn()} authed={false} /></ToastProvider>,
   );
   expect(screen.queryByRole("button", { name: /buy/i })).not.toBeInTheDocument();
 });
 
 test("without sort props, headers are plain labels in server order", () => {
   renderWithProviders(
-    <ToastProvider><PlayerHubTable entries={[entry]} authed={false} /></ToastProvider>,
+    <ToastProvider><PlayerHubTable entries={[entry]} positionFilter={undefined} authed={false} /></ToastProvider>,
   );
   expect(screen.getByRole("columnheader", { name: "Points" })).toBeInTheDocument();
   expect(screen.queryByRole("button", { name: /Points/ })).not.toBeInTheDocument();
@@ -52,6 +52,7 @@ test("leading and after-position columns replace the rank column", () => {
     <ToastProvider>
       <PlayerHubTable
         entries={[entry]}
+        positionFilter={undefined}
         authed={false}
         leadingColumns={[{ key: "jersey", header: "#", align: "right", render: () => "77" }]}
         afterPositionColumns={[{ key: "age", header: "Age", align: "right", render: () => "31" }]}
@@ -62,4 +63,21 @@ test("leading and after-position columns replace the rank column", () => {
   expect(headers.slice(1, 6)).toEqual(["#", "Player", "Club", "Pos", "Age"]);
   expect(screen.getByText("77")).toBeInTheDocument();
   expect(screen.getByText("31")).toBeInTheDocument();
+});
+
+test("marks the secondary chip when the row matched the position filter through it", () => {
+  const dual = { ...entry, position: "GK", positionSecondary: "CB" };
+  renderWithProviders(
+    <ToastProvider><PlayerHubTable entries={[dual]} positionFilter="CB" authed={false} /></ToastProvider>,
+  );
+  expect(screen.getByTitle(/secondary/i)).toHaveTextContent("Centre back");
+});
+
+test("doesn't mark the secondary chip when the primary matched the filter", () => {
+  const dual = { ...entry, position: "CB", positionSecondary: "LB" };
+  renderWithProviders(
+    <ToastProvider><PlayerHubTable entries={[dual]} positionFilter="CB" authed={false} /></ToastProvider>,
+  );
+  expect(screen.getByText("Left back")).toBeInTheDocument();
+  expect(screen.queryByTitle(/secondary/i)).not.toBeInTheDocument();
 });

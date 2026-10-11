@@ -46,3 +46,36 @@ test("unavailable when position is missing", () => {
 test("unavailable when price is missing", () => {
   expect(evaluateBuy({ playerId: "p2", position: "GK", price: null }, emptySquad, constraints).state).toBe("unavailable");
 });
+
+const ISK = (amount: number) => ({ amount, currency: "ISK" });
+const owned = (playerId: string, position: string, positionSecondary: string | null = null): Squad["players"][number] => ({
+  playerId, name: null, clubId: null, clubName: null, position, positionSecondary, gender: null, price: null, rating: 0, pricePaid: ISK(1),
+});
+const capped: SquadConstraints = { ...constraints, maxSquadSize: 15, posLimits: { CB: 1, LB: 1, LW: 2 } };
+
+test("primary full but the candidate's secondary has room: buyable", () => {
+  const squad: Squad = { ...emptySquad, players: [owned("a", "CB")] };
+  const target = { playerId: "p2", position: "CB", positionSecondary: "LB", price: ISK(1) };
+  expect(evaluateBuy(target, squad, capped).state).toBe("buyable");
+});
+
+test("primary full but an owned dual player can move to their secondary: buyable", () => {
+  const squad: Squad = { ...emptySquad, players: [owned("a", "CB", "LB")] };
+  expect(evaluateBuy({ playerId: "p2", position: "CB", price: ISK(1) }, squad, capped).state).toBe("buyable");
+});
+
+test("nobody can move to make room: position limit", () => {
+  const squad: Squad = { ...emptySquad, players: [owned("a", "CB"), owned("b", "LB")] };
+  const target = { playerId: "p2", position: "CB", positionSecondary: "LB", price: ISK(1) };
+  expect(evaluateBuy(target, squad, capped).reason).toBe("position_limit");
+});
+
+test("squad already over a cap: an unrelated buy is still allowed", () => {
+  const squad: Squad = { ...emptySquad, players: [owned("a", "CB"), owned("b", "CB")] };
+  expect(evaluateBuy({ playerId: "p2", position: "LW", price: ISK(1) }, squad, capped).state).toBe("buyable");
+});
+
+test("squad already over a cap: same-primary buy is blocked", () => {
+  const squad: Squad = { ...emptySquad, players: [owned("a", "CB"), owned("b", "CB")] };
+  expect(evaluateBuy({ playerId: "p2", position: "CB", price: ISK(1) }, squad, capped).reason).toBe("position_limit");
+});

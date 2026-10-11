@@ -12,10 +12,13 @@ export function PlayerHubTable<T extends PoolEntry>({
   sort,
   onSort,
   authed,
+  positionFilter,
   leadingColumns,
   afterPositionColumns = [],
 }: {
   entries: T[];
+  /** The active ?position= filter; rows it matched via their secondary (#108) get that chip marked. */
+  positionFilter: string | undefined;
   /** Omit both to show plain headers and keep the server's row order. */
   sort?: PoolSort;
   onSort?: (sort: PoolSort) => void;
@@ -49,7 +52,12 @@ export function PlayerHubTable<T extends PoolEntry>({
       render: (e) => (
         <>
           <span className="pos-chip">{posLabel(e.position)}</span>
-          {e.positionSecondary && <span className="pos-chip pos-chip--secondary">{posLabel(e.positionSecondary)}</span>}
+          {e.positionSecondary && (
+            <SecondaryChip
+              label={posLabel(e.positionSecondary)}
+              matched={matchedViaSecondary(e.position, e.positionSecondary, positionFilter)}
+            />
+          )}
         </>
       ),
     },
@@ -67,9 +75,26 @@ export function PlayerHubTable<T extends PoolEntry>({
     after.push({
       key: "buy",
       header: "",
-      render: (e) => <BuyButton player={{ playerId: e.playerId, name: e.name, position: e.position, price: e.price }} />,
+      render: (e) => <BuyButton player={{ playerId: e.playerId, name: e.name, position: e.position, positionSecondary: e.positionSecondary, price: e.price }} />,
     });
   }
 
   return <PlayerTable<T> rows={entries} before={before} after={after} emptyLabel={t("playerHub.empty")} clubLogos={clubLogos} />;
+}
+
+/** Case-insensitive like the backend filter: the row is listed because its secondary matched. */
+function matchedViaSecondary(position: string, positionSecondary: string, filter: string | undefined): boolean {
+  if (!filter) return false;
+  const wanted = filter.toUpperCase();
+  return position.toUpperCase() !== wanted && positionSecondary.toUpperCase() === wanted;
+}
+
+function SecondaryChip({ label, matched }: { label: string; matched: boolean }) {
+  const { t } = useTranslation();
+  if (!matched) return <span className="pos-chip pos-chip--secondary">{label}</span>;
+  return (
+    <span className="pos-chip pos-chip--secondary pos-chip--matched" title={t("playerHub.matchedSecondary")}>
+      {label}
+    </span>
+  );
 }

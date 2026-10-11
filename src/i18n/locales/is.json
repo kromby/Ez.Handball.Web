@@ -223,6 +223,7 @@
     "errorNotInSquad": "Sá leikmaður er ekki í liðinu þínu."
   },
   "playerHub": {
+    "matchedSecondary": "Birtist vegna aukastöðu",
     "title": "Leikmenn",
     "notFound": "Leikmenn fundust ekki",
     "empty": "Engir leikmenn passa við þessar síur.",
@@ -267,6 +268,7 @@
     "viewProfile": "Skoða leikmann →",
     "tapPrompt": "smelltu á leikmann til að sjá spjaldið",
     "addSlot": "Bæta við {{code}} — fara á markaðinn",
+    "playsSecondary": "{{code}} — aukastaða (aðalstaða {{primary}})",
     "lastRound": "Síðasta umferð",
     "nextMatch": "Næsti leikur",
     "pts": "{{points}} stig",

@@ -54,7 +54,7 @@ export default function PlayerPage() {
           {owned ? (
             <SellButton player={{ playerId: p.playerId, name: p.name }} />
           ) : p.retired ? null : (
-            <BuyButton player={{ playerId: p.playerId, name: p.name, position: p.position ?? null, price: p.price ?? null }} />
+            <BuyButton player={{ playerId: p.playerId, name: p.name, position: p.position ?? null, positionSecondary: p.positionSecondary, price: p.price ?? null }} />
           )}
         </div>
         <p className="subtitle">

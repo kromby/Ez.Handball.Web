@@ -231,3 +231,15 @@ test("hides the round points box when the player has no played rounds", async ()
   await screen.findByText("DNP");
   expect(screen.queryByTestId("round-points")).not.toBeInTheDocument();
 });
+
+test("shows the secondary position next to the primary when the player has one", () => {
+  renderPanel({ ...player, positionSecondary: "LB" });
+  expect(screen.getByText("Centre back")).toBeInTheDocument();
+  expect(screen.getByText("Left back")).toBeInTheDocument();
+});
+
+test("shows only the primary position when the secondary is blank", () => {
+  renderPanel({ ...player, positionSecondary: "" });
+  expect(screen.getByText("Centre back")).toBeInTheDocument();
+  expect(screen.queryByText("Left back")).not.toBeInTheDocument();
+});

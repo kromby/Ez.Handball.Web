@@ -30,6 +30,23 @@ describe("SquadCourt", () => {
     expect(screen.getAllByRole("link")).toHaveLength(6);
   });
 
+  it("places a dual-position player in their assigned (secondary) slot", () => {
+    const players = [
+      mk("p-cb", "Bjössi", "CB"),
+      { ...mk("p-dual", "Dalli", "CB"), positionSecondary: "LB", assignedPosition: "LB" },
+    ];
+    renderCourt(<SquadCourt players={players} selectedId={null} onSelect={vi.fn()} />);
+    // CB and LB are both filled, so only the other five slots are market links.
+    expect(screen.getAllByRole("link")).toHaveLength(5);
+    expect(screen.getByTitle(/LB.*secondary.*CB/i)).toBeInTheDocument();
+  });
+
+  it("falls back to the primary position when no assignment is given", () => {
+    renderCourt(<SquadCourt players={[mk("p-cb", "Bjössi", "CB")]} selectedId={null} onSelect={vi.fn()} />);
+    expect(screen.queryByTitle(/secondary/i)).not.toBeInTheDocument();
+    expect(screen.getAllByRole("link")).toHaveLength(6);
+  });
+
   it("lists players with an unknown position code in an 'others' strip", () => {
     renderCourt(<SquadCourt players={[mk("p-x", "Oddball", "ZZ")]} selectedId={null} onSelect={vi.fn()} />);
     const others = screen.getByTestId("court-others");
