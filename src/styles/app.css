@@ -1230,6 +1230,9 @@ button {
 .standings-team { display: inline-flex; align-items: center; gap: 10px; }
 .standings-row--mine { background: var(--amber-wash); }
 .standings-row--mine td:nth-child(2) { font-weight: 800; }
+.standings-crown { font-size: 1.05em; line-height: 1; }
+/* Rounds won is the first column to go on a phone; the crown still marks the last-round winner. */
+@media (max-width: 600px) { .standings-col--won { display: none; } }
 .league-chart { overflow: hidden; }
 .league-chart svg { display: block; max-width: 100%; }
 .league-chart-grid { stroke: var(--line-2); stroke-dasharray: 3 4; }
