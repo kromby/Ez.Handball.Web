@@ -6,17 +6,17 @@ import { ApiError } from "../../api/client";
 import { StartRoundPanel } from "./StartRoundPanel";
 import { renderWithProviders } from "../../test/renderWithQuery";
 
-afterEach(() => vi.restoreAllMocks());
-beforeEach(() => {
-  vi.spyOn(api, "getGameweeks").mockResolvedValue([gw(1, "1"), gw(5, "5"), gw(6, "6")]);
-});
-
 const user: AuthUser = { id: "u1", email: "a@b.is", displayName: "Jon", language: "is", favoriteClubId: "385", emailVerified: true, isAdmin: false, createdAt: "", lastLoginAt: null };
 const authed = { status: "authenticated" as const, user };
 const gw = (number: number, roundLabel: string): Gameweek =>
   ({ number, roundLabel, tournamentId: "9142", deadline: "2026-09-01T18:00:00Z", status: "Settled", matches: [] });
 const league = (role: string | null, startRound: string | null = null): MiniLeague =>
   ({ id: "L1", name: "Office", season: "2025-26", startRound, creatorUserId: "u1", memberCount: 2, role, createdAt: "", members: [] });
+
+afterEach(() => vi.restoreAllMocks());
+beforeEach(() => {
+  vi.spyOn(api, "getGameweeks").mockResolvedValue([gw(1, "1"), gw(5, "5"), gw(6, "6")]);
+});
 
 test("renders nothing for a member who isn't the creator", async () => {
   renderWithProviders(<StartRoundPanel league={league("member", "1")} />, { auth: authed });
