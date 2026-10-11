@@ -26,6 +26,11 @@ function PanelHead({ player, clubLogoUrl }: { player: SquadPlayer; clubLogoUrl: 
           <span className="token-badge token-badge--lg">
             {player.position ? t(`positions.${player.position}`, { defaultValue: player.position }) : "—"}
           </span>
+          {player.positionSecondary?.trim() && player.positionSecondary !== player.position && (
+            <span className="token-badge token-badge--lg token-badge--secondary">
+              {t(`positions.${player.positionSecondary}`, { defaultValue: player.positionSecondary })}
+            </span>
+          )}
         </div>
       </div>
       <div className="panel-rating">

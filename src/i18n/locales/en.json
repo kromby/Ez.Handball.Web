@@ -223,6 +223,7 @@
     "errorNotInSquad": "That player isn't in your squad."
   },
   "playerHub": {
+    "matchedSecondary": "Listed through their secondary position",
     "title": "Players",
     "notFound": "Players not found",
     "empty": "No players match these filters.",
@@ -267,6 +268,7 @@
     "viewProfile": "View full profile →",
     "tapPrompt": "tap a player to see their card",
     "addSlot": "Add a {{code}} — go to the market",
+    "playsSecondary": "{{code}} — secondary position (primary {{primary}})",
     "lastRound": "Last round",
     "nextMatch": "Next match",
     "pts": "{{points}} pts",

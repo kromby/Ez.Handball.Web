@@ -96,6 +96,7 @@ export default function PlayerHubPage() {
         <Panel>
           <PlayerHubTable
             entries={players.data.entries}
+            positionFilter={position}
             sort={sort}
             onSort={(s) => update({ sort: s, offset: undefined })}
             authed={authed}

@@ -14,6 +14,9 @@ const COURT_POS: Record<string, { x: number; y: number }> = {
 };
 export const COURT_ORDER = Object.keys(COURT_POS) as (keyof typeof COURT_POS)[];
 
+/** The slot a player fills: the backend's assignment (may be their secondary, #108), else their primary. */
+const slotOf = (player: SquadPlayer) => player.assignedPosition || player.position;
+
 export interface SquadCourtProps {
   players: SquadPlayer[];
   selectedId: string | null;
@@ -27,10 +30,13 @@ export function SquadCourt({ players, selectedId, onSelect, clubLogos }: SquadCo
   const { byPos, others } = useMemo(() => {
     const byPos = new Map<string, SquadPlayer[]>();
     for (const p of players) {
-      const code = p.position ?? "";
+      const code = slotOf(p) ?? "";
       byPos.set(code, [...(byPos.get(code) ?? []), p]);
     }
-    const others = players.filter((p) => !p.position || !(p.position in COURT_POS));
+    const others = players.filter((player) => {
+      const code = slotOf(player);
+      return !code || !(code in COURT_POS);
+    });
     return { byPos, others };
   }, [players]);
 
@@ -76,7 +82,7 @@ export function SquadCourt({ players, selectedId, onSelect, clubLogos }: SquadCo
             {others.map((p) => (
               <li key={p.playerId}>
                 <button type="button" className="court-others-row" onClick={() => onSelect(p.playerId)}>
-                  {p.name ?? t("match.unknownPlayer")} <span className="token-badge">{p.position ?? "—"}</span>
+                  {p.name ?? t("match.unknownPlayer")} <span className="token-badge">{slotOf(p) ?? "—"}</span>
                 </button>
               </li>
             ))}

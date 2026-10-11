@@ -1214,6 +1214,7 @@ button {
 .sell-btn { border: 2px solid var(--ink-2); background: transparent; border-radius: 8px; padding: 4px 12px; font-weight: 700; cursor: pointer; }
 .pos-chip { display: inline-block; background: var(--ink); color: var(--paper-2); border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
 .pos-chip--secondary { background: var(--paper-3); color: var(--ink-2); margin-left: 4px; }
+.pos-chip--matched { outline: 1.5px solid var(--amber-deep); }
 .grade-chip { display: inline-block; min-width: 26px; text-align: center; background: var(--paper-3); color: var(--ink-2); border-radius: 6px; padding: 1px 8px; font-size: 12px; font-weight: 700; }
 .grade-chip--good { background: #dde7cf; color: var(--good); }
 .grade-chip--bad { background: #f3d9d4; color: var(--bad); }
@@ -1325,6 +1326,8 @@ button {
 .panel-actions { margin-top: 14px; display: flex; align-items: center; gap: 10px; }
 .panel-frees { font-size: 12px; color: var(--ink-2); }
 .token-badge--lg { font-size: 11px; padding: 2px 7px; border-radius: 6px; letter-spacing: .02em; }
+.token-badge--secondary { background: var(--paper-3); color: var(--ink-2); outline: 1px dashed var(--ink-2); }
+.panel-meta .token-badge--secondary { margin-left: 4px; }
 .panel-rounds { background: var(--paper-3); border-radius: 9px; padding: 8px 10px; margin-top: 7px; }
 .panel-rounds-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .panel-round-chip { font-size: 12px; color: var(--ink-2); background: var(--paper); border-radius: 7px; padding: 2px 8px; }

@@ -23,7 +23,7 @@ function mockBackend(over: { players?: { playerId: string; position: string }[];
   });
 }
 
-function renderBtn(player: { playerId: string; name?: string | null; position: string | null; price: { amount: number; currency: string } | null }) {
+function renderBtn(player: { playerId: string; name?: string | null; position: string | null; positionSecondary?: string | null; price: { amount: number; currency: string } | null }) {
   return renderWithProviders(
     <ToastProvider><BuyButton player={{ name: null, ...player }} /></ToastProvider>,
     { auth: authed },
@@ -87,4 +87,10 @@ test("toasts a deferral notice when the gameweek locked between load and buy", a
   const btn = await screen.findByRole("button");
   fireEvent.click(btn);
   expect(await screen.findByRole("status")).toHaveTextContent(/Gameweek 3/);
+});
+
+test("stays enabled when the primary is full but the player can fill their secondary", async () => {
+  mockBackend({ players: [{ playerId: "a", position: "CB" }, { playerId: "b", position: "CB" }, { playerId: "c", position: "CB" }] });
+  renderBtn({ playerId: "p2", position: "CB", positionSecondary: "LB", price: { amount: 1_000_000, currency: "ISK" } });
+  expect(await screen.findByRole("button")).toBeEnabled();
 });

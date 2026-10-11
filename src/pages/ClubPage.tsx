@@ -43,6 +43,7 @@ function RosterTable({ players }: { players: ClubRosterPlayer[] }) {
   return (
     <PlayerHubTable
       entries={players}
+      positionFilter={undefined}
       authed={status === "authenticated"}
       leadingColumns={[{ key: "jersey", header: "#", align: "right", render: (player) => player.jerseyNumber ?? "" }]}
       afterPositionColumns={[{ key: "age", header: t("club.colAge"), align: "right", render: (player) => player.age ?? "—" }]}

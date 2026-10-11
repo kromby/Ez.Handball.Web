@@ -27,6 +27,8 @@ export interface PlayerTokenProps {
 export function PlayerToken({ code, x, y, player, logoUrl, selected, onSelect }: PlayerTokenProps) {
   const { t } = useTranslation();
   const style = { left: `${x}%`, top: `${y}%` } as const;
+  // Filling their secondary slot (#108) — flag it so the manager knows why they sit here.
+  const onSecondary = player?.position != null && player.position !== code;
 
   if (!player) {
     return (
@@ -51,7 +53,16 @@ export function PlayerToken({ code, x, y, player, logoUrl, selected, onSelect }:
     >
       <span className="token-av">
         {logoUrl ? <img className="token-crest" src={logoUrl} alt="" /> : <BallAvatar size={42} />}
-        <span className="token-badge">{code}</span>
+        {onSecondary ? (
+          <span
+            className="token-badge token-badge--secondary"
+            title={t("squad.playsSecondary", { code, primary: player.position })}
+          >
+            {code}
+          </span>
+        ) : (
+          <span className="token-badge">{code}</span>
+        )}
       </span>
       <span className="token-label">
         <span className="token-name">{shortName(player.name)}</span>

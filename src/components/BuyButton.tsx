@@ -18,6 +18,7 @@ export interface BuyButtonPlayer {
   playerId: string;
   name: string | null;
   position: string | null;
+  positionSecondary?: string | null;
   price: Money | null;
 }
 
@@ -50,7 +51,7 @@ export function BuyButton({ player }: { player: BuyButtonPlayer }) {
   if (status !== "authenticated" || !squad.data || !constraints.data) return null;
 
   const ev = evaluateBuy(
-    { playerId: player.playerId, position: player.position, price: player.price },
+    { playerId: player.playerId, position: player.position, positionSecondary: player.positionSecondary, price: player.price },
     squad.data,
     constraints.data,
   );

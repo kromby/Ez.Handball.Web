@@ -118,6 +118,7 @@ export interface Player {
   clubName: string | null;
   gender: string;
   position?: string | null;  // ADD — optional
+  positionSecondary?: string | null; // Backend#108; "" or null = none
   price?: Money | null;      // ADD — optional
   rating?: number | null; // current-season fantasy rating (Backend#78); 0 = no games, null = uncomputable
   retired?: boolean; // true = player has retired (Backend bootstrap/manual flag); absent/false = active
@@ -396,6 +397,10 @@ export interface SquadPlayer {
   price: Money | null;   // current market value
   pricePaid: Money;      // locked at purchase
   rating: number;        // current-season fantasy rating (#52); 0 = below min-games guard
+  // Backend#108: a player may fill their secondary position too. "" or null = no secondary.
+  positionSecondary?: string | null;
+  // The slot this player fills under the squad caps (primary unless the squad needs the secondary).
+  assignedPosition?: string | null;
 }
 
 export interface Squad {
