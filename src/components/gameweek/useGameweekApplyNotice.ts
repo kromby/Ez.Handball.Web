@@ -11,9 +11,10 @@ import { useToast } from "../Toast";
  * action — so the mutation's own gameweek-current invalidation can't race it.
  * Subscribing to useCurrentGameweek here guarantees the baseline is cached on
  * every buy surface, not just /squad. Detection keys off appliedToGameweek vs the
- * baseline; currentGameweekLocked is part of the contract but intentionally unread
- * (it's true only when no editable gameweek exists at all — too narrow to signal
- * the common deferral).
+ * baseline. currentGameweekLocked is too narrow to signal the common deferral
+ * (it's true only when no editable gameweek exists at all); it's read only to
+ * spot an unknown gameweek — null when the backend's lookup failed after the
+ * change committed — which must not be reported as a lock.
  */
 export function useGameweekApplyNotice() {
   const { t } = useTranslation();
@@ -29,10 +30,11 @@ export function useGameweekApplyNotice() {
         toast.show(t("gameweek.applyDeferred", { locked: baseline, applied }));
         return;
       }
-      if (applied == null && baseline != null) {
+      if (applied == null && baseline != null && echo.currentGameweekLocked !== null) {
         toast.show(t("gameweek.applyLocked"));
       }
-      // baseline null (no gameweek context) or applied === baseline (happy path) → silent.
+      // baseline null (no gameweek context), applied === baseline (happy path) or
+      // gameweek unknown (lookup failed) → silent.
     },
     [data, t, toast],
   );

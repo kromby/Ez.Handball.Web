@@ -59,3 +59,11 @@ test("stays silent when there is no baseline gameweek", () => {
   act(() => screen.getByText("fire").click());
   expect(screen.queryByRole("status")).not.toBeInTheDocument();
 });
+
+test("stays silent when the backend couldn't determine the gameweek", () => {
+  // The buy/sell committed but the gameweek lookup failed (Backend#181): both
+  // fields are null. That isn't a lock, so the "locked" toast would mislead.
+  renderNotice(3, { appliedToGameweek: null, currentGameweekLocked: null });
+  act(() => screen.getByText("fire").click());
+  expect(screen.queryByRole("status")).not.toBeInTheDocument();
+});

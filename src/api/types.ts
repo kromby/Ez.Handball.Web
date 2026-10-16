@@ -640,7 +640,9 @@ export interface MemberGameweeks {
 
 export interface GameweekApplyEcho {
   appliedToGameweek: number | null; // which gameweek the change landed on
-  currentGameweekLocked: boolean;   // backend: true only when no editable gameweek exists
+  // backend: true only when no editable gameweek exists; null when the lookup
+  // failed after the change committed (the gameweek is unknown, not locked)
+  currentGameweekLocked: boolean | null;
 }
 
 export interface SquadMutationResult {
