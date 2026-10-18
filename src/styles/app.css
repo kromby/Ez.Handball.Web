@@ -552,6 +552,9 @@ button {
   }
 }
 
+/* Admin player positions (#167): primary + secondary + Save on one line, wrapping if narrow. */
+.position-editor { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+
 /* --- Auth forms --- */
 .auth-card {
   max-width: 28rem;
