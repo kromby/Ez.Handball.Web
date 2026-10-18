@@ -67,7 +67,7 @@ test("saving a position from the worklist sends both positions and the row drops
 
   renderPage();
 
-  const row = (await screen.findByText("Jón Jónsson")).closest("tr")!;
+  const row = await screen.findByRole("row", { name: /Jón Jónsson/ });
   await userEvent.selectOptions(within(row).getByRole("combobox", { name: "Position" }), "LW");
   await userEvent.click(within(row).getByRole("button", { name: "Save" }));
 
@@ -99,7 +99,7 @@ test("searching finds any player and lets the admin edit both positions", async 
   renderPage();
 
   await userEvent.type(screen.getByRole("searchbox", { name: "Find a player" }), "Aron");
-  const row = (await screen.findByText("Aron Pálmarsson")).closest("tr")!;
+  const row = await screen.findByRole("row", { name: /Aron Pálmarsson/ });
   expect(getPlayers).toHaveBeenCalledWith(expect.objectContaining({ name: "Aron", limit: 20 }));
 
   await userEvent.selectOptions(within(row).getByRole("combobox", { name: "Secondary position" }), "RB");
