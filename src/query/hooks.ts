@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as api from "../api/endpoints";
-import type { LeaderboardMetric, PlayerMissingPosition, PoolSort, ShortlistItem, ShortlistResponse } from "../api/types";
+import type { LeaderboardMetric, PlayerMissingPosition, PlayerPool, PoolSort, ShortlistItem, ShortlistResponse } from "../api/types";
 import { ApiError } from "../api/client";
 import { useAuth } from "../auth/useAuth";
 
@@ -448,11 +448,18 @@ export function useAdminPlayersMissingPosition() {
 export function useSetPlayerPosition() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: ({ playerId, position }: { playerId: string; position: string }) =>
-      api.setPlayerPosition(playerId, position),
-    onSuccess: (_data, { playerId }) => {
+    mutationFn: ({ playerId, position, positionSecondary }: { playerId: string; position: string; positionSecondary: string | null }) =>
+      api.setPlayerPosition(playerId, position, positionSecondary),
+    onSuccess: (_data, { playerId, position, positionSecondary }) => {
+      // A saved player has a primary, so they leave the worklist; any cached search shows the new pair.
       qc.setQueryData<PlayerMissingPosition[]>(["admin-players-missing-position"], (players) =>
         players?.filter((p) => p.playerId !== playerId),
+      );
+      qc.setQueriesData<PlayerPool>({ queryKey: ["players"] }, (pool) =>
+        pool && {
+          ...pool,
+          entries: pool.entries.map((e) => (e.playerId === playerId ? { ...e, position, positionSecondary } : e)),
+        },
       );
     },
   });

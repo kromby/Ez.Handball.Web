@@ -1,47 +1,16 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import type { PlayerMissingPosition } from "../api/types";
 import { AdminNav } from "../components/AdminNav";
+import { PlayerPositionEditor } from "../components/adminPlayers/PlayerPositionEditor";
+import { SearchInput } from "../components/SearchInput";
 import { ErrorView, Loading } from "../components/StateViews";
-import { useAdminPlayersMissingPosition, useSetPlayerPosition } from "../query/hooks";
+import { useAdminPlayersMissingPosition, usePlayers } from "../query/hooks";
 
-const POSITION_CODES = ["GK", "LW", "RW", "LB", "CB", "RB", "LP"];
+const MIN_SEARCH_LENGTH = 2;
+const SEARCH_LIMIT = 20;
 
-function PlayerRow({ player }: { player: PlayerMissingPosition }) {
+function PlayersTable({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
-  const setPosition = useSetPlayerPosition();
-
-  return (
-    <tr>
-      <td>{player.name}</td>
-      <td>{player.clubName ?? "—"}</td>
-      <td>{player.gender}</td>
-      <td>
-        <select
-          aria-label={t("admin.players.position")}
-          value={player.position ?? ""}
-          disabled={setPosition.isPending}
-          onChange={(e) => setPosition.mutate({ playerId: player.playerId, position: e.target.value })}
-        >
-          <option value="">{t("admin.players.choosePosition")}</option>
-          {POSITION_CODES.map((code) => (
-            <option key={code} value={code}>{t(`positions.${code}`, { defaultValue: code })}</option>
-          ))}
-        </select>
-        {setPosition.isPending && <span className="form-note">{t("admin.players.saving")}</span>}
-        {setPosition.isError && <span className="form-error" role="alert">{t("admin.players.saveError")}</span>}
-      </td>
-    </tr>
-  );
-}
-
-function PlayersBody() {
-  const { t } = useTranslation();
-  const { data, isPending, isError, error } = useAdminPlayersMissingPosition();
-
-  if (isPending) return <Loading />;
-  if (isError) return <ErrorView error={error} notFoundLabel={t("admin.players.notFound")} />;
-  if (data.length === 0) return <p className="status">{t("admin.players.empty")}</p>;
-
   return (
     <table className="stats-table">
       <thead>
@@ -52,12 +21,91 @@ function PlayersBody() {
           <th>{t("admin.players.position")}</th>
         </tr>
       </thead>
-      <tbody>
-        {data.map((player) => (
-          <PlayerRow key={player.playerId} player={player} />
-        ))}
-      </tbody>
+      <tbody>{children}</tbody>
     </table>
+  );
+}
+
+function SearchResults({ name }: { name: string }) {
+  const { t } = useTranslation();
+  const { data, isPending, isError, error } = usePlayers({ name, limit: SEARCH_LIMIT });
+
+  if (isPending) return <Loading />;
+  if (isError) return <ErrorView error={error} notFoundLabel={t("admin.players.notFound")} />;
+  if (data.entries.length === 0) return <p className="status">{t("admin.players.searchEmpty")}</p>;
+
+  return (
+    <PlayersTable>
+      {data.entries.map((player) => (
+        <tr key={player.playerId}>
+          <td>{player.name}</td>
+          <td>{player.clubName ?? "—"}</td>
+          <td>{player.gender}</td>
+          <td>
+            <PlayerPositionEditor
+              playerId={player.playerId}
+              position={player.position}
+              positionSecondary={player.positionSecondary}
+            />
+          </td>
+        </tr>
+      ))}
+    </PlayersTable>
+  );
+}
+
+function PlayerSearch() {
+  const { t } = useTranslation();
+  const [name, setName] = useState("");
+  const query = name.trim();
+
+  return (
+    <section className="stack">
+      <h2 className="poslabel">{t("admin.players.searchTitle")}</h2>
+      <SearchInput
+        initialValue=""
+        placeholder={t("admin.players.search")}
+        clearLabel={t("playerHub.clearSearch")}
+        onSearch={setName}
+      />
+      {query.length >= MIN_SEARCH_LENGTH && <SearchResults name={query} />}
+    </section>
+  );
+}
+
+function MissingPositionList() {
+  const { t } = useTranslation();
+  const { data, isPending, isError, error } = useAdminPlayersMissingPosition();
+
+  let body: React.ReactNode;
+  if (isPending) body = <Loading />;
+  else if (isError) body = <ErrorView error={error} notFoundLabel={t("admin.players.notFound")} />;
+  else if (data.length === 0) body = <p className="status">{t("admin.players.empty")}</p>;
+  else
+    body = (
+      <PlayersTable>
+        {data.map((player) => (
+          <tr key={player.playerId}>
+            <td>{player.name}</td>
+            <td>{player.clubName ?? "—"}</td>
+            <td>{player.gender}</td>
+            <td>
+              <PlayerPositionEditor
+                playerId={player.playerId}
+                position={player.position}
+                positionSecondary={player.positionSecondary}
+              />
+            </td>
+          </tr>
+        ))}
+      </PlayersTable>
+    );
+
+  return (
+    <section className="stack">
+      <h2 className="poslabel">{t("admin.players.missingTitle")}</h2>
+      {body}
+    </section>
   );
 }
 
@@ -70,7 +118,8 @@ export default function AdminPlayersPage() {
         <div className="scribble">{t("admin.eyebrow")}</div>
         <h1 className="title">{t("admin.players.title")}</h1>
       </header>
-      <PlayersBody />
+      <PlayerSearch />
+      <MissingPositionList />
     </section>
   );
 }

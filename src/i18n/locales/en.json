@@ -513,7 +513,15 @@
       "position": "Position",
       "choosePosition": "Choose position",
       "saving": "Saving…",
-      "saveError": "Couldn't save this position. Please try again."
+      "saveError": "Couldn't save this position. Please try again.",
+      "secondary": "Secondary position",
+      "none": "None",
+      "save": "Save",
+      "sameAsPrimary": "The secondary position must differ from the primary.",
+      "missingTitle": "Missing a position",
+      "searchTitle": "Find a player",
+      "search": "Find a player",
+      "searchEmpty": "No players match that name."
     }
   }
 }

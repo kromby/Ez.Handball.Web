@@ -131,6 +131,7 @@ export interface PlayerMissingPosition {
   clubName: string | null;
   gender: string;
   position: string | null;
+  positionSecondary: string | null; // "" or null = none (Backend#167)
 }
 
 export interface PlayerHistoryEntry {

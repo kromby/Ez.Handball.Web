@@ -513,7 +513,15 @@
       "position": "Staða",
       "choosePosition": "Velja stöðu",
       "saving": "Vista…",
-      "saveError": "Tókst ekki að vista stöðu. Reyndu aftur."
+      "saveError": "Tókst ekki að vista stöðu. Reyndu aftur.",
+      "secondary": "Aukastaða",
+      "none": "Engin",
+      "save": "Vista",
+      "sameAsPrimary": "Aukastaðan verður að vera önnur en aðalstaðan.",
+      "missingTitle": "Vantar stöðu",
+      "searchTitle": "Finna leikmann",
+      "search": "Finna leikmann",
+      "searchEmpty": "Enginn leikmaður passar við nafnið."
     }
   }
 }

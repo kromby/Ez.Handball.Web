@@ -281,6 +281,8 @@ export function getPlayersMissingPosition(): Promise<PlayerMissingPosition[]> {
   return authedGet<PlayerMissingPosition[]>("/api/admin/players/missing-position");
 }
 
-export async function setPlayerPosition(playerId: string, position: string): Promise<void> {
-  await authedSend(`/api/admin/players/${encodeURIComponent(playerId)}/position`, "POST", { position });
+// Always sends both: the backend treats a missing positionSecondary as "clear it" (Backend#167),
+// so null is only ever a deliberate clear.
+export async function setPlayerPosition(playerId: string, position: string, positionSecondary: string | null): Promise<void> {
+  await authedSend(`/api/admin/players/${encodeURIComponent(playerId)}/position`, "POST", { position, positionSecondary });
 }
